@@ -29,7 +29,5 @@ namespace Web_PR106.Models
 		public List<Rezervacija> ReservationList;
 
 		public Korisnik() { }
-		
-
 	}
 }

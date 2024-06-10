@@ -12,7 +12,6 @@ namespace Web_PR106.Models
 		public string ContactInfo;
 		public List<Let> ProvidedFlights;
 		public List<Recenzija> Reviews;
-
 		public Aviokompanija() { }
 	}
 }
