@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flights>
+	<Let>
+		<Aviokompanija>Air Serbia</Aviokompanija>
+		<StartDestination>Belgrade</StartDestination>
+		<EndDestination>Paris</EndDestination>
+		<DepartureDateTime>2024-07-01T10:30:00</DepartureDateTime>
+		<ArrivalDateTime>2024-07-01T13:30:00</ArrivalDateTime>
+		<NumberOf_FreeSeats>20</NumberOf_FreeSeats>
+		<NumberOf_TakenSeats>150</NumberOf_TakenSeats>
+		<Price>120.50</Price>
+		<Status>AKTIVAN</Status>
+	</Let>
+	<Let>
+		<Aviokompanija>Air France</Aviokompanija>
+		<StartDestination>Paris</StartDestination>
+		<EndDestination>New York</EndDestination>
+		<DepartureDateTime>2024-07-02T15:00:00</DepartureDateTime>
+		<ArrivalDateTime>2024-07-02T18:00:00</ArrivalDateTime>
+		<NumberOf_FreeSeats>50</NumberOf_FreeSeats>
+		<NumberOf_TakenSeats>200</NumberOf_TakenSeats>
+		<Price>350.00</Price>
+		<Status>AKTIVAN</Status>
+	</Let>
+	<Let>
+		<Aviokompanija>Lufthansa</Aviokompanija>
+		<StartDestination>Frankfurt</StartDestination>
+		<EndDestination>Tokyo</EndDestination>
+		<DepartureDateTime>2024-07-03T07:00:00</DepartureDateTime>
+		<ArrivalDateTime>2024-07-03T22:00:00</ArrivalDateTime>
+		<NumberOf_FreeSeats>30</NumberOf_FreeSeats>
+		<NumberOf_TakenSeats>300</NumberOf_TakenSeats>
+		<Price>900.75</Price>
+		<Status>AKTIVAN</Status>
+	</Let>
+	<Let>
+		<Aviokompanija>Emirates</Aviokompanija>
+		<StartDestination>Dubai</StartDestination>
+		<EndDestination>Sydney</EndDestination>
+		<DepartureDateTime>2024-07-04T20:00:00</DepartureDateTime>
+		<ArrivalDateTime>2024-07-05T06:00:00</ArrivalDateTime>
+		<NumberOf_FreeSeats>10</NumberOf_FreeSeats>
+		<NumberOf_TakenSeats>400</NumberOf_TakenSeats>
+		<Price>1100.20</Price>
+		<Status>AKTIVAN</Status>
+	</Let>
+	<Let>
+		<Aviokompanija>Delta</Aviokompanija>
+		<StartDestination>Los Angeles</StartDestination>
+		<EndDestination>San Francisco</EndDestination>
+		<DepartureDateTime>2024-07-01T12:00:00</DepartureDateTime>
+		<ArrivalDateTime>2024-07-01T13:15:00</ArrivalDateTime>
+		<NumberOf_FreeSeats>5</NumberOf_FreeSeats>
+		<NumberOf_TakenSeats>145</NumberOf_TakenSeats>
+		<Price>50.00</Price>
+		<Status>OTKAZAN</Status>
+	</Let>
+</Flights>

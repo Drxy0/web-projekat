@@ -13,5 +13,16 @@ namespace Web_PR106.Models
 		public List<Let> ProvidedFlights;
 		public List<Recenzija> Reviews;
 		public Aviokompanija() { }
+		public Aviokompanija(string name)
+		{
+			Name = name;
+		}
+		public Aviokompanija(string name, string address, string contactInfo, List<Let> providedFlights, List<Recenzija> reviews) : this(name)
+		{
+			Address = address;
+			ContactInfo = contactInfo;
+			ProvidedFlights = providedFlights;
+			Reviews = reviews;
+		}
 	}
 }

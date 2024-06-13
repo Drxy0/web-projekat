@@ -18,8 +18,8 @@ namespace Web_PR106.Models
 		public string EndDestination;
 		public string DepartureDateTime;
 		public string ArrivalDateTime;
-		public string NumberOf_FreeSeats;
-		public string NumberOf_TakenSeats;
+		public int NumberOf_FreeSeats;
+		public int NumberOf_TakenSeats;
 		public double Price;
 		public FlightStatus Status;
 
