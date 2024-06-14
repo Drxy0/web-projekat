@@ -131,6 +131,7 @@
     <Compile Include="Models\Let.cs" />
     <Compile Include="Models\Recenzija.cs" />
     <Compile Include="Models\Rezervacija.cs" />
+    <Compile Include="Models\SearchFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

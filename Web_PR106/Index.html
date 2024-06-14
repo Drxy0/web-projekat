@@ -8,6 +8,61 @@
 </head>
 <body>
     <h2>Letovi</h2>
+
+    <div>
+        <form id="searchForm" action="/api/default" method="post" onsubmit="resetFormFields()">
+            <table>
+                <tr>
+                    <td>
+                        <label>Polazište</label>
+                    </td>
+                    <td>
+                        <input type="text" placeholder="Polazište" id="pocetna_destinacija" name="startDestination"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Odredište</label>
+                    </td>
+                    <td>
+                        <input type="text" placeholder="Odredište" id="odredisna_destinacija" name="endDestination" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Aviokompanija</label>
+                    </td>
+                    <td>
+                        <input type="text" placeholder="Aviokompanija" id="aviokompanija" name="airlinesName" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Datum polaska</label>
+                    </td>
+                    <td>
+                        <input type="date" id="datum_polaska" name="departureDate" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Datum dolaska</label>
+
+                    </td>
+                    <td>
+                        <input type="date" id="datum_dolaska" name="arrivalDate" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="btn btn-success" type="submit" value="PRETRAŽI"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -16,6 +71,7 @@
                 <th scope="col">Odredišna destinacija</th>
                 <th scope="col">Datum polaska</th>
                 <th scope="col">Datum dolaska</th>
+                <th scope="col">Slobodna mjesta</th>
                 <th scope="col">Aviokompanija</th>
                 <th scope="col">Cijena</th>
             </tr>
@@ -26,34 +82,44 @@
 
     <script src="Scripts/jquery-1.10.2.js"></script>
     <script>
+
+
+        function loadFlights() {
+            $.get("api/default", function (data, status) {
+                var flights = data;
+                var tbody = $("#flights-table-body");
+                tbody.empty(); // Clear any existing rows
+
+                flights.forEach(function (flight, index) {
+                    if (flight.Status === 0) {
+                        var row = `<tr>
+                                        <th scope="row">${index + 1}</th>
+                                        <td>${flight.StartDestination}</td>
+                                        <td>${flight.EndDestination}</td>
+                                        <td>${flight.DepartureDateTime}</td>
+                                        <td>${flight.ArrivalDateTime}</td>
+                                        <td>${flight.NumberOf_FreeSeats}</td>
+                                        <td><a href="airline-info.html?aviokompanija=${encodeURIComponent(flight.Aviokompanija)}">${flight.Aviokompanija}</a></td>
+                                        <td>${flight.Price}</td>
+                                    </tr>`;
+                        tbody.append(row);
+                    }
+                });
+            });
+        }
+
+        function resetFormFields() {
+            // Delay form reset by a short timeout to ensure submission completes
+            setTimeout(function () {
+                document.getElementById("searchForm").reset();
+                loadFlights();
+            }, 100);
+        }
+
         $(document).ready(function () {
             loadFlights();
-
-            function loadFlights() {
-                $.get("api/default", function (data, status) {
-                    console.log(data);
-
-                    var flights = data;
-                    var tbody = $("#flights-table-body");
-                    tbody.empty(); // Clear any existing rows
-
-                    flights.forEach(function (flight, index) {
-                        if (flight.Status === 0) {
-                            var row = `<tr>
-                                    <th scope="row">${index + 1}</th>
-                                    <td>${flight.StartDestination}</td>
-                                    <td>${flight.EndDestination}</td>
-                                    <td>${flight.DepartureDateTime}</td>
-                                    <td>${flight.ArrivalDateTime}</td>
-                                    <td><a href="airline-info.html?aviokompanija=${encodeURIComponent(flight.Aviokompanija)}">${flight.Aviokompanija}</a></td>
-                                    <td>${flight.Price}</td>
-                                </tr>`;
-                            tbody.append(row);
-                        }
-                    });
-                });
-            }
         });
+
     </script>
 </body>
 </html>
