@@ -17,6 +17,7 @@ namespace Web_PR106.Controllers
     {
 
 		private static List<Let> flights = new List<Let>();
+		private static List<Let> shownFlights = new List<Let>();
 
 		[HttpGet, Route("")]
 		public RedirectResult Index()
@@ -43,6 +44,7 @@ namespace Web_PR106.Controllers
 
 				flights.Add(flight);
 			}
+			shownFlights = new List<Let>(flights);
 
 			var requestUri = Request.RequestUri;
 			return Redirect(requestUri.AbsoluteUri + "Index.html");
@@ -51,7 +53,97 @@ namespace Web_PR106.Controllers
 		[HttpGet]
 		public IHttpActionResult Get()
 		{
-			return Ok(flights);
+			return Ok(shownFlights);
+		}
+
+		public void Post([FromBody]SearchFilter searchFilter)
+		{
+
+			string startDestination = searchFilter.StartDestination;
+			string endDestination = searchFilter.EndDestination;
+			string airlinesName = searchFilter.AirlinesName;
+			string departureDate, arrivalDate;
+			if (searchFilter.DepartureDate != null) { 
+				departureDate = searchFilter.DepartureDate.ToString().Split(' ')[0];
+			}
+			else
+			{
+				departureDate = "01/01/0001";
+			}
+			if (searchFilter.ArrivalDate != null)
+			{
+				arrivalDate = searchFilter.ArrivalDate.ToString().Split(' ')[0];
+			}
+			else
+			{
+				arrivalDate = "01/01/0001";
+			}
+
+			//if form is left unfilled then reset
+			if (string.IsNullOrEmpty(startDestination) &&
+				string.IsNullOrEmpty(endDestination) &&
+				string.IsNullOrEmpty(airlinesName) &&
+				departureDate == "01/01/0001" &&
+				arrivalDate == "01/01/0001")
+			{
+				shownFlights = new List<Let>(flights);
+				return;
+			}
+
+			if (!string.IsNullOrEmpty(startDestination))
+			{
+				foreach(Let flight in flights)
+				{
+					if (flight.StartDestination != startDestination)
+					{
+						shownFlights.Remove(flight);
+					}
+				}
+			}
+
+			if (!string.IsNullOrEmpty(endDestination))
+			{
+				foreach (Let flight in flights)
+				{
+					if (flight.EndDestination != endDestination)
+					{
+						shownFlights.Remove(flight);
+					}
+				}
+			}
+			if (!string.IsNullOrEmpty(airlinesName))
+			{
+				foreach (Let flight in flights)
+				{
+					if (flight.Aviokompanija.Name != airlinesName)
+					{
+						shownFlights.Remove(flight);
+					}
+				}
+			}
+			if (departureDate != "01/01/0001")
+			{
+				foreach (Let flight in flights)
+				{
+					if (flight.DepartureDateTime != departureDate)
+					{
+						shownFlights.Remove(flight);
+					}
+				}
+			}
+
+			if (arrivalDate != "01/01/0001")
+			{
+				foreach (Let flight in flights)
+				{
+					if (flight.ArrivalDateTime != arrivalDate)
+					{
+						shownFlights.Remove(flight);
+					}
+				}
+			}
+
+
 		}
 	}
 }
