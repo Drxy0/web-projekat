@@ -8,7 +8,8 @@
 </head>
 <body>
     <h2>Letovi</h2>
-
+    php
+    Copy code
     <div>
         <form id="searchForm" action="/api/default" method="post" onsubmit="resetFormFields()">
             <table>
@@ -17,7 +18,7 @@
                         <label>Polazište</label>
                     </td>
                     <td>
-                        <input type="text" placeholder="Polazište" id="pocetna_destinacija" name="startDestination"/>
+                        <input type="text" placeholder="Polazište" id="pocetna_destinacija" name="startDestination" />
                     </td>
                 </tr>
                 <tr>
@@ -56,7 +57,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <input class="btn btn-success" type="submit" value="PRETRAŽI"/>
+                        <input class="btn btn-success" type="submit" value="PRETRAŽI" />
                     </td>
                 </tr>
             </table>
@@ -73,7 +74,7 @@
                 <th scope="col">Datum dolaska</th>
                 <th scope="col">Slobodna mjesta</th>
                 <th scope="col">Aviokompanija</th>
-                <th scope="col">Cijena</th>
+                <th style="cursor:pointer" scope="col" onclick="sortTable()">Cijena</th>
             </tr>
         </thead>
         <tbody id="flights-table-body">
@@ -82,6 +83,74 @@
 
     <script src="Scripts/jquery-1.10.2.js"></script>
     <script>
+
+        var sortOrder = false;
+
+        function sortTable() {
+            var tbody = document.querySelector("#flights-table-body");
+            var rows = Array.from(tbody.rows);
+
+            var flights = [];
+
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].cells;
+                var flight = new Flight(
+                    cells[0].innerText,
+                    cells[1].innerText,
+                    cells[2].innerText,
+                    cells[3].innerText,
+                    cells[4].innerText,
+                    cells[5].innerText,
+                    cells[6].innerText,
+                    parseFloat(cells[7].innerText.substring(1))
+                );
+                flights.push(flight);
+            }
+            console.log(flights);
+
+            sortOrder = !sortOrder;
+
+
+            // Sort the flights array by price
+
+            if (sortOrder) {
+                flights.sort(function (a, b) {
+                    return a.Price - b.Price;
+                });
+            }
+            else {
+                flights.sort(function (a, b) {
+                    return b.Price - a.Price;
+                });
+            }
+
+            tbody.innerHTML = "";
+
+            flights.forEach(function (flight, index) {
+                var row = `<tr>
+                    <td scope="row" id="row_index">${index + 1}</td>
+                    <td id="table_startDestination">${flight.StartDestination}</td>
+                    <td id="table_endDestination">${flight.EndDestination}</td>
+                    <td id="table_departure">${flight.DepartureDateTime}</td>
+                    <td id="table_arrival">${flight.ArrivalDateTime}</td>
+                    <td id="table_freeSeats">${flight.NumberOf_FreeSeats}</td>
+                    <td id="table_airlines"><a href="airline-info.html?aviokompanija=${encodeURIComponent(flight.Airlines)}">${flight.Airlines}</a></td>
+                    <td id="table_price">$${flight.Price}</td>
+                </tr>`;
+                tbody.insertAdjacentHTML('beforeend', row);
+            });
+        };
+
+        function Flight(rowIndex, startDestination, endDestination, departure, arrival, freeSeats, airlines, price) {
+            this.RowIndex = rowIndex;
+            this.StartDestination = startDestination;
+            this.EndDestination = endDestination;
+            this.DepartureDateTime = departure;
+            this.ArrivalDateTime = arrival;
+            this.NumberOf_FreeSeats = freeSeats;
+            this.Airlines = airlines;
+            this.Price = price;
+        };
 
 
         function loadFlights() {
@@ -93,14 +162,14 @@
                 flights.forEach(function (flight, index) {
                     if (flight.Status === 0) {
                         var row = `<tr>
-                                        <th scope="row">${index + 1}</th>
-                                        <td>${flight.StartDestination}</td>
-                                        <td>${flight.EndDestination}</td>
-                                        <td>${flight.DepartureDateTime}</td>
-                                        <td>${flight.ArrivalDateTime}</td>
-                                        <td>${flight.NumberOf_FreeSeats}</td>
-                                        <td><a href="airline-info.html?aviokompanija=${encodeURIComponent(flight.Aviokompanija)}">${flight.Aviokompanija}</a></td>
-                                        <td>${flight.Price}</td>
+                                        <td scope="row">${index + 1}</td>
+                                        <td id="table_startDestination">${flight.StartDestination}</td>
+                                        <td id="table_endDestination">${flight.EndDestination}</td>
+                                        <td id="table_departure">${flight.DepartureDateTime}</td>
+                                        <td id="table_arrival">${flight.ArrivalDateTime}</td>
+                                        <td id="table_freeSeats">${flight.NumberOf_FreeSeats}</td>
+                                        <td id="table_airlines"><a href="airline-info.html?aviokompanija=${encodeURIComponent(flight.Aviokompanija)}">${flight.Aviokompanija}</a></td>
+                                        <td id="table_price">$${flight.Price}</td>
                                     </tr>`;
                         tbody.append(row);
                     }

@@ -63,6 +63,7 @@ namespace Web_PR106.Controllers
 			string endDestination = searchFilter.EndDestination;
 			string airlinesName = searchFilter.AirlinesName;
 			string departureDate, arrivalDate;
+
 			if (searchFilter.DepartureDate != null) { 
 				departureDate = searchFilter.DepartureDate.ToString().Split(' ')[0];
 			}
@@ -142,8 +143,6 @@ namespace Web_PR106.Controllers
 					}
 				}
 			}
-
-
 		}
 	}
 }
