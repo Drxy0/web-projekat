@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Airlines>
+	<Aviokompanija>
+		<Name>Air France</Name>
+		<Address>123 Airline Street, City 1, Country</Address>
+		<ContactInfo>email: info@airfrance.com/phone: +1234567890</ContactInfo>
+		<ProvidedFlights>
+			<Let>
+				<Aviokompanija>Air France</Aviokompanija>
+				<StartDestination>Belgrade</StartDestination>
+				<EndDestination>Paris</EndDestination>
+				<DepartureDateTime>2024-07-01T10:30:00</DepartureDateTime>
+				<ArrivalDateTime>2024-07-01T13:30:00</ArrivalDateTime>
+				<NumberOf_FreeSeats>20</NumberOf_FreeSeats>
+				<NumberOf_TakenSeats>150</NumberOf_TakenSeats>
+				<Price>120,50</Price>
+				<Status>AKTIVAN</Status>
+			</Let>
+			<Let>
+				<Aviokompanija>Air France</Aviokompanija>
+				<StartDestination>Paris</StartDestination>
+				<EndDestination>New York</EndDestination>
+				<DepartureDateTime>2024-07-02T15:00:00</DepartureDateTime>
+				<ArrivalDateTime>2024-07-02T18:00:00</ArrivalDateTime>
+				<NumberOf_FreeSeats>50</NumberOf_FreeSeats>
+				<NumberOf_TakenSeats>200</NumberOf_TakenSeats>
+				<Price>350,00</Price>
+				<Status>AKTIVAN</Status>
+			</Let>
+		</ProvidedFlights>
+		<Reviews>
+			<Review>
+				<Reviewer>john_doe</Reviewer>
+				<Aviokompanija>Air France</Aviokompanija>
+				<Title>Could be better</Title>
+				<Description>The flight was delayed and the service was average. Needs improvement.</Description>
+				<Picture>picture</Picture>
+				<Status>ODOBRENA</Status>
+			</Review>
+			<Review>
+				<Reviewer>jane_smith</Reviewer>
+				<Aviokompanija>Air France</Aviokompanija>
+				<Title>Excellent service!</Title>
+				<Description>I had a fantastic experience with Lufthansa. The flight was smooth, and the crew was very helpful.</Description>
+				<Picture>another-picture</Picture>
+				<Status>ODOBRENA</Status>
+			</Review>
+		</Reviews>
+	</Aviokompanija>
+	
+	<Aviokompanija>
+		<Name>Lufthansa</Name>
+		<Address>456 Airline Avenue, City 2, Country</Address>
+		<ContactInfo>email: info@lufthansa.com/phone: +9876543210</ContactInfo>
+		<ProvidedFlights>
+			<Let>
+				<Aviokompanija>Lufthansa</Aviokompanija>
+				<StartDestination>Frankfurt</StartDestination>
+				<EndDestination>Tokyo</EndDestination>
+				<DepartureDateTime>2024-07-03T07:00:00</DepartureDateTime>
+				<ArrivalDateTime>2024-07-03T22:00:00</ArrivalDateTime>
+				<NumberOf_FreeSeats>30</NumberOf_FreeSeats>
+				<NumberOf_TakenSeats>300</NumberOf_TakenSeats>
+				<Price>290,75</Price>
+				<Status>AKTIVAN</Status>
+			</Let>
+			<Let>
+				<Aviokompanija>Lufthansa</Aviokompanija>
+				<StartDestination>London</StartDestination>
+				<EndDestination>Los Angeles</EndDestination>
+				<DepartureDateTime>2024-07-04T12:00:00</DepartureDateTime>
+				<ArrivalDateTime>2024-07-04T20:00:00</ArrivalDateTime>
+				<NumberOf_FreeSeats>40</NumberOf_FreeSeats>
+				<NumberOf_TakenSeats>210</NumberOf_TakenSeats>
+				<Price>500.00</Price>
+				<Status>AKTIVAN</Status>
+			</Let>
+		</ProvidedFlights>
+		<Reviews>
+			<Review>
+				<Reviewer>mark_jackson</Reviewer>
+				<Aviokompanija>Lufthansa</Aviokompanija>
+				<Title>Great experience!</Title>
+				<Description>The flight was on time, and the service exceeded my expectations. Highly recommended!</Description>
+				<Picture>review-picture</Picture>
+				<Status>ODOBRENA</Status>
+			</Review>
+		</Reviews>
+	</Aviokompanija>
+
+</Airlines>

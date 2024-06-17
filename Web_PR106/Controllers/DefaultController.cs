@@ -16,8 +16,8 @@ namespace Web_PR106.Controllers
     public class DefaultController : ApiController
     {
 
-		private static List<Let> flights = new List<Let>();
-		private static List<Let> shownFlights = new List<Let>();
+		private static List<Flight> flights = new List<Flight>();
+		private static List<Flight> shownFlights = new List<Flight>();
 
 		[HttpGet, Route("")]
 		public RedirectResult Index()
@@ -30,9 +30,9 @@ namespace Web_PR106.Controllers
 
 			foreach (XmlNode node in doc.DocumentElement.ChildNodes)
 			{
-				Let flight = new Let();
+				Flight flight = new Flight();
 
-				flight.Aviokompanija = new Aviokompanija(node["Aviokompanija"].InnerText);
+				flight.Aviokompanija = new Airline(node["Aviokompanija"].InnerText);
 				flight.StartDestination = node["StartDestination"].InnerText;
 				flight.EndDestination = node["EndDestination"].InnerText;
 				flight.DepartureDateTime = node["DepartureDateTime"].InnerText;
@@ -44,7 +44,7 @@ namespace Web_PR106.Controllers
 
 				flights.Add(flight);
 			}
-			shownFlights = new List<Let>(flights);
+			shownFlights = new List<Flight>(flights);
 
 			var requestUri = Request.RequestUri;
 			return Redirect(requestUri.AbsoluteUri + "Index.html");
@@ -87,13 +87,13 @@ namespace Web_PR106.Controllers
 				departureDate == "01/01/0001" &&
 				arrivalDate == "01/01/0001")
 			{
-				shownFlights = new List<Let>(flights);
+				shownFlights = new List<Flight>(flights);
 				return;
 			}
 
 			if (!string.IsNullOrEmpty(startDestination))
 			{
-				foreach(Let flight in flights)
+				foreach(Flight flight in flights)
 				{
 					if (flight.StartDestination != startDestination)
 					{
@@ -104,7 +104,7 @@ namespace Web_PR106.Controllers
 
 			if (!string.IsNullOrEmpty(endDestination))
 			{
-				foreach (Let flight in flights)
+				foreach (Flight flight in flights)
 				{
 					if (flight.EndDestination != endDestination)
 					{
@@ -114,7 +114,7 @@ namespace Web_PR106.Controllers
 			}
 			if (!string.IsNullOrEmpty(airlinesName))
 			{
-				foreach (Let flight in flights)
+				foreach (Flight flight in flights)
 				{
 					if (flight.Aviokompanija.Name != airlinesName)
 					{
@@ -124,7 +124,7 @@ namespace Web_PR106.Controllers
 			}
 			if (departureDate != "01/01/0001")
 			{
-				foreach (Let flight in flights)
+				foreach (Flight flight in flights)
 				{
 					if (flight.DepartureDateTime != departureDate)
 					{
@@ -135,7 +135,7 @@ namespace Web_PR106.Controllers
 
 			if (arrivalDate != "01/01/0001")
 			{
-				foreach (Let flight in flights)
+				foreach (Flight flight in flights)
 				{
 					if (flight.ArrivalDateTime != arrivalDate)
 					{

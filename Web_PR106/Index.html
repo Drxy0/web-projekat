@@ -7,89 +7,135 @@
     <link rel="stylesheet" href="Content/bootstrap.min.css">
 </head>
 <body>
-    <h2>Letovi</h2>
-    php
-    Copy code
-    <div>
-        <form id="searchForm" action="/api/default" method="post" onsubmit="resetFormFields()">
-            <table>
-                <tr>
-                    <td>
-                        <label>Polazište</label>
-                    </td>
-                    <td>
-                        <input type="text" placeholder="Polazište" id="pocetna_destinacija" name="startDestination" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>Odredište</label>
-                    </td>
-                    <td>
-                        <input type="text" placeholder="Odredište" id="odredisna_destinacija" name="endDestination" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>Aviokompanija</label>
-                    </td>
-                    <td>
-                        <input type="text" placeholder="Aviokompanija" id="aviokompanija" name="airlinesName" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>Datum polaska</label>
-                    </td>
-                    <td>
-                        <input type="date" id="datum_polaska" name="departureDate" />
 
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label>Datum dolaska</label>
+    <nav class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
+        <a href="#table" class="navbar-brand">
+                Letovi
+        </a>
+        <a href="#airlines" class="navbar-brand">
+            Aviokompanije
+        </a>
+    </nav>
 
-                    </td>
-                    <td>
-                        <input type="date" id="datum_dolaska" name="arrivalDate" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input class="btn btn-success" type="submit" value="PRETRAŽI" />
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div>
+    <section id="table">
+        <h2>Letovi</h2>
+        <div>
+            <form id="searchForm" action="/api/default" method="post" onsubmit="resetFormFields()">
+                <table>
+                    <tr>
+                        <td>
+                            <label>Polazište</label>
+                        </td>
+                        <td>
+                            <input type="text" placeholder="Polazište" id="pocetna_destinacija" name="startDestination" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Odredište</label>
+                        </td>
+                        <td>
+                            <input type="text" placeholder="Odredište" id="odredisna_destinacija" name="endDestination" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Aviokompanija</label>
+                        </td>
+                        <td>
+                            <input type="text" placeholder="Aviokompanija" id="aviokompanija" name="airlinesName" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Datum polaska</label>
+                        </td>
+                        <td>
+                            <input type="date" id="datum_polaska" name="departureDate" />
 
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Polazna destinacija</th>
-                <th scope="col">Odredišna destinacija</th>
-                <th scope="col">Datum polaska</th>
-                <th scope="col">Datum dolaska</th>
-                <th scope="col">Slobodna mjesta</th>
-                <th scope="col">Aviokompanija</th>
-                <th style="cursor:pointer" scope="col" onclick="sortTable()">Cijena</th>
-            </tr>
-        </thead>
-        <tbody id="flights-table-body">
-        </tbody>
-    </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Datum dolaska</label>
+
+                        </td>
+                        <td>
+                            <input type="date" id="datum_dolaska" name="arrivalDate" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="btn btn-success" type="submit" value="PRETRAŽI" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Polazna destinacija</th>
+                    <th scope="col">Odredišna destinacija</th>
+                    <th scope="col">Datum polaska</th>
+                    <th scope="col">Datum dolaska</th>
+                    <th scope="col">Slobodna mjesta</th>
+                    <th scope="col">Aviokompanija</th>
+                    <th style="cursor:pointer" scope="col" onclick="sortTable()">Cijena</th>
+                </tr>
+            </thead>
+            <tbody id="flights-table-body">
+            </tbody>
+        </table>
+    </section>
+
+
+    <section id="airlines">
+        <h2>Aviokompanije</h2>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Aviokompanija</th>
+                    <th scope="col">e-mail</th>
+                </tr>
+            </thead>
+            <tbody id="airlines-table-body">
+            </tbody>
+        </table>
+
+    </section>
 
     <script src="Scripts/jquery-1.10.2.js"></script>
     <script>
-
         var sortOrder = false;
+
+
+        function loadAirlines() {
+            $.get("api/airlines", function (data, status) {
+                var airlines = data;
+                var tbody = $("#airlines-table-body");
+                tbody.empty(); // Clear any existing rows
+
+                var i = 0;
+                airlines.forEach(function (airline, index) {
+                    ++i;
+                    var row = `<tr>
+                                    <td>${i}</td>
+                                    <td>${airline.Name}</td>
+                                    <td>${airline.ContactInfo.split('/phone:')[0].split('email: ')[1]}</td>
+                                </tr>`;
+                    tbody.append(row);
+                })
+            });
+        }
 
         function sortTable() {
             var tbody = document.querySelector("#flights-table-body");
             var rows = Array.from(tbody.rows);
-
             var flights = [];
 
             for (var i = 0; i < rows.length; i++) {
@@ -106,13 +152,9 @@
                 );
                 flights.push(flight);
             }
-            console.log(flights);
 
             sortOrder = !sortOrder;
-
-
             // Sort the flights array by price
-
             if (sortOrder) {
                 flights.sort(function (a, b) {
                     return a.Price - b.Price;
@@ -152,23 +194,24 @@
             this.Price = price;
         };
 
-
         function loadFlights() {
             $.get("api/default", function (data, status) {
                 var flights = data;
                 var tbody = $("#flights-table-body");
                 tbody.empty(); // Clear any existing rows
 
-                flights.forEach(function (flight, index) {
+                var i = 0;
+                flights.forEach(function (flight) {
                     if (flight.Status === 0) {
+                        ++i;
                         var row = `<tr>
-                                        <td scope="row">${index + 1}</td>
+                                        <td scope="row">${i}</td>
                                         <td id="table_startDestination">${flight.StartDestination}</td>
                                         <td id="table_endDestination">${flight.EndDestination}</td>
                                         <td id="table_departure">${flight.DepartureDateTime}</td>
                                         <td id="table_arrival">${flight.ArrivalDateTime}</td>
                                         <td id="table_freeSeats">${flight.NumberOf_FreeSeats}</td>
-                                        <td id="table_airlines"><a href="airline-info.html?aviokompanija=${encodeURIComponent(flight.Aviokompanija)}">${flight.Aviokompanija}</a></td>
+                                        <td id="table_airlines"><a href="airline-info.html?aviokompanija=${encodeURIComponent(flight.Aviokompanija.Name)}">${flight.Aviokompanija.Name}</a></td>
                                         <td id="table_price">$${flight.Price}</td>
                                     </tr>`;
                         tbody.append(row);
@@ -187,6 +230,7 @@
 
         $(document).ready(function () {
             loadFlights();
+            loadAirlines();
         });
 
     </script>

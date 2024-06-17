@@ -7,10 +7,10 @@ namespace Web_PR106.Models
 {
     public class DataModel
     {
-        public Aviokompanija Aviokompanija { get; set; }
-        public Korisnik Korisnik { get; set; }
-        public List<Let> Letovi { get; set; }
-        public Recenzija Recenzija { get; set; }
-        public Rezervacija Rezervacija { get; set; }
+        public Airline Aviokompanija { get; set; }
+        public User Korisnik { get; set; }
+        public List<Flight> Letovi { get; set; }
+        public Review Recenzija { get; set; }
+        public Reservation Rezervacija { get; set; }
     }
 }

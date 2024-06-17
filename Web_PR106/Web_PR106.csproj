@@ -106,6 +106,7 @@
   <ItemGroup>
     <Content Include="Airline.html" />
     <Content Include="Assets\profile.jpg" />
+    <Content Include="Assets\test_aviokompanije.xml" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Global.asax" />
@@ -121,16 +122,17 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AirlinesController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Aviokompanija.cs" />
+    <Compile Include="Models\Airline.cs" />
     <Compile Include="Models\DataModel.cs" />
-    <Compile Include="Models\Korisnik.cs" />
-    <Compile Include="Models\Let.cs" />
-    <Compile Include="Models\Recenzija.cs" />
-    <Compile Include="Models\Rezervacija.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\Flight.cs" />
+    <Compile Include="Models\Review.cs" />
+    <Compile Include="Models\Reservation.cs" />
     <Compile Include="Models\SearchFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

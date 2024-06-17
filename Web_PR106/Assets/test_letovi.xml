@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flights>
 	<Let>
-		<Aviokompanija>Air Serbia</Aviokompanija>
+		<Aviokompanija>Air France</Aviokompanija>
 		<StartDestination>Belgrade</StartDestination>
 		<EndDestination>Paris</EndDestination>
 		<DepartureDateTime>2024-07-01T10:30:00</DepartureDateTime>
@@ -20,7 +20,7 @@
 		<NumberOf_FreeSeats>50</NumberOf_FreeSeats>
 		<NumberOf_TakenSeats>200</NumberOf_TakenSeats>
 		<Price>350,00</Price>
-		<Status>AKTIVAN</Status>
+		<Status>OTKAZAN</Status>
 	</Let>
 	<Let>
 		<Aviokompanija>Lufthansa</Aviokompanija>
@@ -31,6 +31,17 @@
 		<NumberOf_FreeSeats>30</NumberOf_FreeSeats>
 		<NumberOf_TakenSeats>300</NumberOf_TakenSeats>
 		<Price>290,75</Price>
+		<Status>AKTIVAN</Status>
+	</Let>
+	<Let>
+		<Aviokompanija>Lufthansa</Aviokompanija>
+		<StartDestination>London</StartDestination>
+		<EndDestination>Los Angeles</EndDestination>
+		<DepartureDateTime>2024-07-04T12:00:00</DepartureDateTime>
+		<ArrivalDateTime>2024-07-04T20:00:00</ArrivalDateTime>
+		<NumberOf_FreeSeats>40</NumberOf_FreeSeats>
+		<NumberOf_TakenSeats>210</NumberOf_TakenSeats>
+		<Price>500.00</Price>
 		<Status>AKTIVAN</Status>
 	</Let>
 	<Let>
