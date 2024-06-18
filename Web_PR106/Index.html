@@ -176,7 +176,7 @@
                     <td id="table_departure">${flight.DepartureDateTime}</td>
                     <td id="table_arrival">${flight.ArrivalDateTime}</td>
                     <td id="table_freeSeats">${flight.NumberOf_FreeSeats}</td>
-                    <td id="table_airlines"><a href="airline-info.html?aviokompanija=${encodeURIComponent(flight.Airlines)}">${flight.Airlines}</a></td>
+                    <td id="table_airlines"><a href="Airline.html?airline=${encodeURIComponent(flight.Airlines)}">${flight.Airlines}</a></td>
                     <td id="table_price">$${flight.Price}</td>
                 </tr>`;
                 tbody.insertAdjacentHTML('beforeend', row);
@@ -211,7 +211,7 @@
                                         <td id="table_departure">${flight.DepartureDateTime}</td>
                                         <td id="table_arrival">${flight.ArrivalDateTime}</td>
                                         <td id="table_freeSeats">${flight.NumberOf_FreeSeats}</td>
-                                        <td id="table_airlines"><a href="airline-info.html?aviokompanija=${encodeURIComponent(flight.Aviokompanija.Name)}">${flight.Aviokompanija.Name}</a></td>
+                                        <td id="table_airlines"><a href="Airline.html?airline=${encodeURIComponent(flight.Aviokompanija.Name)}">${flight.Aviokompanija.Name}</a></td>
                                         <td id="table_price">$${flight.Price}</td>
                                     </tr>`;
                         tbody.append(row);

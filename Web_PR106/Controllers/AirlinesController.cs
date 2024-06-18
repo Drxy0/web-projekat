@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -12,10 +13,12 @@ namespace Web_PR106.Controllers
     public class AirlinesController : ApiController
     {
 		private static List<Airline> airlines = new List<Airline>();
-		[HttpGet]
-        public IHttpActionResult Get()
-        {
-			string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+		private static bool loaded = false;
+		public void LoadDatabase()
+		{
+			Trace.WriteLine("Load database entered");
+			loaded = true;
+            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 			string fullPath = baseDirectory + "\\Assets\\test_aviokompanije.xml";
 
 			XmlDocument doc = new XmlDocument();
@@ -74,7 +77,18 @@ namespace Web_PR106.Controllers
 
 				airlines.Add(airline);
 			}
-			return Ok(airlines);
+		}
+
+		[HttpGet]
+        public IHttpActionResult Get()
+        {
+            if (!loaded)
+            {
+				LoadDatabase();
+			}
+			Trace.WriteLine(airlines.Count);
+            return Ok(airlines);
         }
+
     }
 }
