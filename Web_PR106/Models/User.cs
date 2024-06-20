@@ -23,7 +23,7 @@ namespace Web_PR106.Models
 		public string Name { get; set; }
 		public string Surname { get; set; }
 		public string Email { get; set; }
-		public string Date { get; set; }
+		public string Birthday { get; set; }
 		public Gender Gender { get; set; }
 		public UserType UserType {  get; set; }
 		public List<Reservation> ReservationList { get; set; }

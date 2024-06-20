@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Sign in</title>
+    <link rel="stylesheet" href="Content/bootstrap.min.css">
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <style>
+        form, p {
+            padding-top: 20px;
+            margin: 0 auto;
+            width: 25vw;
+        }
+    </style>
+</head>
+<body>
+    <section id="login">
+        <form id="loginForm">
+            <h2 class="text-center">Sign in</h2>
+            <div id="loginAlert" class="alert alert-danger" hidden role="alert"></div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp" placeholder="Enter email" required>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" id="loginPassword" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Sign in</button>
+        </form>
+        <br />
+        <p>Don't have an account? <a>Register</a></p>
+    </section>
+    <section id="register">
+        <form id="registerForm">
+            <h2 class="text-center">Register</h2>
+            <div id="registerAlert" class="alert alert-danger" hidden role="alert"></div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="John" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="surname">Surname</label>
+                    <input type="text" class="form-control" id="surname" name="surname" placeholder="Doe" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="birthday">Birthday</label>
+                    <input type="date" class="form-control" id="birthday" name="birthday" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="gender">Gender</label>
+                    <select id="gender" class="form-control" name="gender" required>
+                        <option selected value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </section>
+    <script>
+        function showAlert(alertId, message) {
+            const alertElement = document.getElementById(alertId);
+            alertElement.hidden = false;
+            alertElement.textContent = message;
+        }
+
+        function hideAlert(alertId) {
+            const alertElement = document.getElementById(alertId);
+            alertElement.hidden = true;
+            alertElement.textContent = '';
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            hideAlert('loginAlert');
+
+            $.get("api/users", function (data, status) {
+                let emailExists = false;
+                data.forEach((user) => {
+                    if (user.Email === document.getElementById('loginEmail').value) {
+                        emailExists = true;
+                    }
+                });
+                if (!emailExists) {
+                    showAlert('loginAlert', "Email doesn't exist");
+                    return;
+                }
+
+                const user = data.find(user => user.Email === document.getElementById('loginEmail').value);
+                if (user.Password != document.getElementById('loginPassword').value) {
+                    showAlert('loginAlert', "Incorrect password!");
+                    return;
+                }
+
+
+                alert("login success");
+            });
+
+
+            // Uncomment the fetch call for the actual login process
+            /*
+            fetch('/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            */
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            hideAlert('registerAlert');
+
+            $.get("api/users", function (data, status) {
+                const usernameExists = data.some(user => user.Username === document.getElementById('username').value);
+                const emailExists = data.some(user => user.Email === document.getElementById('email').value);
+
+                if (usernameExists) {
+                    showAlert('registerAlert', "Username already exists");
+                    return;
+                }
+
+                if (emailExists) {
+                    showAlert('registerAlert', "Email already exists");
+                    return;
+                }
+
+                var formData = {
+                    username: document.getElementById('username').value,
+                    password: document.getElementById('password').value,
+                    name: document.getElementById('name').value,
+                    surname: document.getElementById('surname').value,
+                    email: document.getElementById('email').value,
+                    birthday: document.getElementById('birthday').value,
+                    gender: document.getElementById('gender').value
+                };
+
+                fetch('/api/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+            });
+        });
+    </script>
+</body>
+</html>
