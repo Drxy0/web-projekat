@@ -8,13 +8,14 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
+    <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
         <a href="#table" class="navbar-brand">
                 Letovi
         </a>
         <a href="#airlines" class="navbar-brand">
             Aviokompanije
         </a>
+
     </nav>
 
     <section id="table">
@@ -113,6 +114,17 @@
     <script>
         var sortOrder = false;
 
+        function checkSession() {
+            let nav = document.querySelector("#nav");
+            if (Object.keys(sessionStorage).length == 0) {
+                let row = '<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>';
+                nav.insertAdjacentHTML('beforeend', row);
+            } else {
+                let row = `<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`;
+                nav.insertAdjacentHTML('beforeend', row);
+            }
+        }
+
 
         function loadAirlines() {
             $.get("api/airlines", function (data, status) {
@@ -137,6 +149,9 @@
             var tbody = document.querySelector("#flights-table-body");
             var rows = Array.from(tbody.rows);
             var flights = [];
+
+            sessionStorage.setItem("lastname", "Smith");
+
 
             for (var i = 0; i < rows.length; i++) {
                 var cells = rows[i].cells;
@@ -229,6 +244,7 @@
         }
 
         $(document).ready(function () {
+            checkSession();
             loadFlights();
             loadAirlines();
         });

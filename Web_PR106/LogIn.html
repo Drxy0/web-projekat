@@ -108,8 +108,16 @@
                     return;
                 }
 
+                //login success
+                sessionStorage.setItem("token", user.Username);
+                if (user.UserType === 0) {
+                    sessionStorage.setItem("role", "PUTNIK");
+                }
+                else {
+                    sessionStorage.setItem("role", "ADMINISTRATOR");
+                }
 
-                alert("login success");
+                window.location.href = "Index.html";
             });
 
 
@@ -160,6 +168,11 @@
                     },
                     body: JSON.stringify(formData)
                 });
+
+                sessionStorage.setItem("token", document.getElementById('username').value);
+                sessionStorage.setItem("role", "PUTNIK");
+
+                window.location.href = "Index.html";
             });
         });
     </script>

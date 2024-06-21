@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Users>
+	<User>
+		<Username>john_doe</Username>
+		<Password>123</Password>
+		<Name>John</Name>
+		<Surname>Doe</Surname>
+		<Email>john.doe@example.com</Email>
+		<Birthday>1990-01-01</Birthday>
+		<Gender>Male</Gender>
+		<UserType>PUTNIK</UserType>
+		<ReservationList>
+			<Reservation>
+				<User>john_doe</User>
+				<Flight>Air France</Flight>
+				<ReservationDate>2023-06-20</ReservationDate>
+				<NumberOfPassangers>1</NumberOfPassangers>
+				<Price>50,70</Price>
+			</Reservation>
+		</ReservationList>
+	</User>
+	<User>
+		<Username>jane_smith</Username>
+		<Password>securepassword</Password>
+		<Name>Jane</Name>
+		<Surname>Smith</Surname>
+		<Email>jane.smith@example.com</Email>
+		<Birthday>1985-05-15</Birthday>
+		<Gender>Female</Gender>
+		<UserType>PUTNIK</UserType>
+		<ReservationList>
+			<Reservation>
+				<User>jane_smith</User>
+				<Flight>Air France</Flight>
+				<NumberOfPassangers>1</NumberOfPassangers>
+				<Price>110</Price>
+			</Reservation>
+		</ReservationList>
+	</User>
+</Users>
+

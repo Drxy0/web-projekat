@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="Content/bootstrap.min.css">
+    <title></title>
+</head>
+<body>
+    <h1>User profile</h1>
+    <h4>Username</h4>
+    <br>
+    <button type="button" class="btn btn-primary">Edit Profile</button>
+    <h4>Name Surname</h4>
+    <h4>Email</h4>
+    <h4>Birthday</h4>
+    <h4>Gender</h4>
+    <h4>Reservations</h4>
+    
+    <script>
+        $(document).ready(function () {
+            $.get("api/users", function (data, status) {
+
+            });
+        });
+    </script>
+</body>
+</html>

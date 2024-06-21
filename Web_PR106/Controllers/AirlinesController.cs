@@ -16,7 +16,6 @@ namespace Web_PR106.Controllers
 		private static bool loaded = false;
 		public void LoadDatabase()
 		{
-			Trace.WriteLine("Load database entered");
 			loaded = true;
             string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 			string fullPath = baseDirectory + "\\Assets\\test_aviokompanije.xml";
@@ -86,7 +85,6 @@ namespace Web_PR106.Controllers
             {
 				LoadDatabase();
 			}
-			Trace.WriteLine(airlines.Count);
             return Ok(airlines);
         }
 
