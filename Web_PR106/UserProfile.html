@@ -3,25 +3,132 @@
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="Content/bootstrap.min.css">
-    <title></title>
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <style>
+        form, p {
+            padding-top: 20px;
+            margin: 0 auto;
+            width: 25vw;
+        }
+        body {
+            padding-top: 50px;
+        }
+    </style>
+    <title>Profile</title>
 </head>
 <body>
-    <h1>User profile</h1>
-    <h4>Username</h4>
-    <br>
-    <button type="button" class="btn btn-primary">Edit Profile</button>
-    <h4>Name Surname</h4>
-    <h4>Email</h4>
-    <h4>Birthday</h4>
-    <h4>Gender</h4>
-    <h4>Reservations</h4>
-    
-    <script>
-        $(document).ready(function () {
-            $.get("api/users", function (data, status) {
+    <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
+        <a href="Index.html" class="navbar-brand">
+            Home
+        </a>
+    </nav>
 
-            });
+    <h1>User profile</h1>
+    <button type="button" class="btn btn-primary" onclick="editProfile()">Edit Profile</button>
+
+    <div id="userInfo" style="padding:20px">
+    </div>
+
+    <div id="editDiv" hidden>
+        <form id="registerForm">
+            <h2 class="text-center">Edit Profile</h2>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="John" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="surname">Surname</label>
+                    <input type="text" class="form-control" id="surname" name="surname" placeholder="Doe" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="birthday">Birthday</label>
+                    <input type="date" class="form-control" id="birthday" name="birthday" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="gender">Gender</label>
+                    <select id="gender" class="form-control" name="gender" required>
+                        <option selected value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+    </div>
+
+
+    <script>
+        var user;
+        $(document).ready(function () {
+            loadUser();
         });
+
+        function loadUser() {
+            $.get("api/users", function (data, status) {
+                var userInfo = document.querySelector("#userInfo");
+                user = data.find(user => user.Username === sessionStorage.getItem("token"));
+
+                let gender = ["MALE", "FEMALE"];
+
+                userInfo.innerHTML = `<h4>${user.Username}</h4> <br>
+                                        <h4>${user.Name} ${user.Surname}</h4>
+                                        <h4>${user.Email}</h4>
+                                        <h4>${user.Birthday}</h4>
+                                        <h4>${gender[user.Gender]}</h4>
+                                        <h4>Reservations</h4>`;
+
+                document.querySelector('#password').value = user.Password;
+                document.querySelector('#name').value = user.Name;
+                document.querySelector('#surname').value = user.Surname;
+                document.querySelector('#email').value = user.Email;
+                document.querySelector('#birthday').value = user.Birthday;
+                document.querySelector('#gender').value = user.Gender === 0 ? 'Male' : 'Female';
+            });
+        }
+
+        function editProfile() {
+            userInfo.hidden = true;
+            var editDiv = document.querySelector("#editDiv");
+            editDiv.hidden = false;
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            var formData = {
+                username: user.Username,
+                password: document.getElementById('password').value,
+                name: document.getElementById('name').value,
+                surname: document.getElementById('surname').value,
+                email: document.getElementById('email').value,
+                birthday: document.getElementById('birthday').value,
+                gender: document.getElementById('gender').value
+            };
+
+            fetch('/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            }).then(response => {
+                location.reload();
+            });
+
+
+        });
+
     </script>
 </body>
 </html>

@@ -16,7 +16,7 @@ namespace Web_PR106.Controllers
         private static List<User> users = new List<User>();
 		private static bool loaded = false;
 
-		public void LoadDatabase()
+		private void LoadDatabase()
 		{
 			if (loaded) return;
 			loaded = true;
@@ -57,7 +57,6 @@ namespace Web_PR106.Controllers
 			}
 		}
 
-
 		[HttpGet]
         public IHttpActionResult Get()
         {
@@ -68,12 +67,17 @@ namespace Web_PR106.Controllers
 			return Ok(users);
 		}
 
-
-        [HttpPost]
+		[HttpPost]
         public IHttpActionResult Post([FromBody]User user)
         {
-            users.Add(user);
-            return Ok();
+			User oldUser = users.Find(x => x.Username == user.Username);
+
+			if(oldUser != null)		//Replace already existing user info
+			{
+				users.Remove(oldUser);
+			}
+			users.Add(user);
+			return Ok();
         }
     }
 }

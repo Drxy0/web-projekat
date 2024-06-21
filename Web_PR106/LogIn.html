@@ -11,9 +11,18 @@
             margin: 0 auto;
             width: 25vw;
         }
+        body {
+            padding-top: 50px;
+        }
     </style>
 </head>
 <body>
+    <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
+        <a href="Index.html" class="navbar-brand">
+            Home
+        </a>
+    </nav>
+
     <section id="login">
         <form id="loginForm">
             <h2 class="text-center">Sign in</h2>
@@ -120,17 +129,6 @@
                 window.location.href = "Index.html";
             });
 
-
-            // Uncomment the fetch call for the actual login process
-            /*
-            fetch('/api/users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            })
-            */
         });
 
         document.getElementById('registerForm').addEventListener('submit', function (event) {
@@ -161,6 +159,7 @@
                     gender: document.getElementById('gender').value
                 };
 
+                console.log("request sent");
                 fetch('/api/users', {
                     method: 'POST',
                     headers: {
