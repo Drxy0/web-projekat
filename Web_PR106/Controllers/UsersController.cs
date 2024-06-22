@@ -137,5 +137,21 @@ namespace Web_PR106.Controllers
 				.ToList();
 			return Ok(filteredReservations);
 		}
+
+		[HttpPost]
+		[Route("createReservation")]
+		public IHttpActionResult CreateReservation([FromBody] string request)
+		{
+			string numberOfPassangers = request.Split(' ')[0];
+			string username = request.Split(' ')[1];
+			if (numberOfPassangers == "")
+			{
+				return BadRequest();
+			}
+
+			User currentUser = users.Find(x => x.Username == username);
+
+			return Ok();
+		}
 	}
 }

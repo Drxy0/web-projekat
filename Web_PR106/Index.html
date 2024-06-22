@@ -86,7 +86,8 @@
                     <th scope="col">Datum dolaska</th>
                     <th scope="col">Slobodna mjesta</th>
                     <th scope="col">Aviokompanija</th>
-                    <th style="cursor:pointer" scope="col" onclick="sortTable()">Cijena</th>
+                    <th id="sortHeader" style="cursor:pointer" scope="col" onclick="sortTable()">Cijena</th>
+                    <th style="width:30px;" scope="col"></th>
                 </tr>
             </thead>
             <tbody id="flights-table-body">
@@ -171,13 +172,16 @@
             }
 
             sortOrder = !sortOrder;
+            let sortHeader = document.querySelector("#sortHeader");
             // Sort the flights array by price
             if (sortOrder) {
+                sortHeader.innerHTML = "Cijena▲";
                 flights.sort(function (a, b) {
                     return a.Price - b.Price;
                 });
             }
             else {
+                sortHeader.innerHTML = "Cijena▼"
                 flights.sort(function (a, b) {
                     return b.Price - a.Price;
                 });
@@ -195,6 +199,7 @@
                     <td id="table_freeSeats">${flight.NumberOf_FreeSeats}</td>
                     <td id="table_airlines"><a href="Airline.html?airline=${encodeURIComponent(flight.Airlines)}">${flight.Airlines}</a></td>
                     <td id="table_price">$${flight.Price}</td>
+                    <td><a href="Reservation.html" class="btn btn-success">Rezerviši</a></td>
                 </tr>`;
                 tbody.insertAdjacentHTML('beforeend', row);
             });
@@ -230,6 +235,7 @@
                                         <td id="table_freeSeats">${flight.NumberOf_FreeSeats}</td>
                                         <td id="table_airlines"><a href="Airline.html?airline=${encodeURIComponent(flight.Aviokompanija.Name)}">${flight.Aviokompanija.Name}</a></td>
                                         <td id="table_price">$${flight.Price}</td>
+                                        <td><a href="Reservation.html" class="btn btn-success">Rezerviši</a></td>
                                     </tr>`;
                         tbody.append(row);
                     }

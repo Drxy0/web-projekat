@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="Content/bootstrap.min.css">
+    <title>Rezervacija</title>
+</head>
+<body>
+    <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
+        <a href="#table" class="navbar-brand">
+            Letovi
+        </a>
+        <a href="#airlines" class="navbar-brand">
+            Aviokompanije
+        </a>
+        <a href="MyFlights.html" class="navbar-brand">
+            Moji Letovi
+        </a>
+    </nav>
+
+    <h2>Rezerviši</h2>
+    <form action="api/users/createReservation" method="post">
+        Broj putnika:
+        <input type="number" name="numberOfPassangers" />
+        <input type="submit" class="btn btn-success" value="Rezerviši" />
+    </form>
+</body>
+</html>

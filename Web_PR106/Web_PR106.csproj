@@ -114,6 +114,7 @@
     <Content Include="Global.asax" />
     <Content Include="LogIn.html" />
     <Content Include="MyFlights.html" />
+    <Content Include="Reservation.html" />
     <Content Include="UserProfile.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
