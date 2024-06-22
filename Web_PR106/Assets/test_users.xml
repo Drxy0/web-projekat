@@ -12,7 +12,34 @@
 		<ReservationList>
 			<Reservation>
 				<User>john_doe</User>
-				<Flight>Air France</Flight>
+				<Flight>
+					<Aviokompanija>Air France</Aviokompanija>
+					<StartDestination>Belgrade</StartDestination>
+					<EndDestination>Paris</EndDestination>
+					<DepartureDateTime>2024-07-01T10:30:00</DepartureDateTime>
+					<ArrivalDateTime>2024-07-01T13:30:00</ArrivalDateTime>
+					<NumberOf_FreeSeats>20</NumberOf_FreeSeats>
+					<NumberOf_TakenSeats>150</NumberOf_TakenSeats>
+					<Price>120,50</Price>
+					<Status>AKTIVAN</Status>
+				</Flight>
+				<ReservationDate>2023-06-20</ReservationDate>
+				<NumberOfPassangers>1</NumberOfPassangers>
+				<Price>50,70</Price>
+			</Reservation>
+			<Reservation>
+				<User>john_doe</User>
+				<Flight>
+					<Aviokompanija>Air France</Aviokompanija>
+					<StartDestination>Belgrade</StartDestination>
+					<EndDestination>Paris</EndDestination>
+					<DepartureDateTime>2024-07-01T10:30:00</DepartureDateTime>
+					<ArrivalDateTime>2024-07-01T13:30:00</ArrivalDateTime>
+					<NumberOf_FreeSeats>20</NumberOf_FreeSeats>
+					<NumberOf_TakenSeats>150</NumberOf_TakenSeats>
+					<Price>120,50</Price>
+					<Status>OTKAZAN</Status>
+				</Flight>
 				<ReservationDate>2023-06-20</ReservationDate>
 				<NumberOfPassangers>1</NumberOfPassangers>
 				<Price>50,70</Price>
@@ -31,7 +58,17 @@
 		<ReservationList>
 			<Reservation>
 				<User>jane_smith</User>
-				<Flight>Air France</Flight>
+				<Flight>
+					<Aviokompanija>Turkish Airlines</Aviokompanija>
+					<StartDestination>Belgrade</StartDestination>
+					<EndDestination>Istanbul</EndDestination>
+					<DepartureDateTime>2024-07-01T10:30:00</DepartureDateTime>
+					<ArrivalDateTime>2024-07-01T13:30:00</ArrivalDateTime>
+					<NumberOf_FreeSeats>20</NumberOf_FreeSeats>
+					<NumberOf_TakenSeats>150</NumberOf_TakenSeats>
+					<Price>120,50</Price>
+					<Status>AKTIVAN</Status>
+				</Flight>
 				<NumberOfPassangers>1</NumberOfPassangers>
 				<Price>110</Price>
 			</Reservation>

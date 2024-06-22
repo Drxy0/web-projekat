@@ -5,8 +5,26 @@
     <link rel="stylesheet" href="../../Content/bootstrap.min.css">
     <title>Airline profile</title>
     <script src="Scripts/jquery-1.10.2.js"></script>
+    <style>
+        body{
+            padding-top:50px;
+        }
+    </style>
 </head>
 <body>
+    <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
+        <a href="Index.html#table" class="navbar-brand">
+            Letovi
+        </a>
+        <a href="#airlines" class="navbar-brand">
+            Aviokompanije
+        </a>
+        <a href="MyFlights.html" class="navbar-brand">
+            Moji Letovi
+        </a>
+    </nav>
+
+
     <div style="margin-left:20px">
         <h1 id="airlineName">Airline Name</h1>
         <h3 id="address">Adress</h3>
@@ -41,15 +59,15 @@
                                 if (review.Status === 1) {
                                     $("#reviewsList").append(
                                         `
-                                        <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                                            <div class="d-flex w-100 justify-content-between list-group-item list-group-item-action active">
-                                                <h5 class="mb-1">${review.Reviewer}</h5>
-                                                <h4 class="mb-1">${review.Title}</h4>
-                                                <p>${review.Description}</p>
-                                                <img style="width:50px" src="Assets/comment_placeholder.png" />
-                                            </div>
-                                        </a>
-                                        <br/>`
+                                            <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+                                                <div class="d-flex w-100 justify-content-between list-group-item list-group-item-action active">
+                                                    <h5 class="mb-1">${review.Reviewer}</h5>
+                                                    <h4 class="mb-1">${review.Title}</h4>
+                                                    <p>${review.Description}</p>
+                                                    <img style="width:50px" src="Assets/comment_placeholder.png" />
+                                                </div>
+                                            </a>
+                                            <br/>`
                                     );
                                 }
                             });

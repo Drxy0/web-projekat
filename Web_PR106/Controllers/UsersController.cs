@@ -11,11 +11,11 @@ using Web_PR106.Models;
 
 namespace Web_PR106.Controllers
 {
-    public class UsersController : ApiController
+	[RoutePrefix("api/users")]
+	public class UsersController : ApiController
     {
         private static List<User> users = new List<User>();
 		private static bool loaded = false;
-
 		private void LoadDatabase()
 		{
 			if (loaded) return;
@@ -47,10 +47,23 @@ namespace Web_PR106.Controllers
 				{
 					Reservation reservation = new Reservation();
 					reservation.User = new User() { Username = reservationNode["User"].InnerText };
-					reservation.Flight = new Flight() { Aviokompanija = new Airline (reservationNode["Flight"].InnerText) };
+					XmlNode flightNode = reservationNode["Flight"];
+					Flight flight = new Flight()
+					{
+						Aviokompanija = new Airline(flightNode["Aviokompanija"].InnerText),
+						StartDestination = flightNode["StartDestination"].InnerText,
+						EndDestination = flightNode["EndDestination"].InnerText,
+						DepartureDateTime = flightNode["DepartureDateTime"].InnerText,
+						ArrivalDateTime = flightNode["ArrivalDateTime"].InnerText,
+						NumberOf_FreeSeats = int.Parse(flightNode["NumberOf_FreeSeats"].InnerText),
+						NumberOf_TakenSeats = int.Parse(flightNode["NumberOf_TakenSeats"].InnerText),
+						Price = double.Parse(flightNode["Price"].InnerText.Replace(',', '.')),
+						Status = (FlightStatus)Enum.Parse(typeof(FlightStatus), flightNode["Status"].InnerText.ToUpper())
+					};
+
+					reservation.Flight = flight; 
 					reservation.NumberOfPassangers = int.Parse(reservationNode["NumberOfPassangers"].InnerText);
 					reservation.Price = double.Parse(reservationNode["Price"].InnerText.Replace(',', '.'));
-
 					user.ReservationList.Add(reservation);
 				}
 				users.Add(user);
@@ -68,7 +81,7 @@ namespace Web_PR106.Controllers
 		}
 
 		[HttpPost]
-        public IHttpActionResult Post([FromBody]User user)
+		public IHttpActionResult Post([FromBody]User user)
         {
 			User oldUser = users.Find(x => x.Username == user.Username);
 
@@ -79,5 +92,50 @@ namespace Web_PR106.Controllers
 			users.Add(user);
 			return Ok();
         }
-    }
+
+		[HttpPost]
+		[Route("filterFlightsByStatus")]
+		public IHttpActionResult FilterFlightsByStatus([FromBody] string request)
+		{
+			string status = request.Split(' ')[0];
+			string username = request.Split(' ')[1];
+
+			if (status == "")
+			{
+				return BadRequest();
+			}
+
+			FlightStatus flightStatus = (FlightStatus)Enum.Parse(typeof(FlightStatus), status);
+
+			User currentUser = users.Find(x => x.Username == username);
+
+			var filteredFlights = currentUser.ReservationList
+				.Where(r => r.Flight.Status == flightStatus)
+				.Select(r => r.Flight)
+				.ToList();
+			return Ok(filteredFlights);
+		}
+
+
+		[HttpPost]
+		[Route("filterReservationsByStatus")]
+		public IHttpActionResult FilterReservationsByStatus([FromBody] string request)
+		{
+			string status = request.Split(' ')[0];
+			string username = request.Split(' ')[1];
+			if (status == "")
+			{
+				return BadRequest();
+			}
+
+			ReservationStatus reservationStatus = (ReservationStatus)Enum.Parse(typeof(ReservationStatus), status);
+
+			User currentUser = users.Find(x => x.Username == username);
+
+			var filteredReservations = currentUser.ReservationList
+				.Where(r => r.Status == reservationStatus)
+				.ToList();
+			return Ok(filteredReservations);
+		}
+	}
 }

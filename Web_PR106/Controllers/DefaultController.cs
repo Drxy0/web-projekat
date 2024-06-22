@@ -58,7 +58,6 @@ namespace Web_PR106.Controllers
 
 		public void Post([FromBody]SearchFilter searchFilter)
 		{
-
 			string startDestination = searchFilter.StartDestination;
 			string endDestination = searchFilter.EndDestination;
 			string airlinesName = searchFilter.AirlinesName;

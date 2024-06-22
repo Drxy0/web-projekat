@@ -15,6 +15,9 @@
         <a href="#airlines" class="navbar-brand">
             Aviokompanije
         </a>
+        <a href="MyFlights.html" class="navbar-brand">
+            Moji Letovi
+        </a>
     </nav>
 
     <section id="table">
@@ -243,6 +246,10 @@
         }
 
         $(document).ready(function () {
+
+            sessionStorage.setItem("token", "john_doe");
+            sessionStorage.setItem("role", "PUTNIK");
+
             checkSession();
             loadFlights();
             loadAirlines();

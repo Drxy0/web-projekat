@@ -73,7 +73,6 @@ namespace Web_PR106.Controllers
 						airline.Reviews.Add(review);
 					}
 				}
-
 				airlines.Add(airline);
 			}
 		}

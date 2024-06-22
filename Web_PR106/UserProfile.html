@@ -13,6 +13,9 @@
         body {
             padding-top: 50px;
         }
+        h1, button{
+            margin-left: 20px;
+        }
     </style>
     <title>Profile</title>
 </head>
@@ -25,6 +28,7 @@
 
     <h1>User profile</h1>
     <button type="button" class="btn btn-primary" onclick="editProfile()">Edit Profile</button>
+    <button type="button" class="btn btn-primary" onclick="logOut()">Log Out</button>
 
     <div id="userInfo" style="padding:20px">
     </div>
@@ -73,6 +77,11 @@
         $(document).ready(function () {
             loadUser();
         });
+
+        function logOut() {
+            sessionStorage.clear();
+            window.location.href = "Index.html";
+        }
 
         function loadUser() {
             $.get("api/users", function (data, status) {

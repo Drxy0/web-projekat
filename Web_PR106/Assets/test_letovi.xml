@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flights>
-	<Let>
+	<Flight>
 		<Aviokompanija>Air France</Aviokompanija>
 		<StartDestination>Belgrade</StartDestination>
 		<EndDestination>Paris</EndDestination>
@@ -10,8 +10,8 @@
 		<NumberOf_TakenSeats>150</NumberOf_TakenSeats>
 		<Price>120,50</Price>
 		<Status>AKTIVAN</Status>
-	</Let>
-	<Let>
+	</Flight>
+	<Flight>
 		<Aviokompanija>Air France</Aviokompanija>
 		<StartDestination>Paris</StartDestination>
 		<EndDestination>New York</EndDestination>
@@ -21,8 +21,8 @@
 		<NumberOf_TakenSeats>200</NumberOf_TakenSeats>
 		<Price>350,00</Price>
 		<Status>OTKAZAN</Status>
-	</Let>
-	<Let>
+	</Flight>
+	<Flight>
 		<Aviokompanija>Lufthansa</Aviokompanija>
 		<StartDestination>Frankfurt</StartDestination>
 		<EndDestination>Tokyo</EndDestination>
@@ -32,8 +32,8 @@
 		<NumberOf_TakenSeats>300</NumberOf_TakenSeats>
 		<Price>290,75</Price>
 		<Status>AKTIVAN</Status>
-	</Let>
-	<Let>
+	</Flight>
+	<Flight>
 		<Aviokompanija>Lufthansa</Aviokompanija>
 		<StartDestination>London</StartDestination>
 		<EndDestination>Los Angeles</EndDestination>
@@ -43,8 +43,8 @@
 		<NumberOf_TakenSeats>210</NumberOf_TakenSeats>
 		<Price>500.00</Price>
 		<Status>AKTIVAN</Status>
-	</Let>
-	<Let>
+	</Flight>
+	<Flight>
 		<Aviokompanija>Emirates</Aviokompanija>
 		<StartDestination>Dubai</StartDestination>
 		<EndDestination>Istanbul</EndDestination>
@@ -54,8 +54,8 @@
 		<NumberOf_TakenSeats>400</NumberOf_TakenSeats>
 		<Price>200,00</Price>
 		<Status>AKTIVAN</Status>
-	</Let>
-	<Let>
+	</Flight>
+	<Flight>
 		<Aviokompanija>Delta</Aviokompanija>
 		<StartDestination>Los Angeles</StartDestination>
 		<EndDestination>San Francisco</EndDestination>
@@ -65,5 +65,5 @@
 		<NumberOf_TakenSeats>145</NumberOf_TakenSeats>
 		<Price>50,00</Price>
 		<Status>OTKAZAN</Status>
-	</Let>
+	</Flight>
 </Flights>

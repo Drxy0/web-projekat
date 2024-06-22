@@ -1,0 +1,288 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="Content/bootstrap.min.css">
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <title>My Flights</title>
+    <style>
+        body {
+            padding-top: 50px;
+        }
+        .inline-div {
+            display: flex;
+            align-items: center;
+        }
+        .inline-div > * {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
+        <a href="Index.html#table" class="navbar-brand">
+            Letovi
+        </a>
+        <a href="#airlines" class="navbar-brand">
+            Aviokompanije
+        </a>
+        <a href="MyFlights.html" class="navbar-brand">
+            Moji Letovi
+        </a>
+    </nav>
+
+    <h2>Letovi</h2>
+    <div class="inline-div">
+        <h4>Status leta: </h4>
+        <form id="filterForm" action="/api/users/filterFlightsByStatus" method="post">
+            <input list="status" id="flightStatus" />
+            <datalist id="status">
+                <option value="AKTIVAN">AKTIVAN</option>
+                <option value="ZAVRSEN">ZAVRSEN</option>
+                <option value="OTKAZAN">OTKAZAN</option>
+            </datalist>
+            <input class="btn btn-success" name="status" type="submit" value="PRETRAŽI" />
+        </form>
+        <button style="width:100px;" class="btn btn-primary" onclick="clearFlightsFilter()">
+            PONIŠTI
+        </button>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Polazna destinacija</th>
+                <th scope="col">Odredišna destinacija</th>
+                <th scope="col">Datum polaska</th>
+                <th scope="col">Datum dolaska</th>
+                <th scope="col">Slobodna mjesta</th>
+                <th scope="col">Zauzeta mjesta</th>
+                <th scope="col">Aviokompanija</th>
+                <th style="cursor:pointer" scope="col" onclick="sortTable()">Cijena</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody id="flights-table-body">
+        </tbody>
+    </table>
+    <br />
+
+    <h2>Rezervacije</h2>
+    <div class="inline-div">
+        <h4>Status rezervacije: </h4>
+        <form id="reservationFilterForm" action="/api/users/filterReservationsByStatus" method="post">
+            <input list="reservationStatusList" id="reservationStatus" />
+            <datalist id="reservationStatusList">
+                <option value="KREIRANA">KREIRANA</option>
+                <option value="ODOBRENA">ODOBRENA</option>
+                <option value="OTKAZANA">OTKAZANA</option>
+                <option value="ZAVRSENA">ZAVRSENA</option>
+            </datalist>
+            <input class="btn btn-success" name="status" type="submit" value="PRETRAŽI" />
+        </form>
+        <button style="width:100px;" class="btn btn-primary" onclick="clearReservationsFilter()">
+            PONIŠTI
+        </button>
+    </div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Polazna destinacija</th>
+                <th scope="col">Odredišna destinacija</th>
+                <th scope="col">Datum polaska</th>
+                <th scope="col">Datum dolaska</th>
+                <th scope="col">Slobodna mjesta</th>
+                <th scope="col">Aviokompanija</th>
+                <th style="cursor:pointer" scope="col" onclick="sortTable()">Cijena</th>
+                <th scope="col">Status</th>
+                <th scope="col">Broj putnika</th>
+                <th scope="col">Status rezervacije</th>
+            </tr>
+        </thead>
+        <tbody id="reservations-table-body">
+        </tbody>
+    </table>
+
+
+    <script>
+        var user;
+        const filterForm = document.getElementById('filterForm');
+        const reservationFilterForm = document.getElementById('reservationFilterForm');
+        flightStatus = ['AKTIVAN', 'OTKAZAN', 'ZAVRSEN']
+        reservationStatus = ['KREIRANA', 'ODOBRENA', 'OTKAZANA', 'ZAVRSENA']
+        var clear = "init";
+
+        function clearFlightsFilter() {
+            document.querySelector("#flightStatus").value = "";
+            clear = "clearFlights";
+            loadUser();
+        }
+
+        function clearReservationsFilter() {
+            document.querySelector("#reservationStatus").value = "";
+            clear = "clearReservations";
+            loadUser();
+        }
+
+        reservationFilterForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            let status = document.querySelector("#reservationStatus").value;
+            let user = sessionStorage.getItem("token");
+            let request = status + " " + user;
+
+            fetch(reservationFilterForm.action, {
+                method: reservationFilterForm.method,
+                body: JSON.stringify(request),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+
+                    var tbodyReserv = $("#reservations-table-body");
+                    tbodyReserv.empty(); // Clear any existing rows
+
+                    let i = 0;
+                    data.forEach(function (flight) {
+                        ++i;
+                        var rowReserv = `<tr>
+                                                <td scope="row">${i}</td>
+                                                <td id="table_startDestination">${flight.StartDestination}</td>
+                                                <td id="table_endDestination">${flight.EndDestination}</td>
+                                                <td id="table_departure">${flight.DepartureDateTime}</td>
+                                                <td id="table_arrival">${flight.ArrivalDateTime}</td>
+                                                <td id="table_freeSeats">${flight.NumberOf_FreeSeats}</td>
+                                                <td id="table_airlines"><a href="Airline.html?airline=${encodeURIComponent(flight.Aviokompanija.Name)}">${flight.Aviokompanija.Name}</a></td>
+                                                <td id="table_price">$${flight.Price}</td>
+                                                <td id="table_status">${flightStatus[flight.Status]}</td>
+                                                <th>${reservation.NumberOfPassangers}</th>
+                                                <th>${reservationStatus[reservation.Status]}</th>
+                                            </tr>`;
+                        tbodyReserv.append(rowReserv);
+                    });
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle errors if any
+                });
+        });
+        filterForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            let status = document.querySelector("#flightStatus").value;
+            let user = sessionStorage.getItem("token");
+            let request = status + " " + user;
+
+            fetch(filterForm.action, {
+                method: filterForm.method,
+                body: JSON.stringify(request),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    var tbody = $("#flights-table-body");
+                    tbody.empty(); // Clear any existing rows
+                    let i = 0;
+                    data.forEach(function (flight) {
+                        ++i;
+                        console.log(flight.Status);
+                        var row = `<tr>
+                            <td scope="row">${i}</td>
+                            <td id="table_startDestination">${flight.StartDestination}</td>
+                            <td id="table_endDestination">${flight.EndDestination}</td>
+                            <td id="table_departure">${flight.DepartureDateTime}</td>
+                            <td id="table_arrival">${flight.ArrivalDateTime}</td>
+                            <td id="table_freeSeats">${flight.NumberOf_FreeSeats}</td>
+                            <td id="table_takenSeats">${flight.NumberOf_TakenSeats}</td>
+                            <td id="table_airlines"><a href="Airline.html?airline=${encodeURIComponent(flight.Aviokompanija.Name)}">${flight.Aviokompanija.Name}</a></td>
+                            <td id="table_price">$${flight.Price}</td>
+                            <td id="table_status">${flightStatus[flight.Status]}</td>
+                        </tr>`;
+                        tbody.append(row);
+                    });
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle errors if any
+                });
+        });
+
+
+        $(document).ready(function () {
+            loadUser();
+        });
+
+        function loadUser() {
+            $.get("api/users", function (data, status) {
+                var userInfo = document.querySelector("#userInfo");
+                user = data.find(user => user.Username === sessionStorage.getItem("token"));
+                let reservationList = user.ReservationList;
+
+                var tbody = $("#flights-table-body");
+                var tbodyReserv = $("#reservations-table-body");
+                if (clear == "clearFlights" || clear == "init") {
+                    tbody.empty();
+                }
+                if (clear == "clearReservations" || clear == "init") {
+                    tbodyReserv.empty();
+                }
+
+                let i = 0;
+                reservationList.forEach(function (reservation) {
+                    ++i;
+                    let flight = reservation.Flight;
+                    if (clear == "clearReservations" || clear == "init") {
+                        var rowReserv = `<tr>
+                                                <td scope="row">${i}</td>
+                                                <td id="table_startDestination">${flight.StartDestination}</td>
+                                                <td id="table_endDestination">${flight.EndDestination}</td>
+                                                <td id="table_departure">${flight.DepartureDateTime}</td>
+                                                <td id="table_arrival">${flight.ArrivalDateTime}</td>
+                                                <td id="table_freeSeats">${flight.NumberOf_FreeSeats}</td>
+                                                <td id="table_airlines"><a href="Airline.html?airline=${encodeURIComponent(flight.Aviokompanija.Name)}">${flight.Aviokompanija.Name}</a></td>
+                                                <td id="table_price">$${flight.Price}</td>
+                                                <td id="table_status">${flightStatus[flight.Status]}</td>
+                                                <th>${reservation.NumberOfPassangers}</th>
+                                                <th>${reservationStatus[reservation.Status]}</th>
+                                            </tr>`;
+                        tbodyReserv.append(rowReserv);
+                    }
+                    if (clear == "clearFlights" || clear == "init") {
+                        var row = `<tr>
+                                                <td scope="row">${i}</td>
+                                                <td id="table_startDestination">${flight.StartDestination}</td>
+                                                <td id="table_endDestination">${flight.EndDestination}</td>
+                                                <td id="table_departure">${flight.DepartureDateTime}</td>
+                                                <td id="table_arrival">${flight.ArrivalDateTime}</td>
+                                                <td id="table_freeSeats">${flight.NumberOf_FreeSeats}</td>
+                                                <td id="table_takenSeats">${flight.NumberOf_TakenSeats}</td>
+                                                <td id="table_airlines"><a href="Airline.html?airline=${encodeURIComponent(flight.Aviokompanija.Name)}">${flight.Aviokompanija.Name}</a></td>
+                                                <td id="table_price">$${flight.Price}</td>
+                                                <td id="table_status">${flightStatus[flight.Status]}</td>
+                                            </tr>`;
+                        tbody.append(row);
+                    }
+                });
+
+            });
+        }
+    </script>
+
+</body>
+</html>
