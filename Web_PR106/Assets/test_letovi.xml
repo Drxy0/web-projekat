@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flights>
 	<Flight>
+		<FlightId>1</FlightId>
 		<Aviokompanija>Air France</Aviokompanija>
 		<StartDestination>Belgrade</StartDestination>
 		<EndDestination>Paris</EndDestination>
@@ -12,6 +13,7 @@
 		<Status>AKTIVAN</Status>
 	</Flight>
 	<Flight>
+		<FlightId>2</FlightId>
 		<Aviokompanija>Air France</Aviokompanija>
 		<StartDestination>Paris</StartDestination>
 		<EndDestination>New York</EndDestination>
@@ -23,6 +25,7 @@
 		<Status>OTKAZAN</Status>
 	</Flight>
 	<Flight>
+		<FlightId>3</FlightId>
 		<Aviokompanija>Lufthansa</Aviokompanija>
 		<StartDestination>Frankfurt</StartDestination>
 		<EndDestination>Tokyo</EndDestination>
@@ -34,6 +37,7 @@
 		<Status>AKTIVAN</Status>
 	</Flight>
 	<Flight>
+		<FlightId>4</FlightId>
 		<Aviokompanija>Lufthansa</Aviokompanija>
 		<StartDestination>London</StartDestination>
 		<EndDestination>Los Angeles</EndDestination>
@@ -45,6 +49,7 @@
 		<Status>AKTIVAN</Status>
 	</Flight>
 	<Flight>
+		<FlightId>5</FlightId>
 		<Aviokompanija>Emirates</Aviokompanija>
 		<StartDestination>Dubai</StartDestination>
 		<EndDestination>Istanbul</EndDestination>
@@ -56,6 +61,7 @@
 		<Status>AKTIVAN</Status>
 	</Flight>
 	<Flight>
+		<FlightId>6</FlightId>
 		<Aviokompanija>Delta</Aviokompanija>
 		<StartDestination>Los Angeles</StartDestination>
 		<EndDestination>San Francisco</EndDestination>

@@ -76,9 +76,10 @@
             </form>
         </div>
 
-        <table class="table table-bordered table-striped">
+        <table id="flightsTable" class="table table-bordered table-striped">
             <thead>
                 <tr>
+                    <th hidden>Flight Id</th>
                     <th scope="col">#</th>
                     <th scope="col">Polazna destinacija</th>
                     <th scope="col">Odredišna destinacija</th>
@@ -116,6 +117,16 @@
     <script src="Scripts/jquery-1.10.2.js"></script>
     <script>
         var sortOrder = false;
+        const flightsTable = document.getElementById('flightsTable');
+
+        flightsTable.addEventListener('click', function (event) {
+            // Check if the click is on a button with class 'actionButton'
+            if (event.target.classList.contains('btn-success')) {
+                const row = event.target.closest('tr');
+                const id = row.cells[0].innerText; // Example: ID column
+                sessionStorage.flightId = id;
+            }
+        });
 
         function checkSession() {
             let nav = document.querySelector("#nav");
@@ -127,7 +138,6 @@
                 nav.insertAdjacentHTML('beforeend', row);
             }
         }
-
 
         function loadAirlines() {
             $.get("api/airlines", function (data, status) {
@@ -191,6 +201,7 @@
 
             flights.forEach(function (flight, index) {
                 var row = `<tr>
+                    <td hidden>${flight.FlightId}</td>
                     <td scope="row" id="row_index">${index + 1}</td>
                     <td id="table_startDestination">${flight.StartDestination}</td>
                     <td id="table_endDestination">${flight.EndDestination}</td>
@@ -227,6 +238,7 @@
                     if (flight.Status === 0) {
                         ++i;
                         var row = `<tr>
+                                        <td hidden>${flight.FlightId}</td>
                                         <td scope="row">${i}</td>
                                         <td id="table_startDestination">${flight.StartDestination}</td>
                                         <td id="table_endDestination">${flight.EndDestination}</td>

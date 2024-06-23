@@ -3,7 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="Content/bootstrap.min.css">
+    <script src="Scripts/jquery-1.10.2.js"></script>
     <title>Rezervacija</title>
+    <style>
+        body{
+            margin-left:20px;
+        }
+    </style>
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
@@ -19,10 +25,47 @@
     </nav>
 
     <h2>Rezerviši</h2>
-    <form action="api/users/createReservation" method="post">
+    <form id="reservationForm" action="api/users/createReservation" method="post">
         Broj putnika:
-        <input type="number" name="numberOfPassangers" />
+        <input type="number" id="numberOfPassangers" name="numberOfPassangers" pattern="[1-9]\d*"/>
         <input type="submit" class="btn btn-success" value="Rezerviši" />
     </form>
+    <h5 id="errorLabel" style="color:red;"></h5>
+    <script>
+        const reservationForm = document.querySelector("#reservationForm");
+        const errorLabel = document.querySelector("#errorLabel");
+
+        reservationForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            //errorLabel.innerHTML = "";
+            let numberOfPassangers = document.querySelector("#numberOfPassangers").value;
+            if (numberOfPassangers <= 0) {
+                signalInvalidInput();
+            }
+
+            let user = sessionStorage.getItem("token");
+            let request = sessionStorage.flightId + " " + numberOfPassangers + " " + user;
+
+            fetch(reservationForm.action, {
+                method: reservationForm.method,
+                body: JSON.stringify(request),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                else {
+                    //window.location = "Index.html";
+                }
+            })
+        });
+
+        function signalInvalidInput() {
+            errorLabel.innerHTML = "Nevalidan unos! Molim vas unesti pozitivan cio broj"
+        }
+       </script>
 </body>
 </html>

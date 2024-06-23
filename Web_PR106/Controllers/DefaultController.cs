@@ -16,36 +16,9 @@ namespace Web_PR106.Controllers
     public class DefaultController : ApiController
     {
 
-		private static List<Flight> flights = new List<Flight>();
-		private static List<Flight> shownFlights = new List<Flight>();
-
 		[HttpGet, Route("")]
 		public RedirectResult Index()
 		{
-			string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-			string fullPath = baseDirectory + "\\Assets\\test_letovi.xml";
-
-			XmlDocument doc = new XmlDocument();
-			doc.Load(fullPath);
-
-			foreach (XmlNode node in doc.DocumentElement.ChildNodes)
-			{
-				Flight flight = new Flight();
-
-				flight.Aviokompanija = new Airline(node["Aviokompanija"].InnerText);
-				flight.StartDestination = node["StartDestination"].InnerText;
-				flight.EndDestination = node["EndDestination"].InnerText;
-				flight.DepartureDateTime = node["DepartureDateTime"].InnerText;
-				flight.ArrivalDateTime = node["ArrivalDateTime"].InnerText;
-				flight.NumberOf_FreeSeats = int.Parse(node["NumberOf_FreeSeats"].InnerText);
-				flight.NumberOf_TakenSeats = int.Parse(node["NumberOf_TakenSeats"].InnerText);
-				flight.Price = double.Parse(node["Price"].InnerText);
-				flight.Status = (FlightStatus)Enum.Parse(typeof(FlightStatus), node["Status"].InnerText);
-
-				flights.Add(flight);
-			}
-			shownFlights = new List<Flight>(flights);
-
 			var requestUri = Request.RequestUri;
 			return Redirect(requestUri.AbsoluteUri + "Index.html");
 		}
@@ -53,7 +26,7 @@ namespace Web_PR106.Controllers
 		[HttpGet]
 		public IHttpActionResult Get()
 		{
-			return Ok(shownFlights);
+			return Ok(Global.ShownFlights);
 		}
 
 		public void Post([FromBody]SearchFilter searchFilter)
@@ -86,59 +59,59 @@ namespace Web_PR106.Controllers
 				departureDate == "01/01/0001" &&
 				arrivalDate == "01/01/0001")
 			{
-				shownFlights = new List<Flight>(flights);
+				Global.ShownFlights = new List<Flight>(Global.Flights);
 				return;
 			}
 
 			if (!string.IsNullOrEmpty(startDestination))
 			{
-				foreach(Flight flight in flights)
+				foreach(Flight flight in Global.Flights)
 				{
 					if (flight.StartDestination != startDestination)
 					{
-						shownFlights.Remove(flight);
+						Global.ShownFlights.Remove(flight);
 					}
 				}
 			}
 
 			if (!string.IsNullOrEmpty(endDestination))
 			{
-				foreach (Flight flight in flights)
+				foreach (Flight flight in Global.Flights)
 				{
 					if (flight.EndDestination != endDestination)
 					{
-						shownFlights.Remove(flight);
+						Global.ShownFlights.Remove(flight);
 					}
 				}
 			}
 			if (!string.IsNullOrEmpty(airlinesName))
 			{
-				foreach (Flight flight in flights)
+				foreach (Flight flight in Global.Flights)
 				{
 					if (flight.Aviokompanija.Name != airlinesName)
 					{
-						shownFlights.Remove(flight);
+						Global.ShownFlights.Remove(flight);
 					}
 				}
 			}
 			if (departureDate != "01/01/0001")
 			{
-				foreach (Flight flight in flights)
+				foreach (Flight flight in Global.Flights)
 				{
 					if (flight.DepartureDateTime != departureDate)
 					{
-						shownFlights.Remove(flight);
+						Global.ShownFlights.Remove(flight);
 					}
 				}
 			}
 
 			if (arrivalDate != "01/01/0001")
 			{
-				foreach (Flight flight in flights)
+				foreach (Flight flight in Global.Flights)
 				{
 					if (flight.ArrivalDateTime != arrivalDate)
 					{
-						shownFlights.Remove(flight);
+						Global.ShownFlights.Remove(flight);
 					}
 				}
 			}
