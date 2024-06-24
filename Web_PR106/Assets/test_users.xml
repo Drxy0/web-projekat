@@ -13,6 +13,7 @@
 			<Reservation>
 				<User>john_doe</User>
 				<Flight>
+					<FlightId>1</FlightId>
 					<Aviokompanija>Air France</Aviokompanija>
 					<StartDestination>Belgrade</StartDestination>
 					<EndDestination>Paris</EndDestination>
@@ -24,25 +25,28 @@
 					<Status>AKTIVAN</Status>
 				</Flight>
 				<ReservationDate>2023-06-20</ReservationDate>
-				<NumberOfPassangers>1</NumberOfPassangers>
+				<NumberOfPassengers>2</NumberOfPassengers>
 				<Price>50,70</Price>
+				<ReservationStatus>KREIRANA</ReservationStatus>
 			</Reservation>
 			<Reservation>
 				<User>john_doe</User>
 				<Flight>
+					<FlightId>2</FlightId>
 					<Aviokompanija>Air France</Aviokompanija>
-					<StartDestination>Belgrade</StartDestination>
-					<EndDestination>Paris</EndDestination>
-					<DepartureDateTime>2024-07-01T10:30:00</DepartureDateTime>
-					<ArrivalDateTime>2024-07-01T13:30:00</ArrivalDateTime>
-					<NumberOf_FreeSeats>20</NumberOf_FreeSeats>
-					<NumberOf_TakenSeats>150</NumberOf_TakenSeats>
-					<Price>120,50</Price>
-					<Status>OTKAZAN</Status>
+					<StartDestination>Paris</StartDestination>
+					<EndDestination>New York</EndDestination>
+					<DepartureDateTime>2024-07-02T15:00:00</DepartureDateTime>
+					<ArrivalDateTime>2024-07-02T18:00:00</ArrivalDateTime>
+					<NumberOf_FreeSeats>50</NumberOf_FreeSeats>
+					<NumberOf_TakenSeats>200</NumberOf_TakenSeats>
+					<Price>350,00</Price>
+					<Status>ZAVRSEN</Status>
 				</Flight>
 				<ReservationDate>2023-06-20</ReservationDate>
-				<NumberOfPassangers>1</NumberOfPassangers>
+				<NumberOfPassengers>1</NumberOfPassengers>
 				<Price>50,70</Price>
+				<ReservationStatus>ZAVRSENA</ReservationStatus>
 			</Reservation>
 		</ReservationList>
 	</User>
@@ -59,6 +63,7 @@
 			<Reservation>
 				<User>jane_smith</User>
 				<Flight>
+					<FlightId>3</FlightId>
 					<Aviokompanija>Turkish Airlines</Aviokompanija>
 					<StartDestination>Belgrade</StartDestination>
 					<EndDestination>Istanbul</EndDestination>
@@ -69,8 +74,9 @@
 					<Price>120,50</Price>
 					<Status>AKTIVAN</Status>
 				</Flight>
-				<NumberOfPassangers>1</NumberOfPassangers>
+				<NumberOfPassengers>1</NumberOfPassengers>
 				<Price>110</Price>
+				<ReservationStatus>ODOBRENA</ReservationStatus>
 			</Reservation>
 		</ReservationList>
 	</User>

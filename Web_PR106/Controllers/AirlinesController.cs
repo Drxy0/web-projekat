@@ -12,12 +12,10 @@ namespace Web_PR106.Controllers
 {
     public class AirlinesController : ApiController
     {
-
 		[HttpGet]
         public IHttpActionResult Get()
         {
             return Ok(Global.Airlines);
         }
-
     }
 }

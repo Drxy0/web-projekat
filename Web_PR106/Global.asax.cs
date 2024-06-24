@@ -63,6 +63,7 @@ namespace Web_PR106
 					XmlNode flightNode = reservationNode["Flight"];
 					Flight flight = new Flight()
 					{
+						FlightId = int.Parse(flightNode["FlightId"].InnerText),
 						Aviokompanija = new Airline(flightNode["Aviokompanija"].InnerText),
 						StartDestination = flightNode["StartDestination"].InnerText,
 						EndDestination = flightNode["EndDestination"].InnerText,
@@ -70,13 +71,14 @@ namespace Web_PR106
 						ArrivalDateTime = flightNode["ArrivalDateTime"].InnerText,
 						NumberOf_FreeSeats = int.Parse(flightNode["NumberOf_FreeSeats"].InnerText),
 						NumberOf_TakenSeats = int.Parse(flightNode["NumberOf_TakenSeats"].InnerText),
-						Price = double.Parse(flightNode["Price"].InnerText.Replace(',', '.')),
+						Price = double.Parse(flightNode["Price"].InnerText),
 						Status = (FlightStatus)Enum.Parse(typeof(FlightStatus), flightNode["Status"].InnerText.ToUpper())
 					};
 
 					reservation.Flight = flight;
-					reservation.NumberOfPassangers = int.Parse(reservationNode["NumberOfPassangers"].InnerText);
+					reservation.NumberOfPassengers = int.Parse(reservationNode["NumberOfPassengers"].InnerText);
 					reservation.Price = double.Parse(reservationNode["Price"].InnerText.Replace(',', '.'));
+					reservation.Status = (ReservationStatus)Enum.Parse(typeof(ReservationStatus), reservationNode["ReservationStatus"].InnerText.ToUpper());
 					user.ReservationList.Add(reservation);
 				}
 				Users.Add(user);
@@ -162,7 +164,7 @@ namespace Web_PR106
 							Airline = reviewNode["Aviokompanija"].InnerText,
 							Title = reviewNode["Title"].InnerText,
 							Description = reviewNode["Description"].InnerText,
-							Picture = reviewNode["Picture"].InnerText,
+							//Picture = reviewNode["Picture"].InnerText,
 							Status = (ReviewStatus)Enum.Parse(typeof(ReviewStatus), reviewNode["Status"].InnerText)
 						};
 						airline.Reviews.Add(review);

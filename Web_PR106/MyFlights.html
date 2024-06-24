@@ -92,12 +92,11 @@
                 <th scope="col">Odredišna destinacija</th>
                 <th scope="col">Datum polaska</th>
                 <th scope="col">Datum dolaska</th>
-                <th scope="col">Slobodna mjesta</th>
-                <th scope="col">Aviokompanija</th>
-                <th style="cursor:pointer" scope="col" onclick="sortTable()">Cijena</th>
-                <th scope="col">Status</th>
+                <th style="cursor:pointer" scope="col" onclick="sortTable()">Ukupna cijena</th>
+                <th scope="col">Status leta</th>
                 <th scope="col">Broj putnika</th>
                 <th scope="col">Status rezervacije</th>
+                <th scope="col">Recenzija</th>
             </tr>
         </thead>
         <tbody id="reservations-table-body">
@@ -159,12 +158,11 @@
                                                 <td id="table_endDestination">${flight.EndDestination}</td>
                                                 <td id="table_departure">${flight.DepartureDateTime}</td>
                                                 <td id="table_arrival">${flight.ArrivalDateTime}</td>
-                                                <td id="table_freeSeats">${flight.NumberOf_FreeSeats}</td>
-                                                <td id="table_airlines"><a href="Airline.html?airline=${encodeURIComponent(flight.Aviokompanija.Name)}">${flight.Aviokompanija.Name}</a></td>
-                                                <td id="table_price">$${flight.Price}</td>
+                                                <td id="table_price">$${flight.Price * reservation.NumberOfPassengers}</td>
                                                 <td id="table_status">${flightStatus[flight.Status]}</td>
-                                                <th>${reservation.NumberOfPassangers}</th>
-                                                <th>${reservationStatus[reservation.Status]}</th>
+                                                <td>${reservation.NumberOfPassengers}</th>
+                                                <td>${reservationStatus[reservation.Status]}</th>
+                                                <td class="text-center"><a href="Review.html?airline=${encodeURIComponent(flight.Aviokompanija.Name)}" class="btn btn-primary">Napiši</a></td>
                                             </tr>`;
                         tbodyReserv.append(rowReserv);
                     });
@@ -248,18 +246,20 @@
                     ++i;
                     let flight = reservation.Flight;
                     if (clear == "clearReservations" || clear == "init") {
+                        var leaveReviewButton = flightStatus[flight.Status] === 'ZAVRSEN'
+                            ? `<td class="text-center"><a href="Review.html?airline=${encodeURIComponent(flight.Aviokompanija.Name)}" class="btn btn-primary">Napiši</a></td>`
+                            : `<td class="text-center"><button disabled type="button" class="btn btn-secondary">Napiši</button></td>`;
                         var rowReserv = `<tr>
                                                 <td scope="row">${i}</td>
                                                 <td id="table_startDestination">${flight.StartDestination}</td>
                                                 <td id="table_endDestination">${flight.EndDestination}</td>
                                                 <td id="table_departure">${flight.DepartureDateTime}</td>
                                                 <td id="table_arrival">${flight.ArrivalDateTime}</td>
-                                                <td id="table_freeSeats">${flight.NumberOf_FreeSeats}</td>
-                                                <td id="table_airlines"><a href="Airline.html?airline=${encodeURIComponent(flight.Aviokompanija.Name)}">${flight.Aviokompanija.Name}</a></td>
-                                                <td id="table_price">$${flight.Price}</td>
+                                                <td id="table_price">$${flight.Price * reservation.NumberOfPassengers}</td>
                                                 <td id="table_status">${flightStatus[flight.Status]}</td>
-                                                <th>${reservation.NumberOfPassangers}</th>
-                                                <th>${reservationStatus[reservation.Status]}</th>
+                                                <td>${reservation.NumberOfPassengers}</th>
+                                                <td>${reservationStatus[reservation.Status]}</th>
+                                                ${leaveReviewButton}
                                             </tr>`;
                         tbodyReserv.append(rowReserv);
                     }

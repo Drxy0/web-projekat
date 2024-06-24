@@ -6,17 +6,17 @@
     <script src="Scripts/jquery-1.10.2.js"></script>
     <title>Rezervacija</title>
     <style>
-        body{
-            margin-left:20px;
+        body {
+            margin-left: 20px;
         }
     </style>
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
-        <a href="#table" class="navbar-brand">
+        <a href="Index.html#table" class="navbar-brand">
             Letovi
         </a>
-        <a href="#airlines" class="navbar-brand">
+        <a href="Index.html#airlines" class="navbar-brand">
             Aviokompanije
         </a>
         <a href="MyFlights.html" class="navbar-brand">
@@ -27,25 +27,78 @@
     <h2>Rezerviši</h2>
     <form id="reservationForm" action="api/users/createReservation" method="post">
         Broj putnika:
-        <input type="number" id="numberOfPassangers" name="numberOfPassangers" pattern="[1-9]\d*"/>
+        <input type="number" id="numberOfPassengers" name="numberOfPassengers" pattern="[1-9]\d*" />
         <input type="submit" class="btn btn-success" value="Rezerviši" />
     </form>
     <h5 id="errorLabel" style="color:red;"></h5>
+    <br />
+    <button style="display: none;" id="cancelButton" type="button" class="btn btn-danger" onclick="cancelReservation()">Otkaži</button>
+    <h5 id="cancelErrorLabel" style="color:red;"></h5>
+
     <script>
         const reservationForm = document.querySelector("#reservationForm");
         const errorLabel = document.querySelector("#errorLabel");
+        const cancelErrorLabel = document.querySelector("#cancelErrorLabel");
+
+        $(document).ready(function () {
+            canCancelReservation();
+        });
+
+        function canCancelReservation() {
+            let user = sessionStorage.getItem("token");
+            let request = sessionStorage.flightId + " " + user;
+
+            fetch("api/users/reservationExists", {
+                method: "POST",
+                body: JSON.stringify(request),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                return response.text();
+            }).then(data => {
+                if (data == "true") {
+                    $('#cancelButton').show();
+                } else {
+                    $('#cancelButton').hide();
+                }
+            });
+        }
+
+        function cancelReservation() {
+
+            let user = sessionStorage.getItem("token");
+            let request = sessionStorage.flightId + " " + user;
+
+            fetch("api/users/cancelReservation", {
+                method: "POST",
+                body: JSON.stringify(request),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    window.location = "Index.html";
+                } else if (response.status === 412) {
+                    cancelErrorTime();
+                } else {
+                    console.log(`Error: ${response.status} - ${response.statusText}`);
+                }
+            });
+        }
+
 
         reservationForm.addEventListener('submit', function (event) {
             event.preventDefault();
 
-            //errorLabel.innerHTML = "";
-            let numberOfPassangers = document.querySelector("#numberOfPassangers").value;
-            if (numberOfPassangers <= 0) {
+            errorLabel.innerHTML = "";
+            let numberOfPassengers = document.querySelector("#numberOfPassengers").value;
+            if (numberOfPassengers <= 0) {
                 signalInvalidInput();
             }
 
             let user = sessionStorage.getItem("token");
-            let request = sessionStorage.flightId + " " + numberOfPassangers + " " + user;
+            let request = sessionStorage.flightId + " " + numberOfPassengers + " " + user;
 
             fetch(reservationForm.action, {
                 method: reservationForm.method,
@@ -54,18 +107,40 @@
                     'Content-Type': 'application/json'
                 }
             }).then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                if (response.ok) {
+                    window.location = "Index.html";
                 }
-                else {
-                    //window.location = "Index.html";
+                signalInvalidNumber();
+                return response.json()
+            }).then(data => {
+                if (data == "Invalid reservation status.") {
+                    cancerErrorStatus();
                 }
-            })
+                else if (data == "Number of passengers exceeds available seats.") {
+                    signalInvalidNumber();
+                }
+                else if (data == "Number of passengers must be greater than zero.") {
+                    signalInvalidInput();
+                }
+            });
         });
 
         function signalInvalidInput() {
-            errorLabel.innerHTML = "Nevalidan unos! Molim vas unesti pozitivan cio broj"
+            errorLabel.innerHTML = "Nevalidan unos! Molim vas unesti pozitivan cio broj."
         }
-       </script>
+        function signalInvalidNumber() {
+            errorLabel.innerHTML = "Nevalidan unos! Preveliki broj putnika."
+        }
+
+        function cancelErrorTime() {
+            cancelErrorLabel.innerHTML = "Nije moguće otkazati rezervaciju za let koji polazi za manje od 24h."
+        }
+
+        function cancerErrorStatus() {
+            cancelErrorLabel.innerHTML = "Nije moguće otkazati rezervaciju jer je rezervacija otkazana ili završena."
+        }
+
+
+    </script>
 </body>
 </html>

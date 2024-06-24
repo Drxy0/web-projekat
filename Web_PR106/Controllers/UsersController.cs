@@ -83,29 +83,162 @@ namespace Web_PR106.Controllers
 		[Route("createReservation")]
 		public IHttpActionResult CreateReservation([FromBody] string request)
 		{
-			int flightId = int.Parse(request.Split(' ')[0]);
-			int numberOfPassangers = int.Parse(request.Split(' ')[1]);
-			string username = request.Split(' ')[2];
-			if (numberOfPassangers.Equals(null))
+			try
 			{
+				int flightId = int.Parse(request.Split(' ')[0]);
+				int numberOfPassengers = int.Parse(request.Split(' ')[1]);
+				string username = request.Split(' ')[2];
+
+				if (numberOfPassengers <= 0)
+				{
+					return BadRequest("Number of passengers must be greater than zero.");
+				}
+
+				// Check if a reservation already exists for the given flight and username
+				List<Reservation> reservationList = Global.Users.Find(x => x.Username == username)?.ReservationList;
+				Reservation existingReservation = reservationList?.Find(x => x.Flight.FlightId == flightId);
+
+				if (existingReservation != null)
+				{
+					if (existingReservation.Status == ReservationStatus.KREIRANA || existingReservation.Status == ReservationStatus.ODOBRENA)
+					{
+						// Cancel the existing reservation
+						CancelExistingReservation(existingReservation);
+					}
+					else
+					{
+						return BadRequest("Invalid reservation status.");
+					}
+				}
+
+				// Proceed with creating the new reservation
+				Flight selectedFlight = Global.Flights.Find(x => x.FlightId == flightId);
+				if (selectedFlight == null)
+				{
+					return NotFound(); // Flight not found
+				}
+
+				if (numberOfPassengers > selectedFlight.NumberOf_FreeSeats)
+				{
+					return BadRequest("Number of passengers exceeds available seats.");
+				}
+
+				// Update seat counts
+				selectedFlight.NumberOf_FreeSeats -= numberOfPassengers;
+				selectedFlight.NumberOf_TakenSeats += numberOfPassengers;
+
+				// Create new reservation
+				Reservation newReservation = new Reservation()
+				{
+					User = new User() { Username = username },
+					Flight = selectedFlight,
+					NumberOfPassengers = numberOfPassengers,
+					Price = selectedFlight.Price * numberOfPassengers,
+					Status = ReservationStatus.KREIRANA
+				};
+
+				reservationList.Add(newReservation);
+
+				return Ok("Reservation created successfully.");
+			}
+			catch (Exception ex)
+			{
+				Trace.WriteLine($"Exception occurred: {ex.Message}");
+				return BadRequest("Failed to create reservation.");
+			}
+		}
+
+		private void CancelExistingReservation(Reservation existingReservation)
+		{
+			Flight selectedFlight = existingReservation.Flight;
+			selectedFlight.NumberOf_FreeSeats += existingReservation.NumberOfPassengers;
+			selectedFlight.NumberOf_TakenSeats -= existingReservation.NumberOfPassengers;
+
+			Global.Users
+				.Find(x => x.Username == existingReservation.User.Username)?
+				.ReservationList
+				.Remove(existingReservation);
+		}
+
+
+		[HttpPost]
+		[Route("cancelReservation")]
+		public IHttpActionResult CancelReservation([FromBody] string request)
+		{
+			try
+			{
+				int flightId = int.Parse(request.Split(' ')[0]);
+				string username = request.Split(' ')[1];
+
+				Flight selectedFlight = Global.Flights.Find(x => x.FlightId == flightId);
+				if (selectedFlight == null)
+				{
+					return NotFound(); // Flight not found
+				}
+
+				string[] dateTime = selectedFlight.DepartureDateTime.Split('T');
+				string[] dateStr = dateTime[0].Split('-');
+				string[] timeStr = dateTime[1].Split(':');
+
+				int[] date = dateStr.Select(int.Parse).ToArray();
+				int[] time = timeStr.Select(int.Parse).ToArray();
+
+				DateTime dtFlight = new DateTime(date[0], date[1], date[2], time[0], time[1], time[2]);
+				DateTime now = DateTime.Now;
+
+				TimeSpan difference = dtFlight - now;
+
+				if (difference.TotalHours < 24)
+				{
+					return StatusCode(System.Net.HttpStatusCode.PreconditionFailed); // Less than 24 hours before flight
+				}
+
+				var user = Global.Users.Find(x => x.Username == username);
+				if (user == null)
+				{
+					return NotFound(); // User not found
+				}
+
+				var reservationList = user.ReservationList;
+				Reservation foundReservation = reservationList.Find(x => x.Flight.FlightId == flightId);
+
+				if (foundReservation == null)
+				{
+					return NotFound(); // Reservation not found
+				}
+
+				selectedFlight.NumberOf_FreeSeats += foundReservation.NumberOfPassengers;
+				selectedFlight.NumberOf_TakenSeats -= foundReservation.NumberOfPassengers;
+
+				reservationList.Remove(foundReservation);
+
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				Trace.WriteLine($"Exception occurred: {ex.Message}");
 				return BadRequest();
 			}
+		}
 
-			Flight selectedFlight = Global.Flights.Find(x => x.FlightId == flightId);
-			selectedFlight.NumberOf_FreeSeats -= numberOfPassangers;
-			selectedFlight.NumberOf_TakenSeats += numberOfPassangers;
+		[HttpPost]
+		[Route("reservationExists")]
+		public IHttpActionResult ReservationExists([FromBody] string request)
+		{
+			int flightId = int.Parse(request.Split(' ')[0]);
+			string username = request.Split(' ')[1];
 
 			List<Reservation> reservationList = Global.Users.Find(x => x.Username == username).ReservationList;
-			Reservation res = new Reservation()
+			Reservation foundReservation = reservationList.Find(x => x.Flight.FlightId == flightId);
+			if (foundReservation != null)
 			{
-				User = new User() { Username = username },
-				Flight = selectedFlight,
-				NumberOfPassangers = numberOfPassangers,
-				Price = selectedFlight.Price * numberOfPassangers,
-				Status = ReservationStatus.KREIRANA
-			};
-			reservationList.Add(res);
-			return Ok();
+				return Ok(true);
+			}
+			else
+			{
+				return Ok(false);
+			}
 		}
+
 	}
 }

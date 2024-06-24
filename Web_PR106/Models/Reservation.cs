@@ -16,7 +16,7 @@ namespace Web_PR106.Models
 	{
 		public User User { get; set; }
 		public Flight Flight { get; set;}
-		public int NumberOfPassangers { get; set;}
+		public int NumberOfPassengers { get; set;}
 		public double Price { get; set;}
 		public ReservationStatus Status { get; set;}
 

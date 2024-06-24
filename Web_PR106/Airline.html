@@ -45,8 +45,6 @@
             var airlineName = urlParams.get('airline');
             document.querySelector("#airlineName").innerHTML = airlineName;
 
-            console.log(sessionStorage.getItem("lastname"));
-
             $.get("api/airlines", function (data, status) {
                 if (status === 'success') {
                     data.forEach(function (airline) {

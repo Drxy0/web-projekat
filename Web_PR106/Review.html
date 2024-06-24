@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="Content/bootstrap.min.css">
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <title>My Flights</title>
+    <style>
+        body {
+            padding-top: 50px;
+        }
+        #reviewForm {
+            width: 80%;
+            max-width: 800px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        #submitReview {
+            margin: auto; /* Center the button horizontally */
+        }
+        #formContainer {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
+        <a href="Index.html#table" class="navbar-brand">
+            Letovi
+        </a>
+        <a href="#airlines" class="navbar-brand">
+            Aviokompanije
+        </a>
+        <a href="MyFlights.html" class="navbar-brand">
+            Moji Letovi
+        </a>
+    </nav>
+
+    <h2 id="reviwedAirlineName"></h2>
+    <br />
+    <br />
+
+    <div id="formContainer">
+        <form id="reviewForm" action="/api/review" method="post">
+            <div class="mb-3">
+                <label for="title" class="form-label">Naslov</label>
+                <input style="font-size: 20px; width: 750px;" id="title" name="title" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Opis</label>
+                <textarea style="max-width:750px; min-width:400px; width:750px;" class="form-control" id="description" name="description" rows="5"></textarea>
+            </div>
+            <label class="form-label" for="image">Slika (opciono)</label>
+            <br />
+            <button id="submitReview" type="submit" class="btn btn-primary">Pošalji</button>
+        </form>
+    </div>
+
+    <script>
+        var queryString = window.location.search;
+        var urlParams = new URLSearchParams(queryString);
+        var airlineName = urlParams.get('airline');
+        document.querySelector("#reviwedAirlineName").innerHTML = "Napišite recenziju za " + airlineName;
+
+        document.getElementById('submitReview').addEventListener('click', function (event) {
+            event.preventDefault();
+
+            let data = {
+                reviewer: sessionStorage.getItem("token"),
+                airline: airlineName,
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value
+            };
+
+            fetch('/api/review', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                    // Optionally, do something with the response
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle errors here
+                });
+        });
+
+    </script>
+</body>
+</html>

@@ -29,8 +29,8 @@
 		<Aviokompanija>Lufthansa</Aviokompanija>
 		<StartDestination>Frankfurt</StartDestination>
 		<EndDestination>Tokyo</EndDestination>
-		<DepartureDateTime>2024-07-03T07:00:00</DepartureDateTime>
-		<ArrivalDateTime>2024-07-03T22:00:00</ArrivalDateTime>
+		<DepartureDateTime>2024-06-25T07:00:00</DepartureDateTime>
+		<ArrivalDateTime>2024-06-25T22:00:00</ArrivalDateTime>
 		<NumberOf_FreeSeats>30</NumberOf_FreeSeats>
 		<NumberOf_TakenSeats>300</NumberOf_TakenSeats>
 		<Price>290,75</Price>
