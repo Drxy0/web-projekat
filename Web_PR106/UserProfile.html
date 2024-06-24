@@ -16,6 +16,10 @@
         h1, button{
             margin-left: 20px;
         }
+        #adminUsersFormDiv {
+            float: left;
+            padding-bottom:10px;
+        }
     </style>
     <title>Profile</title>
 </head>
@@ -30,7 +34,66 @@
     <button type="button" class="btn btn-primary" onclick="editProfile()">Edit Profile</button>
     <button type="button" class="btn btn-primary" onclick="logOut()">Log Out</button>
 
-    <div id="userInfo" style="padding:20px">
+    <br />
+    <div id="adminUsersList">
+        <h2>Svi korisnici</h2>
+        <div id="adminUsersFormDiv">
+            <form id="adminUsersForm" action="/api/default" method="post">
+                <table>
+                    <tr>
+                        <td>
+                            <label>Ime: </label>
+                        </td>
+                        <td>
+                            <input type="text" placeholder="John" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Prezime: </label>
+                        </td>
+                        <td>
+                            <input type="text" placeholder="Doe" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Datum rođenja (od): </label>
+                        </td>
+                        <td>
+                            <input type="date" placeholder="01/01/1970" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Datum rođenja (do): </label>
+                        </td>
+                        <td>
+                            <input type="date" placeholder="01/12/1999" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="btn btn-success" type="submit" value="PRETRAŽI" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <br />
+        <table id="adminUsersTable" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th hidden>Flight Id</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Ime</th>
+                    <th scope="col">Prezime</th>
+                    <th scope="col">Datum rođenja</th>
+                </tr>
+            </thead>
+            <tbody id="adminUsersTableBody">
+            </tbody>
+        </table>
     </div>
 
     <div id="editDiv" hidden>
@@ -86,17 +149,22 @@
         function loadUser() {
             $.get("api/users", function (data, status) {
                 var userInfo = document.querySelector("#userInfo");
+                var adminUsersList = document.querySelector("#adminUsersList");
                 user = data.find(user => user.Username === sessionStorage.getItem("token"));
-
+                role = sessionStorage.getItem("role");
                 let gender = ["MALE", "FEMALE"];
 
                 userInfo.innerHTML = `<h4>${user.Username}</h4> <br>
                                         <h4>${user.Name} ${user.Surname}</h4>
                                         <h4>${user.Email}</h4>
                                         <h4>${user.Birthday}</h4>
-                                        <h4>${gender[user.Gender]}</h4>
-                                        <h4>Reservations</h4>`;
-
+                                        <h4>${gender[user.Gender]}</h4>`;
+                if (role == "PUTNIK") {
+                    userInfo.innerHTML += '<h4> Reservations</h4>';
+                } else if (role == "ADMINISTRATOR") {
+                    adminFilterUsersForm();
+                    adminLoadUsersList();
+                }
                 document.querySelector('#password').value = user.Password;
                 document.querySelector('#name').value = user.Name;
                 document.querySelector('#surname').value = user.Surname;
@@ -106,6 +174,25 @@
             });
         }
 
+        function adminFilterUsersForm() {
+
+        }
+        function adminLoadUsersList() {
+            $.get("api/users", function (data, status) {
+                var tbody = $("#adminUsersTableBody");
+                tbody.empty(); // Clear any existing rows
+                console.log(data);
+                data.forEach(function (user, index) {
+                    var row = `<tr>
+                               <td>${index+1}</td>
+                               <td>${user.Name}</td>
+                               <td>${user.Surname}</td>
+                               <td>${user.Birthday}</td>
+                               </tr>`;
+                    tbody.append(row);
+                });
+            });
+        }
         function editProfile() {
             userInfo.hidden = true;
             var editDiv = document.querySelector("#editDiv");

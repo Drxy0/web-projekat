@@ -6,7 +6,7 @@
 		<Name>John</Name>
 		<Surname>Doe</Surname>
 		<Email>john.doe@example.com</Email>
-		<Birthday>1990-01-01</Birthday>
+		<Birthday>01/05/1990</Birthday>
 		<Gender>Male</Gender>
 		<UserType>PUTNIK</UserType>
 		<ReservationList>
@@ -56,7 +56,7 @@
 		<Name>Jane</Name>
 		<Surname>Smith</Surname>
 		<Email>jane.smith@example.com</Email>
-		<Birthday>1985-05-15</Birthday>
+		<Birthday>15/03/1990</Birthday>
 		<Gender>Female</Gender>
 		<UserType>PUTNIK</UserType>
 		<ReservationList>
@@ -79,6 +79,16 @@
 				<ReservationStatus>ODOBRENA</ReservationStatus>
 			</Reservation>
 		</ReservationList>
+	</User>
+	<User>
+		<Username>admin</Username>
+		<Password>admin</Password>
+		<Name>Admin</Name>
+		<Surname>Smith</Surname>
+		<Email>admin.smith@example.com</Email>
+		<Birthday>21/12/1985</Birthday>
+		<Gender>Male</Gender>
+		<UserType>ADMINISTRATOR</UserType>
 	</User>
 </Users>
 
