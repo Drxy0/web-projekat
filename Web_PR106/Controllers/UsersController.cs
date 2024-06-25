@@ -35,6 +35,91 @@ namespace Web_PR106.Controllers
         }
 
 		[HttpPost]
+		[Route("adminFilterUsers")]
+		public IHttpActionResult AdminFilterUsers([FromBody]AdminSearchUsersFilter searchFilter)
+		{
+			List<User> filteredUsers = new List<User>(Global.Users);
+			string startDate, endDate;
+
+			if (searchFilter.StartDate != null)
+			{
+				startDate = searchFilter.StartDate.ToString().Split(' ')[0];
+			}
+			else
+			{
+				startDate = "01/01/0001";
+			}
+			if (searchFilter.EndDate != null)
+			{
+				endDate = searchFilter.EndDate.ToString().Split(' ')[0];
+			}
+			else
+			{
+				endDate = "01/01/0001";
+			}
+
+			//if form is left unfilled then reset
+			if (string.IsNullOrEmpty(searchFilter.Name) &&
+				string.IsNullOrEmpty(searchFilter.Surname) &&
+				startDate == "01/01/0001" &&
+				endDate == "01/01/0001")
+			{
+				return Ok(Global.Users);
+			}
+
+			if (!string.IsNullOrEmpty(searchFilter.Name))
+			{
+				foreach (User user in Global.Users)
+				{
+					if (user.Name != searchFilter.Name)
+					{
+						filteredUsers.Remove(user);
+					}
+				}
+			}
+
+			if (!string.IsNullOrEmpty(searchFilter.Surname))
+			{
+				foreach (User user in Global.Users)
+				{
+					if (user.Surname != searchFilter.Surname)
+					{
+						filteredUsers.Remove(user);
+					}
+				}
+			}
+
+			if (startDate != "01/01/0001")
+			{
+				DateTime startdt = DateTime.ParseExact(startDate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+				foreach (User user in Global.Users)
+				{
+					DateTime bday= DateTime.ParseExact(user.Birthday, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+					if (bday < startdt)//
+					{
+						filteredUsers.Remove(user);
+					}
+				}
+			}
+
+			if (startDate != "01/01/0001")
+			{
+				DateTime enddt = DateTime.ParseExact(startDate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+				foreach (User user in Global.Users)
+				{
+					DateTime bday= DateTime.ParseExact(user.Birthday, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture);
+					if (bday > enddt)
+					{
+						filteredUsers.Remove(user);
+					}
+				}
+			}
+
+			return Ok(filteredUsers);
+		}
+
+
+		[HttpPost]
 		[Route("filterFlightsByStatus")]
 		public IHttpActionResult FilterFlightsByStatus([FromBody] string request)
 		{

@@ -1,9 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Airlines>
 	<Aviokompanija>
+		<Id>1</Id>
 		<Name>Air France</Name>
 		<Address>123 Airline Street, City 1, Country</Address>
 		<ContactInfo>email: info@airfrance.com/phone: +1234567890</ContactInfo>
+		<IsDeleted>false</IsDeleted>
 		<ProvidedFlights>
 			<Let>
 				<Aviokompanija>Air France</Aviokompanija>
@@ -49,9 +51,11 @@
 	</Aviokompanija>
 	
 	<Aviokompanija>
+		<Id>2</Id>
 		<Name>Lufthansa</Name>
 		<Address>456 Airline Avenue, City 2, Country</Address>
 		<ContactInfo>email: info@lufthansa.com/phone: +9876543210</ContactInfo>
+		<IsDeleted>false</IsDeleted>
 		<ProvidedFlights>
 			<Let>
 				<Aviokompanija>Lufthansa</Aviokompanija>

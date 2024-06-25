@@ -124,9 +124,11 @@ namespace Web_PR106
 			{
 				Airline airline = new Airline()
 				{
+					Id = int.Parse(node["Id"].InnerText),
 					Name = node["Name"].InnerText,
 					Address = node["Address"].InnerText,
 					ContactInfo = node["ContactInfo"].InnerText,
+					IsDeleted = bool.Parse(node["IsDeleted"].InnerText),
 					ProvidedFlights = new List<Flight>(),
 					Reviews = new List<Review>(),
 				};

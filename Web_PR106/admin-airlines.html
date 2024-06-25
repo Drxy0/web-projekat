@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="Content/bootstrap.min.css">
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <title>Sve aviokompanije</title>
+    <style>
+        body {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
+        <a href="Index.html" class="navbar-brand">
+            Home
+        </a>
+    </nav>
+
+    <section id="default">
+        <form id="addForm" action="/api/airlines" method="post">
+            <h2 class="text-center">Dodaj Aviokopmaniju</h2>
+            <div id="loginAlert" class="alert alert-danger" hidden role="alert"></div>
+            <div class="form-group">
+                <label for="name">Naziv</label>
+                <input type="text" class="form-control" id="airline-name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="adress">Adresa</label>
+                <input type="text" class="form-control" id="airline-address" name="address" required>
+            </div>
+            <div class="form-group">
+                <label for="airline-contact-info">Kontakt</label>
+                <input type="text" class="form-control" id="airline-contact-info" name="contactInfo" required>
+            </div>
+            <button type="submit" class="btn btn-success">Dodaj</button>
+        </form>
+
+
+        <h2>Sve Aviokompanije</h2>
+        <form id="filter-airlines-form" action="/api/airlines/adminFilterAirlines" method="post">
+            <table>
+                <tr>
+                    <td>
+                        <label>Naziv: </label>
+                    </td>
+                    <td>
+                        <input type="text" name="name" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Adresa: </label>
+                    </td>
+                    <td>
+                        <input type="text" name="address" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Kontakt</label>
+                    </td>
+                    <td>
+                        <input type="text" name="contactInfo" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="btn btn-success" type="submit" value="PRETRAŽI" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Naziv</th>
+                    <th scope="col">Adresa</th>
+                    <th scope="col">Kontakt</th>
+                    <th scope="col">Uredi</th>
+                    <th scope="col">Izbriši</th>
+                </tr>
+            </thead>
+            <tbody id="airlines-table-body">
+            </tbody>
+        </table>
+    </section>
+
+    <section id="edit-airline" style="display: none;">
+        <form id="addForm" action="/api/airlines" method="post">
+            <h2 class="text-center">Dodaj Aviokopmaniju</h2>
+            <div id="loginAlert" class="alert alert-danger" hidden role="alert"></div>
+            <div class="form-group">
+                <label for="name">Naziv</label>
+                <input type="text" class="form-control" id="airline-name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="adress">Adresa</label>
+                <input type="text" class="form-control" id="airline-address" name="address" required>
+            </div>
+            <div class="form-group">
+                <label for="airline-contact-info">Kontakt</label>
+                <input type="text" class="form-control" id="airline-contact-info" name="contactInfo" required>
+            </div>
+            <button type="submit" class="btn btn-success">Uredi</button>
+        </form>
+    </section>
+
+    <script>
+        const defaultSection = document.getElementById('default');
+        const editAirlineSection = document.getElementById('edit-airline');
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('filter-airlines-form');
+
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+                const jsonData = JSON.stringify(Object.fromEntries(formData));
+
+                fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: jsonData
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Assuming data is an array of users; adjust as needed
+                        const tbody = document.getElementById("airlines-table-body");
+                        tbody.innerHTML = ''; // Clear existing table rows
+
+                        data.forEach((user, index) => {
+                            const row = `
+                                    <tr>
+                                        <td>${index + 1}</td>
+                                        <td>${user.Name}</td>
+                                        <td>${user.Address}</td>
+                                        <td>${user.ContactInfo}</td>
+                                        <td><button type="submit" class="btn btn-primary" onclick="editAirline()">Uredi</button></td>
+                                        <td><button type="submit" class="btn btn-danger" onclick="deleteAirline()">Izbriši</button></td>
+                                    </tr>`;
+                            tbody.innerHTML += row;
+                        });
+
+                        form.reset(); // Reset the form after successful submission
+                    });
+            });
+        });
+
+        function loadAirlines() {
+            $.get("api/airlines", function (data, status) {
+                var airlines = data;
+                var tbody = $("#airlines-table-body");
+                tbody.empty(); // Clear any existing rows
+
+                airlines.forEach(function (airline, index) {
+                    var row = `<tr>
+                                    <td>${index + 1}</td>
+                                    <td>${airline.Name}</td>
+                                    <td>${airline.ContactInfo.split('/phone:')[0].split('email: ')[1]}</td>
+                                    <td><button type="submit" class="btn btn-primary" onclick="editAirline()">Uredi</button></td>
+                                    <td><button type="submit" class="btn btn-danger" onclick="deleteAirline()">Izbriši</button></td>
+                                   </tr>`;
+                    tbody.append(row);
+                });
+            });
+        }
+
+        function deleteAirline() {
+            fetch(`/api/airlines/delete/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    console.log('User deleted successfully');
+                    // Handle success scenario here
+                })
+                .catch(error => {
+                    console.error('Error deleting user:', error);
+                    // Handle error scenario here
+                });
+        }
+
+        function editAirline() {
+            defaultSection.style.display = 'none';
+            editAirlineSection.style.display = 'block';
+        }
+
+        $(document).ready(function () {
+            loadAirlines();
+        });
+    </script>
+</body>
+</html>

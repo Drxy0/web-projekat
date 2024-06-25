@@ -28,24 +28,30 @@
         <a href="Index.html" class="navbar-brand">
             Home
         </a>
+        <a href="admin-airlines.html" class="navbar-brand">
+            Aviokompanije
+        </a>
     </nav>
 
     <h1>User profile</h1>
     <button type="button" class="btn btn-primary" onclick="editProfile()">Edit Profile</button>
     <button type="button" class="btn btn-primary" onclick="logOut()">Log Out</button>
 
+    <div id="userInfo" style="padding:20px">
+    </div>
+
     <br />
     <div id="adminUsersList">
         <h2>Svi korisnici</h2>
         <div id="adminUsersFormDiv">
-            <form id="adminUsersForm" action="/api/default" method="post">
+            <form id="adminUsersForm" action="/api/airlines/adminFilterAirlines" method="post">
                 <table>
                     <tr>
                         <td>
                             <label>Ime: </label>
                         </td>
                         <td>
-                            <input type="text" placeholder="John" />
+                            <input type="text" placeholder="John" name="name" />
                         </td>
                     </tr>
                     <tr>
@@ -53,7 +59,7 @@
                             <label>Prezime: </label>
                         </td>
                         <td>
-                            <input type="text" placeholder="Doe" />
+                            <input type="text" placeholder="Doe" name="surname"/>
                         </td>
                     </tr>
                     <tr>
@@ -61,7 +67,7 @@
                             <label>Datum rođenja (od): </label>
                         </td>
                         <td>
-                            <input type="date" placeholder="01/01/1970" />
+                            <input type="date" placeholder="01/01/1970" name="startDate"/>
                         </td>
                     </tr>
                     <tr>
@@ -69,7 +75,7 @@
                             <label>Datum rođenja (do): </label>
                         </td>
                         <td>
-                            <input type="date" placeholder="01/12/1999" />
+                            <input type="date" placeholder="01/12/1999" name="endDate" />
                         </td>
                     </tr>
                     <tr>
@@ -86,9 +92,9 @@
                 <tr>
                     <th hidden>Flight Id</th>
                     <th scope="col">#</th>
-                    <th scope="col">Ime</th>
+                    <th id="sort-name-header" scope="col" onclick="sortTableByName()">Ime</th>
                     <th scope="col">Prezime</th>
-                    <th scope="col">Datum rođenja</th>
+                    <th id="sort-birthday-header" scope="col" onclick="sortTableByBirthday()">Datum rođenja</th>
                 </tr>
             </thead>
             <tbody id="adminUsersTableBody">
@@ -134,9 +140,15 @@
         </form>
     </div>
 
-
     <script>
         var user;
+        var sortOrder = false;
+        const form = document.getElementById('adminUsersForm');
+
+        const sortNameHeader = $("#sort-name-header");
+        const sortBirthdayHeader = $("#sort-birthday-header");
+
+
         $(document).ready(function () {
             loadUser();
         });
@@ -144,6 +156,158 @@
         function logOut() {
             sessionStorage.clear();
             window.location.href = "Index.html";
+        }
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const jsonObject = {};
+            formData.forEach((value, key) => {
+                jsonObject[key] = value;
+            });
+            const jsonData = JSON.stringify(jsonObject);
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: jsonData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Assuming response is JSON; adjust as needed
+                })
+                .then(data => {
+                    form.reset();
+                    var tbody = $("#adminUsersTableBody");
+                    tbody.empty();
+                    data.forEach(function (user, index) {
+                        var row = `<tr>
+                                <td>${index + 1}</td>
+                                <td>${user.Name}</td>
+                                <td>${user.Surname}</td>
+                                <td>${user.Birthday}</td>
+                                </tr>`;
+                        tbody.append(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error occurred:', error);
+                    // Handle errors here, such as displaying an error message
+                });
+        });
+
+
+        function User(name, surname, birthday) {
+            this.Name = name;
+            this.Surname = surname;
+            this.Birthday = birthday;
+        }
+
+
+        function sortTableByName() {
+            var tbody = $("#adminUsersTableBody");
+            var rows = tbody.find("tr").get();
+            var users = [];
+
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].cells;
+                var user = new User(
+                    cells[1].innerText,
+                    cells[2].innerText,
+                    cells[3].innerText,
+                );
+                users.push(user);
+            }
+
+            sortOrder = !sortOrder;
+
+            if (sortOrder) {
+                sortNameHeader.text("Ime▲");
+                users.sort(function (a, b) {
+                    return a.Name.localeCompare(b.Name);
+                });
+            } else {
+                sortNameHeader.text("Ime▼");
+                users.sort(function (a, b) {
+                    return b.Name.localeCompare(a.Name);
+                });
+            }
+
+            if (sortBirthdayHeader.text != "Datum rođenja") {
+                sortBirthdayHeader.text("Datum rođenja")
+            }
+            tbody.empty();
+            users.forEach(function (user, index) {
+                var row = `<tr>
+                                <td>${index + 1}</td>
+                                <td>${user.Name}</td>
+                                <td>${user.Surname}</td>
+                                <td>${user.Birthday}</td>
+                           </tr>`;
+                tbody.append(row);
+            });
+        }
+
+        function sortTableByBirthday() {
+            var tbody = $("#adminUsersTableBody");
+            var rows = tbody.find("tr").get();
+            var users = [];
+
+            for (var i = 0; i < rows.length; i++) {
+                var cells = rows[i].cells;
+                var user = new User(
+                    cells[1].innerText,
+                    cells[2].innerText,
+                    cells[3].innerText,
+                );
+                users.push(user);
+            }
+
+            sortOrder = !sortOrder;
+
+            if (sortOrder) {
+                sortBirthdayHeader.text("Datum rođenja▲");
+                users.sort(function (a, b) {
+                    var datePartsA = a.Birthday.split('/');
+                    var datePartsB = b.Birthday.split('/');
+
+                    var dateA = new Date(datePartsA[2], datePartsA[1] - 1, datePartsA[0]);
+                    var dateB = new Date(datePartsB[2], datePartsB[1] - 1, datePartsB[0]);
+
+                    return dateA - dateB;
+                });
+            } else {
+                sortBirthdayHeader.text("Datum rođenja▼");
+                users.sort(function (a, b) {
+                    var datePartsA = a.Birthday.split('/');
+                    var datePartsB = b.Birthday.split('/');
+
+                    var dateA = new Date(datePartsA[2], datePartsA[1] - 1, datePartsA[0]);
+                    var dateB = new Date(datePartsB[2], datePartsB[1] - 1, datePartsB[0]);
+
+                    return dateB - dateA;
+                });
+            }
+
+            if (sortNameHeader.text != "Ime") {
+                sortNameHeader.text("Ime")
+            }
+
+            tbody.empty();
+            users.forEach(function (user, index) {
+                var row = `<tr>
+                                <td>${index + 1}</td>
+                                <td>${user.Name}</td>
+                                <td>${user.Surname}</td>
+                                <td>${user.Birthday}</td>
+                           </tr>`;
+                tbody.append(row);
+            });
         }
 
         function loadUser() {
@@ -155,14 +319,14 @@
                 let gender = ["MALE", "FEMALE"];
 
                 userInfo.innerHTML = `<h4>${user.Username}</h4> <br>
-                                        <h4>${user.Name} ${user.Surname}</h4>
-                                        <h4>${user.Email}</h4>
-                                        <h4>${user.Birthday}</h4>
-                                        <h4>${gender[user.Gender]}</h4>`;
+                                            <h4>${user.Name} ${user.Surname}</h4>
+                                            <h4>${user.Email}</h4>
+                                            <h4>${user.Birthday}</h4>
+                                            <h4>${gender[user.Gender]}</h4>`;
                 if (role == "PUTNIK") {
                     userInfo.innerHTML += '<h4> Reservations</h4>';
                 } else if (role == "ADMINISTRATOR") {
-                    adminFilterUsersForm();
+                    //adminFilterUsersForm();
                     adminLoadUsersList();
                 }
                 document.querySelector('#password').value = user.Password;
@@ -174,21 +338,17 @@
             });
         }
 
-        function adminFilterUsersForm() {
-
-        }
         function adminLoadUsersList() {
             $.get("api/users", function (data, status) {
                 var tbody = $("#adminUsersTableBody");
                 tbody.empty(); // Clear any existing rows
-                console.log(data);
                 data.forEach(function (user, index) {
                     var row = `<tr>
-                               <td>${index+1}</td>
-                               <td>${user.Name}</td>
-                               <td>${user.Surname}</td>
-                               <td>${user.Birthday}</td>
-                               </tr>`;
+                                   <td>${index + 1}</td>
+                                   <td>${user.Name}</td>
+                                   <td>${user.Surname}</td>
+                                   <td>${user.Birthday}</td>
+                                   </tr>`;
                     tbody.append(row);
                 });
             });
