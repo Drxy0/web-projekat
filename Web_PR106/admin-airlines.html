@@ -19,7 +19,7 @@
     </nav>
 
     <section id="default">
-        <form id="addForm" action="/api/airlines" method="post">
+        <form id="addForm" style="max-width:20%; padding-left:20px;" action="/api/airlines" method="post">
             <h2 class="text-center">Dodaj Aviokopmaniju</h2>
             <div id="loginAlert" class="alert alert-danger" hidden role="alert"></div>
             <div class="form-group">
@@ -34,7 +34,9 @@
                 <label for="airline-contact-info">Kontakt</label>
                 <input type="text" class="form-control" id="airline-contact-info" name="contactInfo" required>
             </div>
-            <button type="submit" class="btn btn-success">Dodaj</button>
+            <div class="text-center">
+                <button type="submit" style="width:200px;" class="btn btn-success">Dodaj</button>
+            </div>
         </form>
 
 
@@ -79,6 +81,7 @@
                     <th scope="col">Naziv</th>
                     <th scope="col">Adresa</th>
                     <th scope="col">Kontakt</th>
+                    <th scope="col">Status</th>
                     <th scope="col">Uredi</th>
                     <th scope="col">Izbriši</th>
                 </tr>

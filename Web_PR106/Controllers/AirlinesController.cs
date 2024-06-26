@@ -102,7 +102,7 @@ namespace Web_PR106.Controllers
 			}
 
 			airline.IsDeleted = true;
-			return Ok(); // Return 200 OK if deletion is successful
+			return Ok();
 		}
 	}
 }

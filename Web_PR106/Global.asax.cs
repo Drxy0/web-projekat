@@ -63,8 +63,12 @@ namespace Web_PR106
 					XmlNode flightNode = reservationNode["Flight"];
 					Flight flight = new Flight()
 					{
-						FlightId = int.Parse(flightNode["FlightId"].InnerText),
-						Aviokompanija = new Airline(flightNode["Aviokompanija"].InnerText),
+						Id = int.Parse(flightNode["FlightId"].InnerText),
+						Aviokompanija = new Airline()
+						{
+							Id = int.Parse(flightNode["Aviokompanija"]["Id"].InnerText),
+							Name = flightNode["Aviokompanija"]["Name"].InnerText
+						},
 						StartDestination = flightNode["StartDestination"].InnerText,
 						EndDestination = flightNode["EndDestination"].InnerText,
 						DepartureDateTime = flightNode["DepartureDateTime"].InnerText,
@@ -97,8 +101,12 @@ namespace Web_PR106
 			{
 				Flight flight = new Flight();
 
-				flight.FlightId = int.Parse(node["FlightId"].InnerText);
-				flight.Aviokompanija = new Airline(node["Aviokompanija"].InnerText);
+				flight.Id = int.Parse(node["FlightId"].InnerText);
+				flight.Aviokompanija = new Airline()
+				{
+					Id = int.Parse(node["Aviokompanija"]["Id"].InnerText),
+					Name = node["Aviokompanija"]["Name"].InnerText
+				};
 				flight.StartDestination = node["StartDestination"].InnerText;
 				flight.EndDestination = node["EndDestination"].InnerText;
 				flight.DepartureDateTime = node["DepartureDateTime"].InnerText;

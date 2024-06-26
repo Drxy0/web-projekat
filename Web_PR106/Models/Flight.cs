@@ -13,7 +13,7 @@ namespace Web_PR106.Models
 	}
 	public class Flight
 	{
-		public int FlightId { get; set; }
+		public int Id { get; set; }
 		public Airline Aviokompanija { get; set; }
 		public string StartDestination { get; set; }
 		public string EndDestination { get; set; }
@@ -23,6 +23,7 @@ namespace Web_PR106.Models
 		public int NumberOf_TakenSeats { get; set; }
 		public double Price { get; set; }
 		public FlightStatus Status { get; set; }
+		public bool IsDeleted { get; set; }
 
 		public Flight () { }
 	}

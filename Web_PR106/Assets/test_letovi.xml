@@ -2,7 +2,10 @@
 <Flights>
 	<Flight>
 		<FlightId>1</FlightId>
-		<Aviokompanija>Air France</Aviokompanija>
+		<Aviokompanija>
+			<Id>1</Id>
+			<Name>Air France</Name>
+		</Aviokompanija>
 		<StartDestination>Belgrade</StartDestination>
 		<EndDestination>Paris</EndDestination>
 		<DepartureDateTime>2024-07-01T10:30:00</DepartureDateTime>
@@ -14,7 +17,10 @@
 	</Flight>
 	<Flight>
 		<FlightId>2</FlightId>
-		<Aviokompanija>Air France</Aviokompanija>
+		<Aviokompanija>
+			<Id>1</Id>
+			<Name>Air France</Name>
+		</Aviokompanija>
 		<StartDestination>Paris</StartDestination>
 		<EndDestination>New York</EndDestination>
 		<DepartureDateTime>2024-07-02T15:00:00</DepartureDateTime>
@@ -26,7 +32,10 @@
 	</Flight>
 	<Flight>
 		<FlightId>3</FlightId>
-		<Aviokompanija>Lufthansa</Aviokompanija>
+		<Aviokompanija>
+			<Id>2</Id>
+			<Name>Lufthansa</Name>
+		</Aviokompanija>
 		<StartDestination>Frankfurt</StartDestination>
 		<EndDestination>Tokyo</EndDestination>
 		<DepartureDateTime>2024-06-25T07:00:00</DepartureDateTime>
@@ -38,7 +47,10 @@
 	</Flight>
 	<Flight>
 		<FlightId>4</FlightId>
-		<Aviokompanija>Lufthansa</Aviokompanija>
+		<Aviokompanija>
+			<Id>2</Id>
+			<Name>Lufthansa</Name>
+		</Aviokompanija>
 		<StartDestination>London</StartDestination>
 		<EndDestination>Los Angeles</EndDestination>
 		<DepartureDateTime>2024-07-04T12:00:00</DepartureDateTime>
@@ -50,7 +62,10 @@
 	</Flight>
 	<Flight>
 		<FlightId>5</FlightId>
-		<Aviokompanija>Emirates</Aviokompanija>
+		<Aviokompanija>
+			<Id>3</Id>
+			<Name>Emirates</Name>
+		</Aviokompanija>
 		<StartDestination>Dubai</StartDestination>
 		<EndDestination>Istanbul</EndDestination>
 		<DepartureDateTime>2024-07-04T20:00:00</DepartureDateTime>
@@ -62,7 +77,10 @@
 	</Flight>
 	<Flight>
 		<FlightId>6</FlightId>
-		<Aviokompanija>Delta</Aviokompanija>
+		<Aviokompanija>
+			<Id>4</Id>
+			<Name>Delta</Name>
+		</Aviokompanija>
 		<StartDestination>Los Angeles</StartDestination>
 		<EndDestination>San Francisco</EndDestination>
 		<DepartureDateTime>2024-07-01T12:00:00</DepartureDateTime>

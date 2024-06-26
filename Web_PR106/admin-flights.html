@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="Content/bootstrap.min.css">
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <title>Svi Letovi</title>
+    <style>
+        body {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
+        <a href="Index.html" class="navbar-brand">
+            Home
+        </a>
+    </nav>
+
+
+    <section id="default">
+        <form id="addForm" style="max-width:20%; padding-left:20px;" action="/api/airlines" method="post">
+            <h2 class="text-center">Dodaj Let</h2>
+            <div id="loginAlert" class="alert alert-danger" hidden role="alert"></div>
+            <div class="form-group">
+                <label for="airlineId">Id Aviokompanije</label>
+                <input type="number" class="form-control" id="airlineId" name="airlineId" required>
+            </div>
+            <div class="form-group">
+                <label for="start-destination">Polazna destinacija</label>
+                <input type="text" class="form-control" id="start-destination" name="startDestination" required>
+            </div>
+            <div class="form-group">
+                <label for="end-destination">Odredišna destinacija</label>
+                <input type="text" class="form-control" id="end-destination" name="endDestination" required>
+            </div>
+            <div class="form-group">
+                <label for="departure-time">Vrijema polaska</label>
+                <input type="datetime" class="form-control" id="departure-time" name="departureDateTime" required>
+            </div>
+            <div class="form-group">
+                <label for="arrival-time">Vrijema dolaska</label>
+                <input type="datetime" class="form-control" id="arrival-time" name="arrivalDateTime" required>
+            </div>
+            <div class="form-group">
+                <label for="free-seats">Broj mjesta</label>
+                <input type="number" class="form-control" id="free-seats" name="numberOf_FreeSeats" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Cijena</label>
+                <input type="number" class="form-control" id="price" name="price" required>
+            </div>
+            <div class="text-center">
+                <button type="submit" style="width:200px;" class="btn btn-success">Dodaj</button>
+            </div>
+        </form>
+
+
+        <h2>Sve Aviokompanije</h2>
+        <form id="filter-flights-form" action="/api/flight/adminFilterFlights" method="post">
+            <table>
+                <tr>
+                    <td>
+                        <label>Polazna destinacija: </label>
+                    </td>
+                    <td>
+                        <input type="text" name="startDestination" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Odredišna destinacija: </label>
+                    </td>
+                    <td>
+                        <input type="text" name="endDestination" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Datum polaskas</label>
+                    </td>
+                    <td>
+                        <input type="date" name="departureDate" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="btn btn-success" type="submit" value="PRETRAŽI" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Id</th>
+                    <th scope="col">Aviokompanija</th>
+                    <th hidden>Aviokompanija id</th>
+                    <th scope="col">Početna destinacija</th>
+                    <th scope="col">Odredišna destinacija</th>
+                    <th scope="col">Vrijeme polaska</th>
+                    <th scope="col">Vrijeme dolaska</th>
+                    <th scope="col">Slobodna mjesta</th>
+                    <th scope="col">Zauzeta mjesta</th>
+                    <th scope="col">Cijena</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Uredi</th>
+                    <th scope="col">Izbriši</th>
+                </tr>
+            </thead>
+            <tbody id="flights-table-body">
+            </tbody>
+        </table>
+    </section>
+
+    <script>
+        const flightStatus = ['AKTIVAN', 'OTKAZAN', 'ZAVRSEN'];
+        const form = document.getElementById('filter-flights-form');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Serialize form data into JSON format
+            const formData = new FormData(form);
+            const formDataJson = {};
+            formData.forEach((value, key) => {
+                formDataJson[key] = value;
+            });
+
+            // Construct the fetch request
+            fetch('/api/flight/adminFilterFlights', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formDataJson)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    form.reset();
+                    var tbody = $("#flights-table-body");
+                    tbody.empty();
+                    data.forEach(function (flight, index) {
+                        var row = `<tr>
+                            <td scope="row">${index + 1}</td>
+                            <td>${flight.Id}</td>
+                            <td><a href="Airline.html?airline=${encodeURIComponent(flight.Aviokompanija.Name)}">${flight.Aviokompanija.Name}</a></td>
+                            <td hidden>${flight.Aviokompanija.Id}</td>
+                            <td>${flight.StartDestination}</td>
+                            <td>${flight.EndDestination}</td>
+                            <td>${flight.DepartureDateTime}</td>
+                            <td>${flight.ArrivalDateTime}</td>
+                            <td>${flight.NumberOf_FreeSeats}</td>
+                            <td>${flight.NumberOf_TakenSeats}</td>
+                            <td>$${flight.Price}</td>
+                            <td>${flightStatus[flight.Status]}</td >
+                            <td class="text-center">Uredi</td>
+                            <td class="text-center"><button class="btn btn-error" onclick="deleteFlight('${flight.Aviokompanija.Id}', '${flight.Id}')">Izbriši</button></td>
+                        </tr>`;
+                        tbody.append(row);
+                    })
+                })
+                .catch(error => {
+                    console.error('Error filtering flights:', error);
+                });
+        });
+
+        function loadFlights() {
+            $.get("api/default", function (data, status) {
+                var tbody = $("#flights-table-body");
+                tbody.empty(); // Clear any existing rows
+
+                data.forEach(function (flight, index) {
+                    var row = `<tr>
+                            <td scope="row">${index + 1}</td>
+                            <td>${flight.Id}</td>
+                            <td><a href="Airline.html?airline=${encodeURIComponent(flight.Aviokompanija.Name)}">${flight.Aviokompanija.Name}</a></td>
+                            <td hidden>${flight.Aviokompanija.Id}</td>
+                            <td>${flight.StartDestination}</td>
+                            <td>${flight.EndDestination}</td>
+                            <td>${flight.DepartureDateTime}</td>
+                            <td>${flight.ArrivalDateTime}</td>
+                            <td>${flight.NumberOf_FreeSeats}</td>
+                            <td>${flight.NumberOf_TakenSeats}</td>
+                            <td>$${flight.Price}</td>
+                            <td>${flightStatus[flight.Status]}</td >
+                            <td class="text-center">Uredi</td>
+                            <td class="text-center"><button class="btn btn-error" onclick="deleteFlight('${flight.Aviokompanija.Id}', '${flight.Id}')">Izbriši</button></td>
+                        </tr>`;
+
+                    console.log(flight.Aviokompanija.Id);
+                    tbody.append(row);
+                });
+            });
+        }
+
+        function deleteFlight(airlineId, flightId) {
+
+            fetch(`/api/flight/delete/${airlineId}/flight/${flightId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    console.log('User deleted successfully');
+                    // Handle success scenario here
+                })
+                .catch(error => {
+                    console.error('Error deleting user:', error);
+                    // Handle error scenario here
+                });
+        }
+
+        $(document).ready(function () {
+            loadFlights();
+        });
+    </script>
+</body>
+</html>

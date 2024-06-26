@@ -31,6 +31,9 @@
         <a href="admin-airlines.html" class="navbar-brand">
             Aviokompanije
         </a>
+        <a href="admin-flights.html" class="navbar-brand">
+            Letovi
+        </a>
     </nav>
 
     <h1>User profile</h1>
@@ -179,7 +182,7 @@
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
-                    return response.json(); // Assuming response is JSON; adjust as needed
+                    return response.json()
                 })
                 .then(data => {
                     form.reset();
@@ -197,7 +200,6 @@
                 })
                 .catch(error => {
                     console.error('Error occurred:', error);
-                    // Handle errors here, such as displaying an error message
                 });
         });
 

@@ -14,7 +14,11 @@ namespace Web_PR106.Models
 		public bool IsDeleted { get; set; }
 		public List<Flight> ProvidedFlights { get; set; }
 		public List<Review> Reviews { get; set; }
-		public Airline() { }
+		public Airline() 
+		{
+			ProvidedFlights = new List<Flight>();
+			Reviews = new List<Review>();
+		}
 
 		public Airline(string name, string address, string contactInfo)
 		{

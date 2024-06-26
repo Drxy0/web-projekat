@@ -181,7 +181,7 @@ namespace Web_PR106.Controllers
 
 				// Check if a reservation already exists for the given flight and username
 				List<Reservation> reservationList = Global.Users.Find(x => x.Username == username)?.ReservationList;
-				Reservation existingReservation = reservationList?.Find(x => x.Flight.FlightId == flightId);
+				Reservation existingReservation = reservationList?.Find(x => x.Flight.Id == flightId);
 
 				if (existingReservation != null)
 				{
@@ -197,7 +197,7 @@ namespace Web_PR106.Controllers
 				}
 
 				// Proceed with creating the new reservation
-				Flight selectedFlight = Global.Flights.Find(x => x.FlightId == flightId);
+				Flight selectedFlight = Global.Flights.Find(x => x.Id == flightId);
 				if (selectedFlight == null)
 				{
 					return NotFound(); // Flight not found
@@ -255,7 +255,7 @@ namespace Web_PR106.Controllers
 				int flightId = int.Parse(request.Split(' ')[0]);
 				string username = request.Split(' ')[1];
 
-				Flight selectedFlight = Global.Flights.Find(x => x.FlightId == flightId);
+				Flight selectedFlight = Global.Flights.Find(x => x.Id == flightId);
 				if (selectedFlight == null)
 				{
 					return NotFound(); // Flight not found
@@ -285,7 +285,7 @@ namespace Web_PR106.Controllers
 				}
 
 				var reservationList = user.ReservationList;
-				Reservation foundReservation = reservationList.Find(x => x.Flight.FlightId == flightId);
+				Reservation foundReservation = reservationList.Find(x => x.Flight.Id == flightId);
 
 				if (foundReservation == null)
 				{
@@ -314,7 +314,7 @@ namespace Web_PR106.Controllers
 			string username = request.Split(' ')[1];
 
 			List<Reservation> reservationList = Global.Users.Find(x => x.Username == username).ReservationList;
-			Reservation foundReservation = reservationList.Find(x => x.Flight.FlightId == flightId);
+			Reservation foundReservation = reservationList.Find(x => x.Flight.Id == flightId);
 			if (foundReservation != null)
 			{
 				return Ok(true);

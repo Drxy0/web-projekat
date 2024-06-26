@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="admin-airlines.html" />
+    <Content Include="admin-flights.html" />
     <Content Include="Airline.html" />
     <Content Include="Assets\comment_placeholder.png" />
     <Content Include="Assets\profile.jpg" />
@@ -132,6 +133,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AirlinesController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\FlightController.cs" />
     <Compile Include="Controllers\ReviewController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
