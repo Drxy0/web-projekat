@@ -13,6 +13,42 @@ namespace Web_PR106.Controllers
 	[RoutePrefix("api/flight")]
 	public class FlightController : ApiController
     {
+
+		[HttpPost]
+		public IHttpActionResult Post([FromBody] JObject flightParams)
+		{
+			if (flightParams == null) 
+			{ 
+				return BadRequest(); 
+			}
+
+			int airlineId = Convert.ToInt32(flightParams["airline"]);
+			Airline airline = Global.Airlines.FirstOrDefault(x => x.Id == airlineId);
+
+			Flight flight = new Flight()
+			{
+				Airline = new Airline()
+				{
+					Id = airlineId,
+					Name = airline.Name,
+				},
+				//Id =
+				StartDestination = flightParams["startDestination"]?.ToString(),
+				EndDestination = flightParams["endDestination"]?.ToString(),
+				DepartureDateTime = flightParams["departureDateTime"]?.ToString(),
+				ArrivalDateTime = flightParams["arrivalDateTime"]?.ToString(),
+				NumberOf_FreeSeats = flightParams["numberOf_FreeSeats"] != null ? Convert.ToInt32(flightParams["numberOf_FreeSeats"]) : 0,
+				Price = flightParams["price"] != null ? Convert.ToDouble(flightParams["price"]) : 0,
+				Status = FlightStatus.AKTIVAN
+			};
+
+			airline.ProvidedFlights.Add(flight);
+
+			Global.LoadFlights();
+			return Ok();
+		}
+
+
 		[HttpPost]
 		[Route("adminFilterFlights")]
 		public IHttpActionResult AdminFilterFlights([FromBody] JObject searchFilter)
@@ -26,7 +62,16 @@ namespace Web_PR106.Controllers
 
 			string startDestination = searchFilter["startDestination"]?.ToString(); // Accessing "name" property from JSON
 			string endDestination = searchFilter["endDestination"]?.ToString(); // Accessing "address" property from JSON
-			string departureDate = searchFilter["departureDate"]?.ToString(); // Accessing "contactInfo" property from JSON
+			string departureDate = searchFilter["departureDate"]?.ToString();
+			if (!string.IsNullOrEmpty(departureDate) || departureDate == "")
+			{
+				departureDate = "01/01/0001";
+			}
+			else
+			{
+				DateTime date = DateTime.Parse(departureDate);
+				departureDate = date.ToString("dd/MM/yyyy");
+			}
 
 			if (string.IsNullOrEmpty(startDestination) &&
 				string.IsNullOrEmpty(endDestination) &&
@@ -58,11 +103,11 @@ namespace Web_PR106.Controllers
 				}
 			}
 
-			if (!string.IsNullOrEmpty(departureDate))
+			if (departureDate != "01/01/0001")
 			{
 				foreach (Flight flight in Global.Flights)
 				{
-					if (flight.DepartureDateTime != departureDate)
+					if (flight.DepartureDateTime.Split(' ')[0] != departureDate)
 					{
 						filteredFlights.Remove(flight);
 					}

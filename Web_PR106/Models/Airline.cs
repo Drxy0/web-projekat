@@ -26,11 +26,7 @@ namespace Web_PR106.Models
 			Address = address;
 			ContactInfo = contactInfo;
 		}
-		public Airline(string name)
-		{
-			Name = name;
-		}
-		public Airline(string name, string address, string contactInfo, List<Flight> providedFlights, List<Review> reviews) : this(name)
+		public Airline(string name, string address, string contactInfo, List<Flight> providedFlights, List<Review> reviews)
 		{
 			Address = address;
 			ContactInfo = contactInfo;

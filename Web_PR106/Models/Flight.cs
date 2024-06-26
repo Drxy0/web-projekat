@@ -14,7 +14,7 @@ namespace Web_PR106.Models
 	public class Flight
 	{
 		public int Id { get; set; }
-		public Airline Aviokompanija { get; set; }
+		public Airline Airline { get; set; }
 		public string StartDestination { get; set; }
 		public string EndDestination { get; set; }
 		public string DepartureDateTime { get; set; }

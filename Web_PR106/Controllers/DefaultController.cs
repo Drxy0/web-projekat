@@ -36,8 +36,10 @@ namespace Web_PR106.Controllers
 			string airlinesName = searchFilter.AirlinesName;
 			string departureDate, arrivalDate;
 
-			if (searchFilter.DepartureDate != null) { 
-				departureDate = searchFilter.DepartureDate.ToString().Split(' ')[0];
+			if (searchFilter.DepartureDate != null) 
+			{
+				DateTime date = DateTime.Parse(searchFilter.DepartureDate);
+				departureDate = date.ToString("dd/MM/yyyy");
 			}
 			else
 			{
@@ -45,7 +47,8 @@ namespace Web_PR106.Controllers
 			}
 			if (searchFilter.ArrivalDate != null)
 			{
-				arrivalDate = searchFilter.ArrivalDate.ToString().Split(' ')[0];
+				DateTime date = DateTime.Parse(searchFilter.DepartureDate);
+				arrivalDate = date.ToString("dd/MM/yyyy");
 			}
 			else
 			{
@@ -88,17 +91,18 @@ namespace Web_PR106.Controllers
 			{
 				foreach (Flight flight in Global.Flights)
 				{
-					if (flight.Aviokompanija.Name != airlinesName)
+					if (flight.Airline.Name != airlinesName)
 					{
 						Global.ShownFlights.Remove(flight);
 					}
 				}
 			}
+
 			if (departureDate != "01/01/0001")
 			{
 				foreach (Flight flight in Global.Flights)
 				{
-					if (flight.DepartureDateTime != departureDate)
+					if (flight.DepartureDateTime.Split(' ')[0] != departureDate)
 					{
 						Global.ShownFlights.Remove(flight);
 					}
@@ -109,7 +113,7 @@ namespace Web_PR106.Controllers
 			{
 				foreach (Flight flight in Global.Flights)
 				{
-					if (flight.ArrivalDateTime != arrivalDate)
+					if (flight.ArrivalDateTime.Split(' ')[0] != arrivalDate)
 					{
 						Global.ShownFlights.Remove(flight);
 					}

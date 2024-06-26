@@ -64,10 +64,10 @@ namespace Web_PR106
 					Flight flight = new Flight()
 					{
 						Id = int.Parse(flightNode["FlightId"].InnerText),
-						Aviokompanija = new Airline()
+						Airline = new Airline()
 						{
-							Id = int.Parse(flightNode["Aviokompanija"]["Id"].InnerText),
-							Name = flightNode["Aviokompanija"]["Name"].InnerText
+							Id = int.Parse(flightNode["Airline"]["Id"].InnerText),
+							Name = flightNode["Airline"]["Name"].InnerText
 						},
 						StartDestination = flightNode["StartDestination"].InnerText,
 						EndDestination = flightNode["EndDestination"].InnerText,
@@ -89,34 +89,17 @@ namespace Web_PR106
 			}
 		}
 
-		private void LoadFlights()
+		public static void LoadFlights()
 		{
-			string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-			string fullPath = baseDirectory + "\\Assets\\test_letovi.xml";
-
-			XmlDocument doc = new XmlDocument();
-			doc.Load(fullPath);
-
-			foreach (XmlNode node in doc.DocumentElement.ChildNodes)
+			foreach(Airline airline in Airlines)
 			{
-				Flight flight = new Flight();
-
-				flight.Id = int.Parse(node["FlightId"].InnerText);
-				flight.Aviokompanija = new Airline()
+				foreach(Flight flight in airline.ProvidedFlights)
 				{
-					Id = int.Parse(node["Aviokompanija"]["Id"].InnerText),
-					Name = node["Aviokompanija"]["Name"].InnerText
-				};
-				flight.StartDestination = node["StartDestination"].InnerText;
-				flight.EndDestination = node["EndDestination"].InnerText;
-				flight.DepartureDateTime = node["DepartureDateTime"].InnerText;
-				flight.ArrivalDateTime = node["ArrivalDateTime"].InnerText;
-				flight.NumberOf_FreeSeats = int.Parse(node["NumberOf_FreeSeats"].InnerText);
-				flight.NumberOf_TakenSeats = int.Parse(node["NumberOf_TakenSeats"].InnerText);
-				flight.Price = double.Parse(node["Price"].InnerText);
-				flight.Status = (FlightStatus)Enum.Parse(typeof(FlightStatus), node["Status"].InnerText);
-
-				Flights.Add(flight);
+					if (!Flights.Contains(flight))
+					{
+						Flights.Add(flight);
+					}
+				}
 			}
 			ShownFlights = new List<Flight>(Flights);
 		}
@@ -149,7 +132,11 @@ namespace Web_PR106
 					{
 						Flight flight = new Flight()
 						{
-							Aviokompanija = new Airline(flightNode["Aviokompanija"].InnerText),
+							Airline = new Airline()
+							{
+								Id = int.Parse(flightNode["Airline"]["Id"].InnerText),
+								Name = flightNode["Airline"]["Name"].InnerText
+							},
 							StartDestination = flightNode["StartDestination"].InnerText,
 							EndDestination = flightNode["EndDestination"].InnerText,
 							DepartureDateTime = flightNode["DepartureDateTime"].InnerText,
@@ -162,7 +149,7 @@ namespace Web_PR106
 						airline.ProvidedFlights.Add(flight);
 					}
 				}
-
+				
 				XmlNode reviewsNode = node["Reviews"];
 				if (reviewsNode != null)
 				{
@@ -171,7 +158,7 @@ namespace Web_PR106
 						Review review = new Review()
 						{
 							Reviewer = reviewNode["Reviewer"].InnerText,
-							Airline = reviewNode["Aviokompanija"].InnerText,
+							Airline = reviewNode["Airline"].InnerText,
 							Title = reviewNode["Title"].InnerText,
 							Description = reviewNode["Description"].InnerText,
 							//Picture = reviewNode["Picture"].InnerText,

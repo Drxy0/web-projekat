@@ -14,10 +14,10 @@
 				<User>john_doe</User>
 				<Flight>
 					<FlightId>1</FlightId>
-					<Aviokompanija>
+					<Airline>
 						<Id>1</Id>
 						<Name>Air France</Name>
-					</Aviokompanija>
+					</Airline>
 					<StartDestination>Belgrade</StartDestination>
 					<EndDestination>Paris</EndDestination>
 					<DepartureDateTime>2024-07-01T10:30:00</DepartureDateTime>
@@ -36,10 +36,10 @@
 				<User>john_doe</User>
 				<Flight>
 					<FlightId>2</FlightId>
-					<Aviokompanija>
+					<Airline>
 						<Id>1</Id>
 						<Name>Air France</Name>
-					</Aviokompanija>
+					</Airline>
 					<StartDestination>Paris</StartDestination>
 					<EndDestination>New York</EndDestination>
 					<DepartureDateTime>2024-07-02T15:00:00</DepartureDateTime>
@@ -70,10 +70,10 @@
 				<User>jane_smith</User>
 				<Flight>
 					<FlightId>3</FlightId>
-					<Aviokompanija>
+					<Airline>
 						<Id>2</Id>
 						<Name>Lufthansa</Name>
-					</Aviokompanija>
+					</Airline>
 					<StartDestination>Belgrade</StartDestination>
 					<EndDestination>Istanbul</EndDestination>
 					<DepartureDateTime>2024-07-01T10:30:00</DepartureDateTime>

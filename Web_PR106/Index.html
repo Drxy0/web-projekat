@@ -222,7 +222,7 @@
                             <td>${flight.DepartureDateTime}</td>
                             <td>${flight.ArrivalDateTime}</td>
                             <td>${flight.NumberOf_FreeSeats}</td>
-                            <td><a href="Airline.html?airline=${encodeURIComponent(flight.Aviokompanija.Name)}">${flight.Aviokompanija.Name}</a></td>
+                            <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airline.Name)}">${flight.Airline.Name}</a></td>
                             <td>$${flight.Price}</td>
                             <td class="text-center"><a href="Reservation.html" class="btn btn-${currentUserReservedFlightIds.includes(Number(flight.FlightId)) ? 'primary' : 'success'}">${buttonLabel}</a></td>
                         </tr>`;
