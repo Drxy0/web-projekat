@@ -194,6 +194,7 @@ namespace Web_PR106
 					{
 						Review review = new Review()
 						{
+							Id = int.Parse(reviewNode["ReviewId"].InnerText),
 							Reviewer = reviewNode["Reviewer"].InnerText,
 							Airline = reviewNode["Airline"].InnerText,
 							Title = reviewNode["Title"].InnerText,

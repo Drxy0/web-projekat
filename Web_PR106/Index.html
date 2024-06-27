@@ -236,6 +236,9 @@
             sessionStorage.setItem("token", "admin");
             sessionStorage.setItem("role", "ADMINISTRATOR");
 
+            //sessionStorage.setItem("token", "john_doe");
+            //sessionStorage.setItem("role", "PUTNIK");
+
             checkSession();
 
             $.get("api/users", function (data, status) {

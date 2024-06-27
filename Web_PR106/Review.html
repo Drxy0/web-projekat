@@ -49,17 +49,19 @@
     <br />
 
     <div id="formContainer">
-        <form id="reviewForm" action="/api/review" method="post">
+        <form id="reviewForm" action="/api/review" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="title" class="form-label">Naslov</label>
-                <input style="font-size: 20px; width: 750px;" id="title" name="title" type="text" class="form-control">
+                <input style="font-size: 20px; width: 750px;" id="title" name="title" type="text" class="form-control" required>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Opis</label>
-                <textarea style="max-width:750px; min-width:400px; width:750px;" class="form-control" id="description" name="description" rows="5"></textarea>
+                <textarea style="max-width:750px; min-width:400px; width:750px;" class="form-control" id="description" name="description" rows="5" required></textarea>
             </div>
-            <label class="form-label" for="image">Slika (opciono)</label>
-            <br />
+            <div class="mb-3">
+                <label for="image" class="form-label">Slika (opciono)</label>
+                <input type="file" class="form-control" id="image" name="image">
+            </div>
             <button id="submitReview" type="submit" class="btn btn-primary">Pošalji</button>
         </form>
     </div>
@@ -77,30 +79,29 @@
                 reviewer: sessionStorage.getItem("token"),
                 airline: airlineName,
                 title: document.getElementById('title').value,
-                description: document.getElementById('description').value
+                description: document.getElementById('description').value,
+                status: 0
             };
 
-            fetch('/api/review', {
+            const formData = new FormData();
+            formData.append('data', JSON.stringify(data));
+
+            const fileInput = document.getElementById('image').files[0];
+            formData.append('file', fileInput);
+
+            $.ajax({
+                url: '/api/review',
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function () {
+                    alert('Review submitted successfully.');
                 },
-                body: JSON.stringify(data)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Success:', data);
-                    // Optionally, do something with the response
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    // Handle errors here
-                });
+                error: function () {
+                    alert('Error submitting review. Please try again later.');
+                }
+            });
         });
 
     </script>

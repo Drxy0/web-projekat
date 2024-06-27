@@ -13,6 +13,7 @@ namespace Web_PR106.Models
 	}
 	public class Review
 	{
+		public int Id { get; set; }
 		public string Reviewer { get; set; }
 		public string Airline { get; set;}
 		public string Title { get; set;}

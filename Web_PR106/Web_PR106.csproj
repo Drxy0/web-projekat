@@ -107,6 +107,7 @@
     <Content Include="admin-airlines.html" />
     <Content Include="admin-flights.html" />
     <Content Include="admin-reservations.html" />
+    <Content Include="admin-reviews.html" />
     <Content Include="Airline.html" />
     <Content Include="Assets\comment_placeholder.png" />
     <Content Include="Assets\profile.jpg" />
@@ -119,6 +120,7 @@
     <Content Include="MyFlights.html" />
     <Content Include="Reservation.html" />
     <Content Include="Review.html" />
+    <Content Include="UploadedFiles\profile.jpg" />
     <Content Include="UserProfile.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -142,7 +144,6 @@
     </Compile>
     <Compile Include="Models\AdminSearchUsersFilter.cs" />
     <Compile Include="Models\Airline.cs" />
-    <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\SearchFilter.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Flight.cs" />

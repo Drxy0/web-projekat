@@ -15,8 +15,8 @@
 				</Airline>
 				<StartDestination>Belgrade</StartDestination>
 				<EndDestination>Paris</EndDestination>
-				<DepartureDateTime>28/06/2024 10:30</DepartureDateTime>
-				<ArrivalDateTime>01/07/2024 13:00</ArrivalDateTime>
+				<DepartureDateTime>25/06/2024 10:30</DepartureDateTime>
+				<ArrivalDateTime>26/06/2024 13:00</ArrivalDateTime>
 				<NumberOf_FreeSeats>20</NumberOf_FreeSeats>
 				<NumberOf_TakenSeats>150</NumberOf_TakenSeats>
 				<Price>120,50</Price>
@@ -36,12 +36,13 @@
 				<NumberOf_FreeSeats>50</NumberOf_FreeSeats>
 				<NumberOf_TakenSeats>200</NumberOf_TakenSeats>
 				<Price>350,00</Price>
-				<Status>OTKAZAN</Status>
+				<Status>ZAVRSEN</Status>
 				<IsDeleted>false</IsDeleted>
 			</Flight>
 		</ProvidedFlights>
 		<Reviews>
 			<Review>
+				<ReviewId>1</ReviewId>
 				<Reviewer>john_doe</Reviewer>
 				<Airline>
 					<Id>1</Id>
@@ -53,6 +54,7 @@
 				<Status>ODOBRENA</Status>
 			</Review>
 			<Review>
+				<ReviewId>2</ReviewId>
 				<Reviewer>jane_smith</Reviewer>
 				<Airline>
 					<Id>1</Id>
@@ -108,6 +110,7 @@
 		</ProvidedFlights>
 		<Reviews>
 			<Review>
+				<ReviewId>3</ReviewId>
 				<Reviewer>mark_jackson</Reviewer>
 				<Airline>
 					<Id>2</Id>

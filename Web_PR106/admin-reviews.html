@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="Content/bootstrap.min.css">
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <title>Rezencije</title>
+    <style>
+        .card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+            .card .card-body {
+                flex-grow: 1;
+            }
+
+        .card-footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: auto; /* Pushes the footer to the bottom */
+            padding: 10px;
+        }
+
+            .card-footer .btn {
+                margin: 0 10px; /* Adjust spacing between buttons */
+            }
+    </style>
+
+</head>
+<body>
+    <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323;">
+        <a href="Index.html" class="navbar-brand">
+            Home
+        </a>
+    </nav>
+
+    <div class="container mt-5">
+        <section id="airlineReviewsContainer">
+        </section>
+    </div>
+
+    <script>
+
+        $(document).ready(function () {
+            getAirlines();
+        });
+
+        function getAirlines() {
+            $.ajax({
+                url: '/api/airlines',
+                method: 'GET',
+                contentType: 'application/json',
+                success: function (data) {
+                    var container = $('#airlineReviewsContainer');
+                    container.empty();
+
+                    data.forEach(function (airline) {
+                        var header = `<h2>${airline.Name}</h2>`;
+                        container.append(header);
+
+                        var row = $('<div class="row"></div>');
+                        airline.Reviews.forEach(function (review) {
+                            var card = `
+                                <div class="col-md-4 mb-4">
+                                    <div class="card">
+                                        <img class="card-img-top" src="/UploadedFiles/profile.jpg" alt="Card image cap">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${review.Title}</h5>
+                                            <p class="card-text">${review.Description}</p>
+                                        </div>
+                                        <div class="card-footer">
+                                            <a class="btn btn-success approve" onclick="approveReview('${review.Id}', this)">Odobri</a>
+                                            <a class="btn btn-danger reject" onclick="rejectReview('${review.Id}', this)">Odbij</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            row.append(card);
+                        });
+                        container.append(row);
+                    });
+
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', status, error);
+                }
+            });
+        }
+
+        function approveReview(Id, button) {
+            $.ajax({
+                url: `/api/review/approve/${Id}`,
+                method: 'POST',
+                contentType: 'application/json',
+                success: function (response) {
+                    console.log('Review approved successfully:', response);
+                    $(button).text('Odobrena').removeClass('btn-success').addClass('btn-secondary').removeAttr('onclick');
+                    $(button).siblings('.reject').attr('hidden', true).removeClass('btn-danger').addClass('btn-secondary');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error approving review:', status, error);
+                }
+            });
+        }
+
+        function rejectReview(Id, button) {
+            $.ajax({
+                url: `/api/review/reject/${Id}`,
+                method: 'POST',
+                contentType: 'application/json',
+                success: function (response) {
+                    console.log('Review rejected successfully:', response);
+                    $(button).text('Odbijena').removeClass('btn-danger').addClass('btn-secondary').removeAttr('onclick');
+                    $(button).siblings('.approve').attr('hidden', true).removeClass('btn-success').addClass('btn-secondary');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error rejecting review:', status, error);
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>
