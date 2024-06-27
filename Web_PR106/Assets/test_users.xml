@@ -21,12 +21,13 @@
 					</Airline>
 					<StartDestination>Belgrade</StartDestination>
 					<EndDestination>Paris</EndDestination>
-					<DepartureDateTime>2024-07-01T10:30:00</DepartureDateTime>
-					<ArrivalDateTime>2024-07-01T13:30:00</ArrivalDateTime>
+					<DepartureDateTime>28/06/2024 10:30</DepartureDateTime>
+					<ArrivalDateTime>01/07/2024 13:00</ArrivalDateTime>
 					<NumberOf_FreeSeats>20</NumberOf_FreeSeats>
 					<NumberOf_TakenSeats>150</NumberOf_TakenSeats>
 					<Price>120,50</Price>
 					<Status>AKTIVAN</Status>
+					<IsDeleted>false</IsDeleted>
 				</Flight>
 				<ReservationDate>2023-06-20</ReservationDate>
 				<NumberOfPassengers>2</NumberOfPassengers>
@@ -44,12 +45,13 @@
 					</Airline>
 					<StartDestination>Paris</StartDestination>
 					<EndDestination>New York</EndDestination>
-					<DepartureDateTime>2024-07-02T15:00:00</DepartureDateTime>
-					<ArrivalDateTime>2024-07-02T18:00:00</ArrivalDateTime>
+					<DepartureDateTime>02/07/2024 00:00</DepartureDateTime>
+					<ArrivalDateTime>02/07/2024 18:00</ArrivalDateTime>
 					<NumberOf_FreeSeats>50</NumberOf_FreeSeats>
 					<NumberOf_TakenSeats>200</NumberOf_TakenSeats>
 					<Price>350,00</Price>
-					<Status>ZAVRSEN</Status>
+					<Status>OTKAZAN</Status>
+					<IsDeleted>false</IsDeleted>
 				</Flight>
 				<ReservationDate>2023-06-20</ReservationDate>
 				<NumberOfPassengers>1</NumberOfPassengers>
@@ -77,14 +79,15 @@
 						<Id>2</Id>
 						<Name>Lufthansa</Name>
 					</Airline>
-					<StartDestination>Belgrade</StartDestination>
-					<EndDestination>Istanbul</EndDestination>
-					<DepartureDateTime>2024-07-01T10:30:00</DepartureDateTime>
-					<ArrivalDateTime>2024-07-01T13:30:00</ArrivalDateTime>
-					<NumberOf_FreeSeats>20</NumberOf_FreeSeats>
-					<NumberOf_TakenSeats>150</NumberOf_TakenSeats>
-					<Price>120,50</Price>
+					<StartDestination>Frankfurt</StartDestination>
+					<EndDestination>Tokyo</EndDestination>
+					<DepartureDateTime>25/06/2024 23:00</DepartureDateTime>
+					<ArrivalDateTime>26/06/2024 07:00</ArrivalDateTime>
+					<NumberOf_FreeSeats>30</NumberOf_FreeSeats>
+					<NumberOf_TakenSeats>300</NumberOf_TakenSeats>
+					<Price>290,75</Price>
 					<Status>AKTIVAN</Status>
+					<IsDeleted>false</IsDeleted>
 				</Flight>
 				<NumberOfPassengers>1</NumberOfPassengers>
 				<Price>110</Price>

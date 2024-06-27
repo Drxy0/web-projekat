@@ -15,7 +15,7 @@
 				</Airline>
 				<StartDestination>Belgrade</StartDestination>
 				<EndDestination>Paris</EndDestination>
-				<DepartureDateTime>01/07/2024 10:30</DepartureDateTime>
+				<DepartureDateTime>28/06/2024 10:30</DepartureDateTime>
 				<ArrivalDateTime>01/07/2024 13:00</ArrivalDateTime>
 				<NumberOf_FreeSeats>20</NumberOf_FreeSeats>
 				<NumberOf_TakenSeats>150</NumberOf_TakenSeats>

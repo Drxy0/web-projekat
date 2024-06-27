@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="Content/bootstrap.min.css">
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <title>Rezervacije</title>
+    <style>
+        body {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
+        <a href="Index.html" class="navbar-brand">
+            Home
+        </a>
+    </nav>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Id</th>
+                <th scope="col">Id leta</th>
+                <th scope="col">Korisnik</th>
+                <th scope="col">Broj putnika</th>
+                <th scope="col">Ukupna cijena</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody id="reservations-table-body">
+        </tbody>
+    </table>
+    <script>
+        const reservationStatus = ['KREIRANA', 'ODOBRENA', 'OTKAZANA', 'ZAVRSENA'];
+
+        $(document).ready(function () {
+            $.get("api/reservation", function (data) {
+                var tbody = $("#reservations-table-body");
+                tbody.empty();
+
+                data.forEach(function (reservation, index) {
+                    const parts = reservation.Flight.DepartureDateTime.split(' ');
+                    const dateParts = parts[0].split('/');
+                    const timeParts = parts[1].split(':');
+                    const formattedDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0], timeParts[0], timeParts[1]);
+                    const currentDate = new Date();
+                    var timeDifferenceInHours = (formattedDate - currentDate) / 36e5; // 36e5 is 60 * 60 * 1000
+
+                    var otkazanaDisabled = timeDifferenceInHours < 24 ? "disabled" : "";
+                    var selectDisabled = reservation.Status === 3 ? "disabled" : "";
+
+                    var row = `<tr>
+                                <td>${index + 1}</td>
+                                <td>${reservation.Id}</td>
+                                <td>${reservation.Flight.Id}</td>
+                                <td>${reservation.User.Username}</td>
+                                <td>${reservation.NumberOfPassengers}</td>
+                                <td>${reservation.Price}</td>
+                                <td>
+                                    <select id="status-${reservation.Id}" name="status" ${selectDisabled}>
+                                    <option value="KREIRANA" ${reservation.Status === 0 ? 'selected' : ''}>KREIRANA</option>
+                                    <option value="ODOBRENA" ${reservation.Status === 1 ? 'selected' : ''}>ODOBRENA</option>
+                                    <option value="OTKAZANA" ${otkazanaDisabled} ${reservation.Status === 2 ? 'selected' : ''}>OTKAZANA</option>
+                                    </select>
+                                </td>
+                            </tr>`;
+                    tbody.append(row);
+
+                    $(`#status-${reservation.Id}`).on('change', function () {
+                        var newValue = $(this).val();
+
+                        const reservationData = {
+                            reservationId: reservation.Id,
+                            status: newValue,
+                            username: reservation.User.Username,
+                            numberOfPassengers: reservation.NumberOfPassengers,
+                            flightId: reservation.Flight.Id
+                        };
+
+                        fetch('/api/reservation', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(reservationData),
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                console.log('Reservation successfully made:', data);
+                            })
+                            .catch(error => {
+                                console.error('Error making reservation:', error);
+                            });
+                    });
+                });
+
+            });
+        });
+    </script>
+</body>
+</html>
