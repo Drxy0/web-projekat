@@ -10,6 +10,9 @@ using System.Web.Http;
 using System.Xml;
 using Web_PR106.Models;
 using System.IO;
+using System.Diagnostics;
+using System.Timers;
+using System.Globalization;
 
 namespace Web_PR106
 {
@@ -19,6 +22,9 @@ namespace Web_PR106
 		public static List<Flight> Flights = new List<Flight>();
 		public static List<Flight> ShownFlights = new List<Flight>();
 		public static List<User> Users = new List<User>();
+		public static List<Reservation> Reservations = new List<Reservation>();
+		public static int FlightIdCounter = 100;
+		private static Timer timer;
 
 		void Application_Start(object sender, EventArgs e)
         {
@@ -31,6 +37,33 @@ namespace Web_PR106
 			LoadFlights();
 			LoadUsers();
 
+			timer = new Timer(30000);
+			timer.Elapsed += TimerElapsed;
+			timer.AutoReset = true;
+			timer.Start();
+
+
+		}
+		private static void TimerElapsed(object sender, ElapsedEventArgs e)
+		{
+			UpdateFlightStatus();
+		}
+
+		private static void UpdateFlightStatus()
+		{
+			DateTime now = DateTime.Now;
+			DateTime arrivalDateTime;
+			foreach (Airline airline in Airlines)
+			{
+				foreach (Flight flight in airline.ProvidedFlights)
+				{
+					arrivalDateTime = DateTime.ParseExact(flight.ArrivalDateTime, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+					if (arrivalDateTime < now && flight.Status != FlightStatus.OTKAZAN)
+					{
+						flight.Status = FlightStatus.OTKAZAN;
+					}
+				}
+			}
 		}
 		private void LoadUsers()
 		{
@@ -78,12 +111,13 @@ namespace Web_PR106
 						Price = double.Parse(flightNode["Price"].InnerText),
 						Status = (FlightStatus)Enum.Parse(typeof(FlightStatus), flightNode["Status"].InnerText.ToUpper())
 					};
-
+					reservation.Id = int.Parse(reservationNode["Id"].InnerText);
 					reservation.Flight = flight;
 					reservation.NumberOfPassengers = int.Parse(reservationNode["NumberOfPassengers"].InnerText);
 					reservation.Price = double.Parse(reservationNode["Price"].InnerText.Replace(',', '.'));
 					reservation.Status = (ReservationStatus)Enum.Parse(typeof(ReservationStatus), reservationNode["ReservationStatus"].InnerText.ToUpper());
 					user.ReservationList.Add(reservation);
+					Reservations.Add(reservation);
 				}
 				Users.Add(user);
 			}
@@ -102,6 +136,7 @@ namespace Web_PR106
 				}
 			}
 			ShownFlights = new List<Flight>(Flights);
+
 		}
 		private void LoadDatabaseAirlines()
 		{
@@ -137,6 +172,7 @@ namespace Web_PR106
 								Id = int.Parse(flightNode["Airline"]["Id"].InnerText),
 								Name = flightNode["Airline"]["Name"].InnerText
 							},
+							Id = int.Parse(flightNode["FlightId"].InnerText),
 							StartDestination = flightNode["StartDestination"].InnerText,
 							EndDestination = flightNode["EndDestination"].InnerText,
 							DepartureDateTime = flightNode["DepartureDateTime"].InnerText,
@@ -144,7 +180,8 @@ namespace Web_PR106
 							NumberOf_FreeSeats = int.Parse(flightNode["NumberOf_FreeSeats"].InnerText),
 							NumberOf_TakenSeats = int.Parse(flightNode["NumberOf_TakenSeats"].InnerText),
 							Price = double.Parse(flightNode["Price"].InnerText),
-							Status = (FlightStatus)Enum.Parse(typeof(FlightStatus), flightNode["Status"].InnerText)
+							Status = (FlightStatus)Enum.Parse(typeof(FlightStatus), flightNode["Status"].InnerText),
+							IsDeleted = bool.Parse(flightNode["IsDeleted"].InnerText),
 						};
 						airline.ProvidedFlights.Add(flight);
 					}

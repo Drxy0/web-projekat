@@ -15,12 +15,13 @@
 				</Airline>
 				<StartDestination>Belgrade</StartDestination>
 				<EndDestination>Paris</EndDestination>
-				<DepartureDateTime>01/07/2024 10:30:00</DepartureDateTime>
-				<ArrivalDateTime>01/07/2024 13:00:00</ArrivalDateTime>
+				<DepartureDateTime>01/07/2024 10:30</DepartureDateTime>
+				<ArrivalDateTime>01/07/2024 13:00</ArrivalDateTime>
 				<NumberOf_FreeSeats>20</NumberOf_FreeSeats>
 				<NumberOf_TakenSeats>150</NumberOf_TakenSeats>
 				<Price>120,50</Price>
 				<Status>AKTIVAN</Status>
+				<IsDeleted>false</IsDeleted>
 			</Flight>
 			<Flight>
 				<FlightId>2</FlightId>
@@ -30,12 +31,13 @@
 				</Airline>
 				<StartDestination>Paris</StartDestination>
 				<EndDestination>New York</EndDestination>
-				<DepartureDateTime>02/07/2024 00:00:00</DepartureDateTime>
-				<ArrivalDateTime>02/07/2024 18:00:00</ArrivalDateTime>
+				<DepartureDateTime>02/07/2024 00:00</DepartureDateTime>
+				<ArrivalDateTime>02/07/2024 18:00</ArrivalDateTime>
 				<NumberOf_FreeSeats>50</NumberOf_FreeSeats>
 				<NumberOf_TakenSeats>200</NumberOf_TakenSeats>
 				<Price>350,00</Price>
 				<Status>OTKAZAN</Status>
+				<IsDeleted>false</IsDeleted>
 			</Flight>
 		</ProvidedFlights>
 		<Reviews>
@@ -79,12 +81,13 @@
 				</Airline>
 				<StartDestination>Frankfurt</StartDestination>
 				<EndDestination>Tokyo</EndDestination>
-				<DepartureDateTime>25/06/2024 23:00:00</DepartureDateTime>
-				<ArrivalDateTime>26/06/2024 07:00:00</ArrivalDateTime>
+				<DepartureDateTime>25/06/2024 23:00</DepartureDateTime>
+				<ArrivalDateTime>26/06/2024 07:00</ArrivalDateTime>
 				<NumberOf_FreeSeats>30</NumberOf_FreeSeats>
 				<NumberOf_TakenSeats>300</NumberOf_TakenSeats>
 				<Price>290,75</Price>
 				<Status>AKTIVAN</Status>
+				<IsDeleted>false</IsDeleted>
 			</Flight>
 			<Flight>
 				<FlightId>4</FlightId>
@@ -94,12 +97,13 @@
 				</Airline>
 				<StartDestination>London</StartDestination>
 				<EndDestination>Los Angeles</EndDestination>
-				<DepartureDateTime>07/04/2024 12:00:000</DepartureDateTime>
-				<ArrivalDateTime>08/04/2024 02:00:00</ArrivalDateTime>
+				<DepartureDateTime>07/04/2024 12:00</DepartureDateTime>
+				<ArrivalDateTime>08/04/2024 02:00</ArrivalDateTime>
 				<NumberOf_FreeSeats>40</NumberOf_FreeSeats>
 				<NumberOf_TakenSeats>210</NumberOf_TakenSeats>
 				<Price>500.00</Price>
 				<Status>AKTIVAN</Status>
+				<IsDeleted>true</IsDeleted>
 			</Flight>
 		</ProvidedFlights>
 		<Reviews>

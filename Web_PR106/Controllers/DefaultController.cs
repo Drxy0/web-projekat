@@ -26,7 +26,7 @@ namespace Web_PR106.Controllers
 		[HttpGet]
 		public IHttpActionResult Get()
 		{
-			return Ok(Global.ShownFlights);
+			return Ok(Global.ShownFlights.Where(x => x.IsDeleted == false));
 		}
 
 		public void Post([FromBody]SearchFilter searchFilter)

@@ -25,7 +25,7 @@
             <form id="addForm" action="/api/flight" method="post">
                 <div class="form-group">
                     <label for="available-airlines">Izaberite Aviokompaniju</label>
-                    <input list="available-airlines-list" id="available-airlines" name="airline"/>
+                    <input list="available-airlines-list" id="available-airlines" name="airline" required/>
                     <datalist id="available-airlines-list">
                     </datalist>
                 </div>
@@ -99,7 +99,7 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Id</th>
+                    <th scope="col">Id Leta</th>
                     <th scope="col">Aviokompanija</th>
                     <th hidden>Aviokompanija id</th>
                     <th scope="col">Početna destinacija</th>
@@ -119,13 +119,52 @@
         </table>
     </section>
 
+
+    <section id="edit-flight" style="display: none;">
+        <div style="max-width:20%; padding-left:20px; min-width:250px;">
+            <h2 class="text-center">Uredi Let</h2>
+            <form id="editForm" action="/api/flight/edit" method="post">
+                <div class="form-group">
+                    <label for="edit-departure-time">Vrijema polaska</label>
+                    <input type="datetime-local" class="form-control" id="edit-departure-time" name="departureDateTime" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-arrival-time">Vrijema dolaska</label>
+                    <input type="datetime-local" class="form-control" id="edit-arrival-time" name="arrivalDateTime" required>
+                    <small id="edit-arrivalTimeError" class="form-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label for="edit-free-seats">Broj mjesta</label>
+                    <input type="number" class="form-control" id="edit-free-seats" name="numberOf_FreeSeats" required min="1">
+                </div>
+                <div class="form-group">
+                    <label for="edit-price">Cijena</label>
+                    <input type="number" class="form-control" id="edit-price" name="price" required min="0.01" step="0.01">
+                    <small class="form-text text-muted">(do dvije decimale)</small>
+                </div>
+                <div class="text-center">
+                    <button id="submitEdit" type="submit" style="width:200px;" class="btn btn-success">Potvrdi</button>
+                </div>
+                <div class="text-center" style="padding-top:10px;">
+                    <button style="width:200px;" class="btn btn-danger" onclick="location.reload()">Odustani</button>
+                </div>
+            </form>
+        </div>
+    </section>
     <script>
         const flightStatus = ['AKTIVAN', 'OTKAZAN', 'ZAVRSEN'];
         const form = document.getElementById('filter-flights-form');
         var addform = document.getElementById('addForm');
+        var editform = document.getElementById('editForm');
         var departureTimeInput = document.getElementById('departure-time');
         var arrivalTimeInput = document.getElementById('arrival-time');
         var arrivalTimeError = document.getElementById('arrivalTimeError');
+
+        var editDepartureTimeInput = document.getElementById('edit-departure-time');
+        var editArrivalTimeInput = document.getElementById('edit-arrival-time');
+        var editAarrivalTimeError = document.getElementById('edit-arrivalTimeError');
+
+        var reservations = [];
 
         addform.addEventListener('submit', function (event) {
             event.preventDefault();
@@ -212,7 +251,7 @@
                             <td>${flight.NumberOf_TakenSeats}</td>
                             <td>$${flight.Price}</td>
                             <td>${flightStatus[flight.Status]}</td >
-                            <td class="text-center">Uredi</td>
+                            <td class="text-center"><button class="btn btn-primary" onclick="editFlight('${flight.Id}')">Uredi</button></td>
                             <td class="text-center"><button class="btn btn-error" onclick="deleteFlight('${flight.Airline.Id}', '${flight.Id}')">Izbriši</button></td>
                         </tr>`;
                         tbody.append(row);
@@ -223,13 +262,88 @@
                 });
         });
 
+        editform.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            var departureDateTime = new Date(editDepartureTimeInput.value);
+            var arrivalDateTime = new Date(editArrivalTimeInput.value);
+            if (arrivalDateTime <= departureDateTime) {
+                arrivalTimeError.textContent = 'Vrijeme dolaska mora biti veće od vremena polaska.';
+                event.preventDefault();
+            } else {
+                editAarrivalTimeError.textContent = ''; // Clear error message if validation passes
+            }
+
+            let price = 0.0;
+            if (document.getElementById('edit-price') != null) {
+                price = parseFloat(document.getElementById('edit-price').value);
+            }
+
+            fetch(editform.action, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    airlineId: sessionStorage.getItem("airlineId"),
+                    flightId: sessionStorage.getItem("flightId"), 
+                    departureDateTime: document.getElementById('edit-departure-time').value,
+                    arrivalDateTime: document.getElementById('edit-arrival-time').value,
+                    numberOf_FreeSeats: parseInt(document.getElementById('edit-free-seats').value),
+                    price: price
+                })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        // Handle errors if needed
+                        console.error('Form submission failed:', response);
+                        alert('Form submission failed. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during form submission:', error);
+                    alert('An error occurred during form submission. Please try again.');
+                });
+        });
+
+        function editFlight(airlineId, flightId) {
+            sessionStorage.setItem("airlineId", airlineId);
+            sessionStorage.setItem("flightId", flightId);
+            $.get("api/reservation", function (data, status) {
+                let canEditPrice = true;
+                data.forEach(function (reservation) {
+                    if (reservation.Flight.Id == flightId && (reservation.Status == 0 || reservation.Status == 1)) {
+                        canEditPrice = false;
+                    }
+                });
+                let priceFormGroup = document.querySelector('#edit-price').closest('.form-group');
+                if (!canEditPrice) {
+                    if (priceFormGroup) {
+                        priceFormGroup.remove();
+                    }
+                }
+
+                var defaultSection = document.getElementById('default');
+                var editSection = document.getElementById('edit-flight');
+                defaultSection.style.display = 'none';
+                editSection.style.display = 'block';
+            });
+        }
+
+
         function loadFlights() {
             $.get("api/default", function (data, status) {
-                console.log(data);
                 var tbody = $("#flights-table-body");
                 tbody.empty(); // Clear any existing rows
-
+                console.log(reservations);
                 data.forEach(function (flight, index) {
+                    var hasActiveReservations = reservations.some(function (reservation) {
+                        return reservation.Flight.Id === flight.Id &&
+                            (reservation.Status === 0 || reservation.Status === 1);
+                    });
+                    var deleteButtonDisabled = hasActiveReservations ? 'disabled' : '';
                     var row = `<tr>
                             <td scope="row">${index + 1}</td>
                             <td>${flight.Id}</td>
@@ -243,8 +357,8 @@
                             <td>${flight.NumberOf_TakenSeats}</td>
                             <td>$${flight.Price}</td>
                             <td>${flightStatus[flight.Status]}</td >
-                            <td class="text-center">Uredi</td>
-                            <td class="text-center"><button class="btn btn-error" onclick="deleteFlight('${flight.Airline.Id}', '${flight.Id}')">Izbriši</button></td>
+                            <td class="text-center"><button class="btn btn-primary" onclick="editFlight('${flight.Airline.Id}', '${flight.Id}')">Uredi</button></td>
+                            <td class="text-center"><button class="btn btn-danger" onclick="deleteFlight('${flight.Airline.Id}', '${flight.Id}')" ${deleteButtonDisabled}>Izbriši</button></td>
                         </tr>`;
                     tbody.append(row);
                 });
@@ -263,13 +377,8 @@
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
-                    console.log('User deleted successfully');
-                    // Handle success scenario here
+                    loadFlights();
                 })
-                .catch(error => {
-                    console.error('Error deleting user:', error);
-                    // Handle error scenario here
-                });
         }
 
         function updateAvailableAirlinesList() {
@@ -285,8 +394,17 @@
             });
         }
 
+        function loadReservations() {
+            $.get("api/reservation", function (data, status) {
+                reservations = data;
+            });
+        }
+
         $(document).ready(function () {
-            loadFlights();
+            setTimeout(function () {
+                loadFlights();
+            },100)
+            loadReservations();
             updateAvailableAirlinesList();
         });
     </script>

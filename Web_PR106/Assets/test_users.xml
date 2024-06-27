@@ -11,6 +11,7 @@
 		<UserType>PUTNIK</UserType>
 		<ReservationList>
 			<Reservation>
+				<Id>1</Id>
 				<User>john_doe</User>
 				<Flight>
 					<FlightId>1</FlightId>
@@ -33,6 +34,7 @@
 				<ReservationStatus>KREIRANA</ReservationStatus>
 			</Reservation>
 			<Reservation>
+				<Id>2</Id>
 				<User>john_doe</User>
 				<Flight>
 					<FlightId>2</FlightId>
@@ -67,6 +69,7 @@
 		<UserType>PUTNIK</UserType>
 		<ReservationList>
 			<Reservation>
+				<Id>3</Id>
 				<User>jane_smith</User>
 				<Flight>
 					<FlightId>3</FlightId>
