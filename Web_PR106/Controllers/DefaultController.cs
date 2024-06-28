@@ -102,6 +102,7 @@ namespace Web_PR106.Controllers
 			{
 				foreach (Flight flight in Global.Flights)
 				{
+					Trace.WriteLine(flight.DepartureDateTime.Split(' ')[0]);
 					if (flight.DepartureDateTime.Split(' ')[0] != departureDate)
 					{
 						Global.ShownFlights.Remove(flight);

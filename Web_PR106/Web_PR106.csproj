@@ -120,7 +120,6 @@
     <Content Include="MyFlights.html" />
     <Content Include="Reservation.html" />
     <Content Include="Review.html" />
-    <Content Include="UploadedFiles\profile.jpg" />
     <Content Include="UserProfile.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -164,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="UploadedImages\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

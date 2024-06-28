@@ -10,9 +10,6 @@
             margin: 0 auto;
             width: 25vw;
         }
-        body {
-            padding-top: 50px;
-        }
         h1, button{
             margin-left: 20px;
         }
@@ -28,18 +25,6 @@
         <a href="Index.html" class="navbar-brand">
             Home
         </a>
-        <a href="admin-airlines.html" class="navbar-brand">
-            Aviokompanije
-        </a>
-        <a href="admin-flights.html" class="navbar-brand">
-            Letovi
-        </a>
-        <a href="admin-reservations.html" class="navbar-brand">
-            Rezervacije
-        </a>
-        <a href="admin-reviews.html" class="navbar-brand">
-            Recenzije
-        </a>
     </nav>
 
     <h1>User profile</h1>
@@ -49,8 +34,46 @@
     <div id="userInfo" style="padding:20px">
     </div>
 
+    <div id="editDiv" hidden>
+        <form id="editForm">
+            <h2 class="text-center">Edit Profile</h2>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="John" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="surname">Surname</label>
+                    <input type="text" class="form-control" id="surname" name="surname" placeholder="Doe" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="birthday">Birthday</label>
+                    <input type="date" class="form-control" id="birthday" name="birthday" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="gender">Gender</label>
+                    <select id="gender" class="form-control" name="gender" required>
+                        <option selected value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+    </div>
+
     <br />
-    <div id="adminUsersList">
+    <div id="adminUsersList" style="display:none">
         <h2>Svi korisnici</h2>
         <div id="adminUsersFormDiv">
             <form id="adminUsersForm" action="/api/airlines/adminFilterAirlines" method="post">
@@ -111,54 +134,34 @@
         </table>
     </div>
 
-    <div id="editDiv" hidden>
-        <form id="registerForm">
-            <h2 class="text-center">Edit Profile</h2>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" name="password" required>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="name">Name</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="John" required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="surname">Surname</label>
-                    <input type="text" class="form-control" id="surname" name="surname" placeholder="Doe" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="birthday">Birthday</label>
-                    <input type="date" class="form-control" id="birthday" name="birthday" required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="gender">Gender</label>
-                    <select id="gender" class="form-control" name="gender" required>
-                        <option selected value="Male">Male</option>
-                        <option value="Female">Female</option>
-                    </select>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-        </form>
-    </div>
+    
 
     <script>
-        var user;
         var sortOrder = false;
         const form = document.getElementById('adminUsersForm');
 
         const sortNameHeader = $("#sort-name-header");
         const sortBirthdayHeader = $("#sort-birthday-header");
 
+        function checkSession() {
+            var nav = $("#nav");
+            if (Object.keys(sessionStorage).length == 0) {
+                nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
+            } else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
+                nav.append(`<a href="admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
+                nav.append(`<a href="admin-flights.html" class="navbar-brand">Letovi</a>`);
+                nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
+                nav.append(`<a href="admin-reviews.html" class="navbar-brand">Recenzije</a>`);
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                document.getElementById('adminUsersList').style.display = 'block'
+            }
+            else {
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            }
+        }
 
         $(document).ready(function () {
+            checkSession();
             loadUser();
         });
 
@@ -177,36 +180,31 @@
             });
             const jsonData = JSON.stringify(jsonObject);
 
-            fetch(form.action, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: jsonData
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json()
-                })
-                .then(data => {
+            $.ajax({
+                url: form.action,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(jsonData),
+                success: function (data) {
                     form.reset();
+
                     var tbody = $("#adminUsersTableBody");
                     tbody.empty();
-                    data.forEach(function (user, index) {
+
+                    $.each(data, function (index, user) {
                         var row = `<tr>
-                                <td>${index + 1}</td>
-                                <td>${user.Name}</td>
-                                <td>${user.Surname}</td>
-                                <td>${user.Birthday}</td>
-                                </tr>`;
+                                    <td>${index + 1}</td>
+                                    <td>${user.Name}</td>
+                                    <td>${user.Surname}</td>
+                                    <td>${user.Birthday}</td>
+                                   </tr>`;
                         tbody.append(row);
                     });
-                })
-                .catch(error => {
-                    console.error('Error occurred:', error);
-                });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error occurred:', textStatus, errorThrown);
+                }
+            });
         });
 
 
@@ -215,7 +213,6 @@
             this.Surname = surname;
             this.Birthday = birthday;
         }
-
 
         function sortTableByName() {
             var tbody = $("#adminUsersTableBody");
@@ -319,46 +316,66 @@
         }
 
         function loadUser() {
-            $.get("api/users", function (data, status) {
-                var userInfo = document.querySelector("#userInfo");
-                var adminUsersList = document.querySelector("#adminUsersList");
-                user = data.find(user => user.Username === sessionStorage.getItem("token"));
-                role = sessionStorage.getItem("role");
-                let gender = ["MALE", "FEMALE"];
+            $.ajax({
+                url: 'api/users',
+                type: 'GET',
+                success: function (data, status) {
+                    var userInfo = document.querySelector("#userInfo");
+                    var adminUsersList = document.querySelector("#adminUsersList");
+                    var user = data.find(user => user.Username === sessionStorage.getItem("token"));
+                    var role = sessionStorage.getItem("role");
+                    var gender = ["MALE", "FEMALE"];
 
-                userInfo.innerHTML = `<h4>${user.Username}</h4> <br>
-                                            <h4>${user.Name} ${user.Surname}</h4>
-                                            <h4>${user.Email}</h4>
-                                            <h4>${user.Birthday}</h4>
-                                            <h4>${gender[user.Gender]}</h4>`;
-                if (role == "PUTNIK") {
-                    userInfo.innerHTML += '<h4> Reservations</h4>';
-                } else if (role == "ADMINISTRATOR") {
-                    //adminFilterUsersForm();
-                    adminLoadUsersList();
+                    userInfo.innerHTML = `<h4>${user.Username}</h4> <br>
+                              <h4>${user.Name} ${user.Surname}</h4>
+                              <h4>${user.Email}</h4>
+                              <h4>${user.Birthday}</h4>
+                              <h4>${gender[user.Gender]}</h4>`;
+
+                    if (role === "PUTNIK") {
+                        userInfo.innerHTML += '<h4> Reservations</h4>';
+                    } else if (role === "ADMINISTRATOR") {
+                      //adminFilterUsersForm();
+                        adminLoadUsersList();
+                    }
+
+                    document.querySelector('#password').value = user.Password;
+                    document.querySelector('#name').value = user.Name;
+                    document.querySelector('#surname').value = user.Surname;
+                    document.querySelector('#email').value = user.Email;
+
+                    var birthdayString = user.Birthday; //'dd/MM/YYYY'
+                    var parts = birthdayString.split('/');
+                    var formattedBirthday = parts[2] + '-' + parts[1] + '-' + parts[0];
+                    document.querySelector('#birthday').value = formattedBirthday;
+
+                    document.querySelector('#gender').value = user.Gender === 0 ? 'Male' : 'Female';
+                },
+                error: function (xhr, status, error) {
                 }
-                document.querySelector('#password').value = user.Password;
-                document.querySelector('#name').value = user.Name;
-                document.querySelector('#surname').value = user.Surname;
-                document.querySelector('#email').value = user.Email;
-                document.querySelector('#birthday').value = user.Birthday;
-                document.querySelector('#gender').value = user.Gender === 0 ? 'Male' : 'Female';
             });
         }
 
         function adminLoadUsersList() {
-            $.get("api/users", function (data, status) {
-                var tbody = $("#adminUsersTableBody");
-                tbody.empty(); // Clear any existing rows
-                data.forEach(function (user, index) {
-                    var row = `<tr>
-                                   <td>${index + 1}</td>
-                                   <td>${user.Name}</td>
-                                   <td>${user.Surname}</td>
-                                   <td>${user.Birthday}</td>
-                                   </tr>`;
-                    tbody.append(row);
-                });
+            $.ajax({
+                url: "api/users",
+                method: "GET",
+                success: function (data, status) {
+                    var tbody = $("#adminUsersTableBody");
+                    tbody.empty(); // Clear any existing rows
+                    data.forEach(function (user, index) {
+                        var row = `<tr>
+                           <td>${index + 1}</td>
+                           <td>${user.Name}</td>
+                           <td>${user.Surname}</td>
+                           <td>${user.Birthday}</td>
+                       </tr>`;
+                        tbody.append(row);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching users:", error);
+                }
             });
         }
         function editProfile() {
@@ -367,11 +384,11 @@
             editDiv.hidden = false;
         }
 
-        document.getElementById('registerForm').addEventListener('submit', function (event) {
+        document.getElementById('editForm').addEventListener('submit', function (event) {
             event.preventDefault();
 
             var formData = {
-                username: user.Username,
+                username: sessionStorage.getItem("token"),
                 password: document.getElementById('password').value,
                 name: document.getElementById('name').value,
                 surname: document.getElementById('surname').value,
@@ -380,19 +397,19 @@
                 gender: document.getElementById('gender').value
             };
 
-            fetch('/api/users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
+            $.ajax({
+                url: '/api/users',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    location.reload();
                 },
-                body: JSON.stringify(formData)
-            }).then(response => {
-                location.reload();
+                error: function (xhr, status, error) {
+                    console.error('Error posting user data:', error);
+                }
             });
-
-
         });
-
     </script>
 </body>
 </html>

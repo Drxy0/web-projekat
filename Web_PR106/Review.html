@@ -6,9 +6,6 @@
     <script src="Scripts/jquery-1.10.2.js"></script>
     <title>My Flights</title>
     <style>
-        body {
-            padding-top: 50px;
-        }
         #reviewForm {
             width: 80%;
             max-width: 800px;
@@ -96,7 +93,7 @@
                 processData: false,
                 contentType: false,
                 success: function () {
-                    alert('Review submitted successfully.');
+                    location = "MyFlights.html";
                 },
                 error: function () {
                     alert('Error submitting review. Please try again later.');

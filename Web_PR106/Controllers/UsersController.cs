@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mail;
 using System.Web.Http;
 using System.Xml;
 using Web_PR106.Models;
@@ -154,7 +156,15 @@ namespace Web_PR106.Controllers
 				return BadRequest();
 			}
 
-			ReservationStatus reservationStatus = (ReservationStatus)Enum.Parse(typeof(ReservationStatus), status);
+			ReservationStatus reservationStatus;
+			try
+			{
+				reservationStatus = (ReservationStatus)Enum.Parse(typeof(ReservationStatus), status);
+			}
+			catch
+			{
+				return BadRequest("Parsing error. Invalid status value.");
+			}
 
 			User currentUser = Global.Users.Find(x => x.Username == username);
 
@@ -223,6 +233,7 @@ namespace Web_PR106.Controllers
 				};
 
 				reservationList.Add(newReservation);
+				Global.Reservations.Add(newReservation);
 
 				return Ok("Reservation created successfully.");
 			}
@@ -258,30 +269,23 @@ namespace Web_PR106.Controllers
 				Flight selectedFlight = Global.Flights.Find(x => x.Id == flightId);
 				if (selectedFlight == null)
 				{
-					return NotFound(); // Flight not found
+					return Content(HttpStatusCode.NotFound, "Flight not found");
 				}
 
-				string[] dateTime = selectedFlight.DepartureDateTime.Split('T');
-				string[] dateStr = dateTime[0].Split('-');
-				string[] timeStr = dateTime[1].Split(':');
-
-				int[] date = dateStr.Select(int.Parse).ToArray();
-				int[] time = timeStr.Select(int.Parse).ToArray();
-
-				DateTime dtFlight = new DateTime(date[0], date[1], date[2], time[0], time[1], time[2]);
+				DateTime dt = DateTime.ParseExact(selectedFlight.DepartureDateTime, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
 				DateTime now = DateTime.Now;
 
-				TimeSpan difference = dtFlight - now;
+				TimeSpan difference = dt - now;
 
 				if (difference.TotalHours < 24)
 				{
-					return StatusCode(System.Net.HttpStatusCode.PreconditionFailed); // Less than 24 hours before flight
+					return Content(HttpStatusCode.PreconditionFailed, "Flight cannot be canceled less than 24 hours before departure");
 				}
 
 				var user = Global.Users.Find(x => x.Username == username);
 				if (user == null)
 				{
-					return NotFound(); // User not found
+					return Content(HttpStatusCode.NotFound, "User not found");
 				}
 
 				var reservationList = user.ReservationList;
@@ -289,13 +293,14 @@ namespace Web_PR106.Controllers
 
 				if (foundReservation == null)
 				{
-					return NotFound(); // Reservation not found
+					return Content(HttpStatusCode.NotFound, "Reservation not found");
 				}
 
 				selectedFlight.NumberOf_FreeSeats += foundReservation.NumberOfPassengers;
 				selectedFlight.NumberOf_TakenSeats -= foundReservation.NumberOfPassengers;
 
 				reservationList.Remove(foundReservation);
+				Global.Reservations.Remove(foundReservation);
 
 				return Ok();
 			}

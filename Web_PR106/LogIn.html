@@ -11,15 +11,12 @@
             margin: 0 auto;
             width: 25vw;
         }
-        body {
-            padding-top: 50px;
-        }
     </style>
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
         <a href="Index.html" class="navbar-brand">
-            Home
+            Početna
         </a>
     </nav>
 
@@ -37,10 +34,9 @@
             </div>
             <button type="submit" class="btn btn-primary">Sign in</button>
         </form>
-        <br />
-        <p>Don't have an account? <a>Register</a></p>
+        <p>Don't have an account? <a href="#" onclick="showRegisterForm()">Register</a></p>
     </section>
-    <section id="register">
+    <section id="register" style="display:none;">
         <form id="registerForm">
             <h2 class="text-center">Register</h2>
             <div id="registerAlert" class="alert alert-danger" hidden role="alert"></div>
@@ -81,8 +77,21 @@
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
+        <p>Already have an account? <a href="#" onclick="showSignInForm()">Sign in</a></p>
+        <br/>
     </section>
     <script>
+
+        function showSignInForm() {
+            document.getElementById("login").style.display = "block";
+            document.getElementById("register").style.display = "none";
+        }
+
+        function showRegisterForm() {
+            document.getElementById("login").style.display = "none";
+            document.getElementById("register").style.display = "block";
+        }
+
         function showAlert(alertId, message) {
             const alertElement = document.getElementById(alertId);
             alertElement.hidden = false;
@@ -99,34 +108,43 @@
             event.preventDefault();
             hideAlert('loginAlert');
 
-            $.get("api/users", function (data, status) {
-                let emailExists = false;
-                data.forEach((user) => {
-                    if (user.Email === document.getElementById('loginEmail').value) {
-                        emailExists = true;
+            $.ajax({
+                url: "api/users",
+                type: "GET",
+                success: function (data, status) {
+                    let emailExists = false;
+
+                    data.forEach(function (user) {
+                        if (user.Email === $('#loginEmail').val()) {
+                            emailExists = true;
+                        }
+                    });
+
+                    if (!emailExists) {
+                        showAlert('loginAlert', "Email doesn't exist");
+                        return;
                     }
-                });
-                if (!emailExists) {
-                    showAlert('loginAlert', "Email doesn't exist");
-                    return;
-                }
 
-                const user = data.find(user => user.Email === document.getElementById('loginEmail').value);
-                if (user.Password != document.getElementById('loginPassword').value) {
-                    showAlert('loginAlert', "Incorrect password!");
-                    return;
-                }
+                    const user = data.find(user => user.Email === $('#loginEmail').val());
 
-                //login success
-                sessionStorage.setItem("token", user.Username);
-                if (user.UserType === 0) {
-                    sessionStorage.setItem("role", "PUTNIK");
-                }
-                else {
-                    sessionStorage.setItem("role", "ADMINISTRATOR");
-                }
+                    if (user.Password !== $('#loginPassword').val()) {
+                        showAlert('loginAlert', "Incorrect password!");
+                        return;
+                    }
 
-                window.location.href = "Index.html";
+                    // Login success
+                    sessionStorage.setItem("token", user.Username);
+                    if (user.UserType === 0) {
+                        sessionStorage.setItem("role", "PUTNIK");
+                    } else {
+                        sessionStorage.setItem("role", "ADMINISTRATOR");
+                    }
+
+                    window.location.href = "Index.html";
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    showAlert('loginAlert', "Error fetching users. Please try again.");
+                }
             });
 
         });
@@ -135,43 +153,51 @@
             event.preventDefault();
             hideAlert('registerAlert');
 
-            $.get("api/users", function (data, status) {
-                const usernameExists = data.some(user => user.Username === document.getElementById('username').value);
-                const emailExists = data.some(user => user.Email === document.getElementById('email').value);
+            $.ajax({
+                url: "api/users",
+                type: "GET",
+                success: function (data, status) {
+                    const usernameExists = data.some(user => user.Username === $('#username').val());
+                    const emailExists = data.some(user => user.Email === $('#email').val());
 
-                if (usernameExists) {
-                    showAlert('registerAlert', "Username already exists");
-                    return;
+                    if (usernameExists) {
+                        showAlert('registerAlert', "Username already exists");
+                        return;
+                    }
+
+                    if (emailExists) {
+                        showAlert('registerAlert', "Email already exists");
+                        return;
+                    }
+
+                    const formData = {
+                        username: $('#username').val(),
+                        password: $('#password').val(),
+                        name: $('#name').val(),
+                        surname: $('#surname').val(),
+                        email: $('#email').val(),
+                        birthday: $('#birthday').val(),
+                        gender: $('#gender').val()
+                    };
+
+                    $.ajax({
+                        url: '/api/users/addUser',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(formData),
+                        success: function (response) {
+                            sessionStorage.setItem("token", formData.username);
+                            sessionStorage.setItem("role", "PUTNIK");
+                            window.location.href = "Index.html";
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            showAlert('registerAlert', "Error adding user. Please try again.");
+                        }
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    showAlert('registerAlert', "Error fetching users. Please try again.");
                 }
-
-                if (emailExists) {
-                    showAlert('registerAlert', "Email already exists");
-                    return;
-                }
-
-                var formData = {
-                    username: document.getElementById('username').value,
-                    password: document.getElementById('password').value,
-                    name: document.getElementById('name').value,
-                    surname: document.getElementById('surname').value,
-                    email: document.getElementById('email').value,
-                    birthday: document.getElementById('birthday').value,
-                    gender: document.getElementById('gender').value
-                };
-
-                console.log("request sent");
-                fetch('/api/users/addUser', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                sessionStorage.setItem("token", document.getElementById('username').value);
-                sessionStorage.setItem("role", "PUTNIK");
-
-                window.location.href = "Index.html";
             });
         });
     </script>

@@ -5,22 +5,11 @@
     <link rel="stylesheet" href="Content/bootstrap.min.css">
     <script src="Scripts/jquery-1.10.2.js"></script>
     <title>Rezervacija</title>
-    <style>
-        body {
-            margin-left: 20px;
-        }
-    </style>
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
-        <a href="Index.html#table" class="navbar-brand">
-            Letovi
-        </a>
-        <a href="Index.html#airlines" class="navbar-brand">
-            Aviokompanije
-        </a>
-        <a href="MyFlights.html" class="navbar-brand">
-            Moji Letovi
+        <a href="Index.html" class="navbar-brand">
+            Početna
         </a>
     </nav>
 
@@ -39,50 +28,67 @@
         const reservationForm = document.querySelector("#reservationForm");
         const errorLabel = document.querySelector("#errorLabel");
         const cancelErrorLabel = document.querySelector("#cancelErrorLabel");
+        const url = window.location.href;
+        const parsedUrl = new URL(url);
+        const flightId = parsedUrl.searchParams.get('id');
 
         $(document).ready(function () {
+            checkSession();
             canCancelReservation();
         });
 
+        function checkSession() {
+            var nav = $("#nav");
+            if (Object.keys(sessionStorage).length == 0) {
+                nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
+            } else if (sessionStorage.getItem("role") == 'PUTNIK') {
+                nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            }
+            else {
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            }
+        }
+
         function canCancelReservation() {
             let user = sessionStorage.getItem("token");
-            let request = sessionStorage.flightId + " " + user;
+            let request = flightId + " " + user;
 
-            fetch("api/users/reservationExists", {
-                method: "POST",
-                body: JSON.stringify(request),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => {
-                return response.text();
-            }).then(data => {
-                if (data == "true") {
-                    $('#cancelButton').show();
-                } else {
-                    $('#cancelButton').hide();
+            $.ajax({
+                url: 'api/users/reservationExists',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(request),
+                success: function (data) {
+                    if (data === true) {
+                        $('#cancelButton').show();
+                    } else {
+                        $('#cancelButton').hide();
+                    }
+                },
+                error: function (xhr, status, error) {
                 }
             });
         }
 
         function cancelReservation() {
-
             let user = sessionStorage.getItem("token");
-            let request = sessionStorage.flightId + " " + user;
+            let request = flightId + " " + user;
 
-            fetch("api/users/cancelReservation", {
-                method: "POST",
-                body: JSON.stringify(request),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => {
-                if (response.ok) {
-                    window.location = "Index.html";
-                } else if (response.status === 412) {
-                    cancelErrorTime();
-                } else {
-                    console.log(`Error: ${response.status} - ${response.statusText}`);
+            $.ajax({
+                url: 'api/users/cancelReservation',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(request),
+                success: function (response) {
+                    window.location = 'Index.html';
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 412) {
+                        cancelErrorTime();
+                    } else {
+                        console.log('Error: ' + xhr.status + ' - ' + xhr.statusText);
+                    }
                 }
             });
         }
@@ -98,32 +104,35 @@
             }
 
             let user = sessionStorage.getItem("token");
-            let request = sessionStorage.flightId + " " + numberOfPassengers + " " + user;
+            let request = flightId + " " + numberOfPassengers + " " + user;
 
-            fetch(reservationForm.action, {
+            $.ajax({
+                url: reservationForm.action,
                 method: reservationForm.method,
-                body: JSON.stringify(request),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => {
-                if (response.ok) {
-                    window.location = "Index.html";
-                }
-                signalInvalidNumber();
-                return response.json()
-            }).then(data => {
-                if (data == "Invalid reservation status.") {
-                    cancerErrorStatus();
-                }
-                else if (data == "Number of passengers exceeds available seats.") {
-                    signalInvalidNumber();
-                }
-                else if (data == "Number of passengers must be greater than zero.") {
-                    signalInvalidInput();
+                contentType: 'application/json',
+                data: JSON.stringify(request),
+                success: function (data, status, xhr) {
+                    if (xhr.status === 200) {
+                        window.location = "Index.html";
+                    }
+                },
+                error: function (xhr, status, error) {
+                    var errorResponse = JSON.parse(xhr.responseText);
+                    var errorMessage = errorResponse.Message;
+                    handleErrorResponse(errorMessage);
                 }
             });
         });
+
+        function handleErrorResponse(data) {
+            if (data === "Invalid reservation status.") {
+                cancelErrorStatus();
+            } else if (data === "Number of passengers exceeds available seats.") {
+                signalInvalidNumber();
+            } else if (data === "Number of passengers must be greater than zero.") {
+                signalInvalidInput();
+            }
+        }
 
         function signalInvalidInput() {
             errorLabel.innerHTML = "Nevalidan unos! Molim vas unesti pozitivan cio broj."

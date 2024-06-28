@@ -154,48 +154,51 @@
                             tbody.innerHTML += row;
                         });
 
-                        form.reset(); // Reset the form after successful submission
+                        form.reset();
                     });
             });
         });
 
         function loadAirlines() {
-            $.get("api/airlines", function (data, status) {
-                var airlines = data;
-                var tbody = $("#airlines-table-body");
-                tbody.empty(); // Clear any existing rows
+            $.ajax({
+                url: 'api/airlines',
+                type: 'GET',
+                success: function (data, status) {
+                    var airlines = data;
+                    var tbody = $("#airlines-table-body");
+                    tbody.empty(); // Clear any existing rows
 
-                airlines.forEach(function (airline, index) {
-                    var row = `<tr>
-                                    <td>${index + 1}</td>
-                                    <td>${airline.Name}</td>
-                                    <td>${airline.ContactInfo.split('/phone:')[0].split('email: ')[1]}</td>
-                                    <td><button type="submit" class="btn btn-primary" onclick="editAirline()">Uredi</button></td>
-                                    <td><button type="submit" class="btn btn-danger" onclick="deleteAirline()">Izbriši</button></td>
-                                   </tr>`;
-                    tbody.append(row);
-                });
+                    airlines.forEach(function (airline, index) {
+                        var contactInfo = airline.ContactInfo;
+                        var email = contactInfo.split('email: ')[1].split('/phone:')[0].trim(); // Extract email from ContactInfo
+                        var row = `<tr>
+                            <td>${index + 1}</td>
+                            <td>${airline.Name}</td>
+                            <td>${email}</td>
+                            <td><button type="button" class="btn btn-primary" onclick="editAirline()">Uredi</button></td>
+                            <td><button type="button" class="btn btn-danger" onclick="deleteAirline()">Izbriši</button></td>
+                           </tr>`;
+                        tbody.append(row);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error occurred while fetching airlines:', status, error);
+                }
             });
         }
 
         function deleteAirline() {
-            fetch(`/api/airlines/delete/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
+            $.ajax({
+                url: `/api/airlines/delete/${id}`,
+                type: 'DELETE',
+                contentType: 'application/json',
+                success: function (data) {
+                    console.log('Airline deleted successfully');
                 },
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    console.log('User deleted successfully');
-                    // Handle success scenario here
-                })
-                .catch(error => {
-                    console.error('Error deleting user:', error);
-                    // Handle error scenario here
-                });
+                error: function (xhr, status, error) {
+                    console.error('Error deleting airline:', error);
+                }
+            });
         }
 
         function editAirline() {

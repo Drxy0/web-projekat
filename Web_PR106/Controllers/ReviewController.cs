@@ -20,26 +20,21 @@ namespace Web_PR106.Controllers
 		[Route("")]
 		public IHttpActionResult Post()
 		{
-			// Access form data from the request
 			var httpRequest = HttpContext.Current.Request;
-			
-			// Retrieve and parse JSON data from FormData
 			string jsonData = httpRequest.Form["data"];
 			var review = JsonConvert.DeserializeObject<Review>(jsonData);
 
 			if (httpRequest.Files.Count > 0)
 			{
 				var postedFile = httpRequest.Files[0];
-				var filePath = HttpContext.Current.Server.MapPath($"~/UploadedFiles/{postedFile.FileName}");
+				var filePath = HttpContext.Current.Server.MapPath($"~/UploadedImages/{postedFile.FileName}");
 				postedFile.SaveAs(filePath);
 
-				review.Picture = postedFile.FileName;
-				//review.UploadedFileUrl = $"/UploadedFiles/{postedFile.FileName}";
+				review.Picture = $"/UploadedImages/{postedFile.FileName}";
 			}
 			else
 			{
 				review.Picture = null;
-				//review.UploadedFileUrl = null;
 			}
 
 			foreach(Airline airline in Global.Airlines)
@@ -50,24 +45,8 @@ namespace Web_PR106.Controllers
 					break;
 				}
 			}
-
 			return Ok();
 		}
-		private string SaveImage(HttpPostedFileBase imageFile)
-		{
-			// Example implementation: Save the image file to a location
-			// For demo purposes, you might save to a directory or a cloud storage
-
-			// Example: Save to local directory
-			string fileName = Path.GetFileName(imageFile.FileName);
-			string filePath = HttpContext.Current.Server.MapPath("~/App_Data/uploads/" + fileName);
-			imageFile.SaveAs(filePath);
-
-			// Example: Return the URL to access the uploaded image
-			return "/App_Data/uploads/" + fileName;
-		}
-
-
 
 		[HttpPost]
 		[Route("approve/{Id}")]

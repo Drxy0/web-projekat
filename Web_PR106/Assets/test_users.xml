@@ -81,7 +81,7 @@
 					</Airline>
 					<StartDestination>Frankfurt</StartDestination>
 					<EndDestination>Tokyo</EndDestination>
-					<DepartureDateTime>25/06/2024 23:00</DepartureDateTime>
+					<DepartureDateTime>24/06/2024 23:00</DepartureDateTime>
 					<ArrivalDateTime>26/06/2024 07:00</ArrivalDateTime>
 					<NumberOf_FreeSeats>30</NumberOf_FreeSeats>
 					<NumberOf_TakenSeats>300</NumberOf_TakenSeats>
