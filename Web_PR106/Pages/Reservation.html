@@ -2,19 +2,19 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="Content/bootstrap.min.css">
-    <script src="Scripts/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="../Content/bootstrap.min.css">
+    <script src="../Scripts/jquery-1.10.2.js"></script>
     <title>Rezervacija</title>
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
-        <a href="Index.html" class="navbar-brand">
+        <a href="../Index.html" class="navbar-brand">
             Početna
         </a>
     </nav>
 
     <h2>Rezerviši</h2>
-    <form id="reservationForm" action="api/users/createReservation" method="post">
+    <form id="reservationForm" action="../api/users/createReservation" method="post">
         Broj putnika:
         <input type="number" id="numberOfPassengers" name="numberOfPassengers" pattern="[1-9]\d*" />
         <input type="submit" class="btn btn-success" value="Rezerviši" />
@@ -55,7 +55,7 @@
             let request = flightId + " " + user;
 
             $.ajax({
-                url: 'api/users/reservationExists',
+                url: '../api/users/reservationExists',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(request),
@@ -76,7 +76,7 @@
             let request = flightId + " " + user;
 
             $.ajax({
-                url: 'api/users/cancelReservation',
+                url: '../api/users/cancelReservation',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(request),

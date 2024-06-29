@@ -2,9 +2,15 @@
 <html>
 <head>
     <meta charset="utf-8" />
+<<<<<<< HEAD:Web_PR106/admin-airlines.html
     <link rel="stylesheet" href="Content/bootstrap.min.css">
     <script src="Scripts/jquery-1.10.2.js"></script>
     <title>Sve aviokompanije</title>
+=======
+    <link rel="stylesheet" href="../Content/bootstrap.min.css">
+    <script src="../Scripts/jquery-1.10.2.js"></script>
+    <title>Aviokompanije</title>
+>>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-airlines.html
     <style>
         body {
             padding-top: 50px;
@@ -27,13 +33,13 @@
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
-        <a href="Index.html" class="navbar-brand">
+        <a href="../Index.html" class="navbar-brand">
             Početna
         </a>
     </nav>
 
     <section id="default">
-        <form id="addForm" style="max-width:20%; padding-left:20px;" action="/api/airlines" method="post">
+        <form id="addForm" style="max-width:20%; padding-left:20px;" action="../api/airlines" method="post">
             <h2 class="text-center">Dodaj Aviokopmaniju</h2>
             <div id="loginAlert" class="alert alert-danger" hidden role="alert"></div>
             <div class="form-group">
@@ -57,7 +63,7 @@
         <br/>
 
         <h2>Sve Aviokompanije</h2>
-        <form id="filter-airlines-form" action="/api/airlines/adminFilterAirlines" method="post">
+        <form id="filter-airlines-form" action="../api/airlines/adminFilterAirlines" method="post">
             <table>
                 <tr>
                     <td>
@@ -128,7 +134,7 @@
         </form>
 =======
         <div class="centered-form">
-            <form id="editForm" style="max-width: 500px;" action="/api/airlines/edit" method="post" class="col-6">
+            <form id="editForm" style="max-width: 500px;" action="../api/airlines/edit" method="post" class="col-6">
                 <h2 class="text-center">Uredi Aviokopmaniju</h2>
                 <div id="loginAlert" class="alert alert-danger" hidden role="alert"></div>
                 <div class="form-group">
@@ -227,7 +233,7 @@
 
         function loadAirlines() {
             $.ajax({
-                url: 'api/airlines',
+                url: '../api/airlines',
                 type: 'GET',
                 success: function (data, status) {
                     var airlines = data;
@@ -255,7 +261,7 @@
 
         function deleteAirline() {
             $.ajax({
-                url: `/api/airlines/delete/${id}`,
+                url: `../api/airlines/delete/${id}`,
                 type: 'DELETE',
                 contentType: 'application/json',
                 success: function (data) {

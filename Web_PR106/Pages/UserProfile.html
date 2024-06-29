@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="Content/bootstrap.min.css">
-    <script src="Scripts/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="../Content/bootstrap.min.css">
+    <script src="../Scripts/jquery-1.10.2.js"></script>
     <style>
         form, p {
             padding-top: 20px;
@@ -22,8 +22,8 @@
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
-        <a href="Index.html" class="navbar-brand">
-            Počenta
+        <a href="../Index.html" class="navbar-brand">
+            Početna
         </a>
     </nav>
 
@@ -76,7 +76,7 @@
     <div id="adminUsersList" style="display:none">
         <h2>Svi korisnici</h2>
         <div id="adminUsersFormDiv">
-            <form id="adminUsersForm" action="/api/airlines/adminFilterAirlines" method="post">
+            <form id="adminUsersForm" action="../api/airlines/adminFilterAirlines" method="post">
                 <table>
                     <tr>
                         <td>
@@ -169,7 +169,7 @@
 
         function logOut() {
             sessionStorage.clear();
-            window.location.href = "Index.html";
+            window.location.href = "../Index.html";
         }
 
         form.addEventListener('submit', function (event) {
@@ -319,7 +319,7 @@
 
         function loadUser() {
             $.ajax({
-                url: 'api/users',
+                url: '../api/users',
                 type: 'GET',
                 success: function (data, status) {
                     var userInfo = document.querySelector("#userInfo");
@@ -358,7 +358,7 @@
 
         function adminLoadUsersList() {
             $.ajax({
-                url: "api/users",
+                url: "../api/users",
                 method: "GET",
                 success: function (data, status) {
                     var tbody = $("#adminUsersTableBody");
@@ -398,7 +398,7 @@
             };
 
             $.ajax({
-                url: '/api/users',
+                url: '../api/users',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(formData),

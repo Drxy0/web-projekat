@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="Content/bootstrap.min.css">
-    <script src="Scripts/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="../Content/bootstrap.min.css">
+    <script src="../Scripts/jquery-1.10.2.js"></script>
     <title>My Flights</title>
     <style>
         #reviewForm {
@@ -30,14 +30,8 @@
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
-        <a href="Index.html#table" class="navbar-brand">
-            Letovi
-        </a>
-        <a href="#airlines" class="navbar-brand">
-            Aviokompanije
-        </a>
-        <a href="MyFlights.html" class="navbar-brand">
-            Moji Letovi
+        <a href="../Index.html" class="navbar-brand">
+            Početna
         </a>
     </nav>
 
@@ -46,7 +40,7 @@
     <br />
 
     <div id="formContainer">
-        <form id="reviewForm" action="/api/review" method="post" enctype="multipart/form-data">
+        <form id="reviewForm" action="../api/review" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="title" class="form-label">Naslov</label>
                 <input style="font-size: 20px; width: 750px;" id="title" name="title" type="text" class="form-control" required>
@@ -69,6 +63,28 @@
         var airlineName = urlParams.get('airline');
         document.querySelector("#reviwedAirlineName").innerHTML = "Napišite recenziju za " + airlineName;
 
+        $(document).ready(function () {
+            checkSession();
+        });
+
+        function checkSession() {
+            var nav = $("#nav");
+            var navBrand = nav.find('.navbar-brand')
+            if (Object.keys(sessionStorage).length == 0) {
+                nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
+            } else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
+                navBrand.remove();
+                nav.append(`<a href="admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
+                nav.append(`<a href="admin-flights.html" class="navbar-brand">Letovi</a>`);
+                nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
+                nav.append(`<a href="admin-reviews.html" class="navbar-brand">Recenzije</a>`);
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                document.getElementById('adminUsersList').style.display = 'block'
+            }
+            else {
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+
+
         document.getElementById('submitReview').addEventListener('click', function (event) {
             event.preventDefault();
 
@@ -87,7 +103,7 @@
             formData.append('file', fileInput);
 
             $.ajax({
-                url: '/api/review',
+                url: '../api/review',
                 method: 'POST',
                 data: formData,
                 processData: false,

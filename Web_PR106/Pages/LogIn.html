@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <title>Sign in</title>
-    <link rel="stylesheet" href="Content/bootstrap.min.css">
-    <script src="Scripts/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="../Content/bootstrap.min.css">
+    <script src="../Scripts/jquery-1.10.2.js"></script>
     <style>
         form, p {
             padding-top: 20px;
@@ -15,7 +15,7 @@
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
-        <a href="Index.html" class="navbar-brand">
+        <a href="../Index.html" class="navbar-brand">
             Početna
         </a>
     </nav>
@@ -109,7 +109,7 @@
             hideAlert('loginAlert');
 
             $.ajax({
-                url: "api/users",
+                url: "../api/users",
                 type: "GET",
                 success: function (data, status) {
                     let emailExists = false;
@@ -140,7 +140,7 @@
                         sessionStorage.setItem("role", "ADMINISTRATOR");
                     }
 
-                    window.location.href = "Index.html";
+                    window.location.href = "../Index.html";
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     showAlert('loginAlert', "Error fetching users. Please try again.");
@@ -154,7 +154,7 @@
             hideAlert('registerAlert');
 
             $.ajax({
-                url: "api/users",
+                url: "../api/users",
                 type: "GET",
                 success: function (data, status) {
                     const usernameExists = data.some(user => user.Username === $('#username').val());
@@ -188,7 +188,7 @@
                         success: function (response) {
                             sessionStorage.setItem("token", formData.username);
                             sessionStorage.setItem("role", "PUTNIK");
-                            window.location.href = "Index.html";
+                            window.location.href = "../Index.html";
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             showAlert('registerAlert', "Error adding user. Please try again.");

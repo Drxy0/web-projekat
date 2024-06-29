@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="Content/bootstrap.min.css">
-    <script src="Scripts/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="../Content/bootstrap.min.css">
+    <script src="../Scripts/jquery-1.10.2.js"></script>
     <title>Rezencije</title>
     <style>
         .card {
@@ -32,8 +32,13 @@
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323;">
+<<<<<<< HEAD:Web_PR106/admin-reviews.html
         <a href="Index.html" class="navbar-brand">
             Home
+=======
+        <a href="../Index.html" class="navbar-brand">
+            Početna
+>>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-reviews.html
         </a>
     </nav>
 
@@ -50,7 +55,7 @@
 
         function getAirlines() {
             $.ajax({
-                url: '/api/airlines',
+                url: '../api/airlines',
                 method: 'GET',
                 contentType: 'application/json',
                 success: function (data) {
@@ -99,7 +104,7 @@
 
         function approveReview(Id, button) {
             $.ajax({
-                url: `/api/review/approve/${Id}`,
+                url: `../api/review/approve/${Id}`,
                 method: 'POST',
                 contentType: 'application/json',
                 success: function (response) {
@@ -112,7 +117,7 @@
 
         function rejectReview(Id, button) {
             $.ajax({
-                url: `/api/review/reject/${Id}`,
+                url: `../api/review/reject/${Id}`,
                 method: 'POST',
                 contentType: 'application/json',
                 success: function (response) {

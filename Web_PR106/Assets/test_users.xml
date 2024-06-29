@@ -28,7 +28,7 @@
           <ArrivalDateTime>08/07/2024 07:00</ArrivalDateTime>
           <NumberOf_FreeSeats>21</NumberOf_FreeSeats>
           <NumberOf_TakenSeats>309</NumberOf_TakenSeats>
-          <Price>29075</Price>
+          <Price>290,75</Price>
           <Status>AKTIVAN</Status>
           <IsDeleted>false</IsDeleted>
         </Flight>
@@ -66,7 +66,7 @@
           <ArrivalDateTime>26/06/2024 07:00</ArrivalDateTime>
           <NumberOf_FreeSeats>30</NumberOf_FreeSeats>
           <NumberOf_TakenSeats>300</NumberOf_TakenSeats>
-          <Price>29075</Price>
+          <Price>290,75</Price>
           <Status>AKTIVAN</Status>
           <IsDeleted>false</IsDeleted>
         </Flight>

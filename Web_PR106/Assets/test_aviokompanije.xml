@@ -189,7 +189,7 @@
         <ArrivalDateTime>07/07/2024 18:48</ArrivalDateTime>
         <NumberOf_FreeSeats>3</NumberOf_FreeSeats>
         <NumberOf_TakenSeats>0</NumberOf_TakenSeats>
-        <Price>3</Price>
+        <Price>15</Price>
         <Status>AKTIVAN</Status>
         <IsDeleted>false</IsDeleted>
       </Flight>
@@ -239,7 +239,7 @@
         <ArrivalDateTime>07/07/2024 18:04</ArrivalDateTime>
         <NumberOf_FreeSeats>41</NumberOf_FreeSeats>
         <NumberOf_TakenSeats>309</NumberOf_TakenSeats>
-        <Price>29075</Price>
+        <Price>120</Price>
         <Status>AKTIVAN</Status>
         <IsDeleted>false</IsDeleted>
       </Flight>
@@ -258,9 +258,9 @@
         <ArrivalDateTime>08/04/2024 02:00</ArrivalDateTime>
         <NumberOf_FreeSeats>40</NumberOf_FreeSeats>
         <NumberOf_TakenSeats>210</NumberOf_TakenSeats>
-        <Price>50000</Price>
-        <Status>OTKAZAN</Status>
-        <IsDeleted>true</IsDeleted>
+        <Price>240,5</Price>
+        <Status>AKTIVAN</Status>
+        <IsDeleted>false</IsDeleted>
       </Flight>
     </ProvidedFlights>
     <Reviews>

@@ -143,28 +143,28 @@
             var navBrand = nav.find('.navbar-brand')
 
             if (Object.keys(sessionStorage).length == 0) {
-                nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
+                nav.append('<a id="userNav" href="Pages/LogIn.html" class="navbar-brand"> Sign in </a>');
             } else if (sessionStorage.getItem("role") == 'PUTNIK') {
-                nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                nav.append(`<a id="userNav" href="Pages/MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
+                nav.append(`<a id="userNav" href="Pages/UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
             }
 <<<<<<< HEAD
 =======
             else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
                 navBrand.remove();
 
-                nav.append(`<a href="admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
-                nav.append(`<a href="admin-flights.html" class="navbar-brand">Letovi</a>`);
-                nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
-                nav.append(`<a href="admin-reviews.html" class="navbar-brand">Recenzije</a>`);
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                nav.append(`<a href="Pages/admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
+                nav.append(`<a href="Pages/admin-flights.html" class="navbar-brand">Letovi</a>`);
+                nav.append(`<a href="Pages/admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
+                nav.append(`<a href="Pages/admin-reviews.html" class="navbar-brand">Recenzije</a>`);
+                nav.append(`<a id="userNav" href="Pages/UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
 
                 var userView = document.getElementById("user-view");
                 userView.style.display = 'none';
             }
 >>>>>>> 5b1f20d (Add data persistance)
             else {
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                nav.append(`<a id="userNav" href="Pages/UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
             }
         }
 
@@ -181,7 +181,7 @@
                         var contactInfo = parseContactInfo(airline.ContactInfo);
                         var row = `<tr>
                                         <td>${index + 1}</td>
-                                        <td><a href="Airline.html?airline=${encodeURIComponent(airline.Name)}">${airline.Name}</a></td>
+                                        <td><a href="Pages/Airline.html?airline=${encodeURIComponent(airline.Name)}">${airline.Name}</a></td>
                                         <td>${contactInfo.email}</td>
                                         <td>${contactInfo.phone}</td>
                                        </tr>`;

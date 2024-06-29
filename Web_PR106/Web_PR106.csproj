@@ -104,11 +104,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="admin-airlines.html" />
-    <Content Include="admin-flights.html" />
-    <Content Include="admin-reservations.html" />
-    <Content Include="admin-reviews.html" />
-    <Content Include="Airline.html" />
+    <Content Include="Pages\admin-airlines.html" />
+    <Content Include="Pages\admin-flights.html" />
+    <Content Include="Pages\admin-reservations.html" />
+    <Content Include="Pages\admin-reviews.html" />
+    <Content Include="Pages\Airline.html" />
     <Content Include="Assets\comment_placeholder.png" />
     <Content Include="Assets\profile.jpg" />
     <Content Include="Assets\test_aviokompanije.xml" />
@@ -116,11 +116,11 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Global.asax" />
-    <Content Include="LogIn.html" />
-    <Content Include="MyFlights.html" />
-    <Content Include="Reservation.html" />
-    <Content Include="Review.html" />
-    <Content Include="UserProfile.html" />
+    <Content Include="Pages\LogIn.html" />
+    <Content Include="Pages\MyFlights.html" />
+    <Content Include="Pages\Reservation.html" />
+    <Content Include="Pages\Review.html" />
+    <Content Include="Pages\UserProfile.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />

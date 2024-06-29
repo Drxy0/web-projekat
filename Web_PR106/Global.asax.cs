@@ -134,7 +134,7 @@ namespace Web_PR106
 					reservation.Id = int.Parse(reservationNode["Id"].InnerText);
 					reservation.Flight = flight;
 					reservation.NumberOfPassengers = int.Parse(reservationNode["NumberOfPassengers"].InnerText);
-					reservation.Price = double.Parse(reservationNode["Price"].InnerText.Replace(',', '.'));
+					reservation.Price = double.Parse(reservationNode["Price"].InnerText);
 					reservation.Status = (ReservationStatus)Enum.Parse(typeof(ReservationStatus), reservationNode["Status"].InnerText.ToUpper());
 					user.ReservationList.Add(reservation);
 					Reservations.Add(reservation);

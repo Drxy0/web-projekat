@@ -13,7 +13,7 @@
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
-        <a href="Index.html" class="navbar-brand">
+        <a href="../Index.html" class="navbar-brand">
             Početna
         </a>
     </nav>
@@ -22,7 +22,7 @@
     <section id="default">
         <div style="max-width:20%; padding-left:20px;">
             <h2 class="text-center">Dodaj Let</h2>
-            <form id="addForm" action="/api/flight" method="post">
+            <form id="addForm" action="../api/flight" method="post">
                 <div class="form-group">
                     <label for="available-airlines">Izaberite Aviokompaniju</label>
                     <input list="available-airlines-list" id="available-airlines" name="airline" required/>
@@ -62,7 +62,7 @@
         </div>
 
         <h2>Svi Letovi</h2>
-        <form id="filter-flights-form" action="/api/flight/adminFilterFlights" method="post">
+        <form id="filter-flights-form" action="../api/flight/adminFilterFlights" method="post">
             <table>
                 <tr>
                     <td>
@@ -123,7 +123,7 @@
     <section id="edit-flight" style="display: none;">
         <div style="max-width:20%; padding-left:20px; min-width:250px;">
             <h2 class="text-center">Uredi Let</h2>
-            <form id="editForm" action="/api/flight/edit" method="post">
+            <form id="editForm" action="../api/flight/edit" method="post">
                 <div class="form-group">
                     <label for="edit-departure-time">Vrijema polaska</label>
                     <input type="datetime-local" class="form-control" id="edit-departure-time" name="departureDateTime" required>
@@ -251,6 +251,7 @@
                 formDataJson[key] = value;
             });
 
+<<<<<<< HEAD:Web_PR106/admin-flights.html
             // Construct the fetch request
             fetch('/api/flight/adminFilterFlights', {
                 method: 'POST',
@@ -266,6 +267,14 @@
                     return response.json();
                 })
                 .then(data => {
+=======
+            $.ajax({
+                url: '../api/flight/adminFilterFlights',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formDataJson),
+                success: function (data) {
+>>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-flights.html
                     form.reset();
                     var tbody = $("#flights-table-body");
                     tbody.empty();
@@ -398,7 +407,7 @@
             document.getElementById('edit-seats').value = numberOfSeats;
 
             $.ajax({
-                url: 'api/reservation',
+                url: '../api/reservation',
                 type: 'GET',
                 success: function (data, status) {
                     let canEditPrice = true;
@@ -448,7 +457,7 @@
                             (reservation.Status === 0 || reservation.Status === 1);
 =======
             $.ajax({
-                url: 'api/flight/getAll',
+                url: '../api/flight/getAll',
                 type: 'GET',
                 success: function (data, status) {
                     var tbody = $("#flights-table-body");
@@ -506,10 +515,19 @@
 
         function deleteFlight(airlineId, flightId) {
 
+<<<<<<< HEAD:Web_PR106/admin-flights.html
             fetch(`/api/flight/delete/${airlineId}/flight/${flightId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
+=======
+            $.ajax({
+                url: `../api/flight/delete/${airlineId}/flight/${flightId}`,
+                type: 'DELETE',
+                contentType: 'application/json',
+                success: function (data, status, xhr) {
+                    loadFlights();
+>>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-flights.html
                 },
             })
                 .then(response => {
@@ -523,6 +541,7 @@
         function updateAvailableAirlinesList() {
             const list = document.getElementById('available-airlines-list');
 
+<<<<<<< HEAD:Web_PR106/admin-flights.html
             $.get("api/airlines", function (data, status) {
                 data.forEach(function (airline, index) {
                     var option = document.createElement('option');
@@ -530,12 +549,36 @@
                     option.innerHTML = ` Id ${airline.Id} - ${airline.Name}`;
                     list.appendChild(option);
                 });
+=======
+            $.ajax({
+                url: "../api/airlines",
+                type: 'GET',
+                success: function (data, status) {
+                    data.forEach(function (airline, index) {
+                        var option = `<option value="${airline.Id}">Id ${airline.Id} - ${airline.Name}</option>`;
+                        $('#list').append(option);
+                    });
+                },
+                error: function (xhr, status, error) {
+                }
+>>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-flights.html
             });
         }
 
         function loadReservations() {
+<<<<<<< HEAD:Web_PR106/admin-flights.html
             $.get("api/reservation", function (data, status) {
                 reservations = data;
+=======
+            $.ajax({
+                url: "../api/reservation",
+                type: 'GET',
+                success: function (data, status, xhr) {
+                    reservations = data;
+                },
+                error: function (xhr, status, error) {
+                }
+>>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-flights.html
             });
         }
 

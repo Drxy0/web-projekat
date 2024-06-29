@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="Content/bootstrap.min.css">
-    <script src="Scripts/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="../Content/bootstrap.min.css">
+    <script src="../Scripts/jquery-1.10.2.js"></script>
     <title>Rezervacije</title>
     <style>
         body {
@@ -13,8 +13,13 @@
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
+<<<<<<< HEAD:Web_PR106/admin-reservations.html
         <a href="Index.html" class="navbar-brand">
             Home
+=======
+        <a href="../Index.html" class="navbar-brand">
+            Počenta
+>>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-reservations.html
         </a>
     </nav>
 
@@ -42,9 +47,19 @@
         const flightStatus = ['AKTIVAN', 'OTKAZAN', 'ZAVRSEN']
 
         $(document).ready(function () {
+<<<<<<< HEAD:Web_PR106/admin-reservations.html
             $.get("api/reservation", function (data) {
                 var tbody = $("#reservations-table-body");
                 tbody.empty();
+=======
+            checkSession();
+            $.ajax({
+                url: '../api/reservation',
+                type: 'GET',
+                success: function (data) {
+                    var tbody = $("#reservations-table-body");
+                    tbody.empty();
+>>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-reservations.html
 
                 data.forEach(function (reservation, index) {
                     const parts = reservation.Flight.DepartureDateTime.split(' ');
