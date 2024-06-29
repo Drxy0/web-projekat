@@ -20,6 +20,7 @@ namespace Web_PR106.Models
 		public string Description { get; set;}
 		public string Picture { get; set;}
 		public ReviewStatus Status { get; set;}
+		public bool IsDeleted { get; set; }
 
 		public Review() { }
 	}

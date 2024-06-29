@@ -53,7 +53,7 @@ namespace Web_PR106.Controllers
 			};
 
 			airline.ProvidedFlights.Add(flight);
-
+			Global.SaveAirlineData();
 			Global.LoadFlights();
 			return Ok();
 		}
@@ -84,14 +84,25 @@ namespace Web_PR106.Controllers
 			flight.DepartureDateTime = departureDateTime;
 			flight.ArrivalDateTime = arrivalDateTime;
 
-			int numberOfSeats = flightParams["numberOf_FreeSeats"] != null ? Convert.ToInt32(flightParams["numberOf_FreeSeats"]) : 0;
-			flight.NumberOf_FreeSeats += (numberOfSeats - flight.NumberOf_FreeSeats);
+			int numberOfSeats = flightParams["numberOf_Seats"] != null ? Convert.ToInt32(flightParams["numberOf_FreeSeats"]) : 0;
+			int seatsToAdd = numberOfSeats - (flight.NumberOf_FreeSeats + flight.NumberOf_TakenSeats);
+
+			if (flight.NumberOf_FreeSeats + seatsToAdd < 0)
+			{
+				return BadRequest("New number of seats cannot be so low that it trumps the number of available seats.");
+			}
+			else
+			{
+				flight.NumberOf_FreeSeats += seatsToAdd;
+			}
+			
 			double price = flightParams["price"] != null ? Convert.ToDouble(flightParams["price"]) : 0;
 			if (price != 0)
 			{
 				flight.Price = price;
 			}
 
+			Global.SaveAirlineData();
 			return Ok();
 		}
 
@@ -187,6 +198,7 @@ namespace Web_PR106.Controllers
 			}
 
 			flight.IsDeleted = true;
+			Global.SaveAirlineData();
 			return Ok();
 		}
 	}

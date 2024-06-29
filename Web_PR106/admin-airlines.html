@@ -9,12 +9,26 @@
         body {
             padding-top: 50px;
         }
+        #addForm, #editForm {
+            max-width: 80%;
+            padding: 20px;
+            background: #f7f7f7;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #editForm {
+            margin-top: 50px;
+        }
+        #default, #edit-airline {
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
         <a href="Index.html" class="navbar-brand">
-            Home
+            Početna
         </a>
     </nav>
 
@@ -39,6 +53,8 @@
             </div>
         </form>
 
+        <br/>
+        <br/>
 
         <h2>Sve Aviokompanije</h2>
         <form id="filter-airlines-form" action="/api/airlines/adminFilterAirlines" method="post">
@@ -92,6 +108,7 @@
     </section>
 
     <section id="edit-airline" style="display: none;">
+<<<<<<< HEAD
         <form id="addForm" action="/api/airlines" method="post">
             <h2 class="text-center">Dodaj Aviokopmaniju</h2>
             <div id="loginAlert" class="alert alert-danger" hidden role="alert"></div>
@@ -109,6 +126,29 @@
             </div>
             <button type="submit" class="btn btn-success">Uredi</button>
         </form>
+=======
+        <div class="centered-form">
+            <form id="editForm" style="max-width: 500px;" action="/api/airlines/edit" method="post" class="col-6">
+                <h2 class="text-center">Uredi Aviokopmaniju</h2>
+                <div id="loginAlert" class="alert alert-danger" hidden role="alert"></div>
+                <div class="form-group">
+                    <label for="name">Naziv</label>
+                    <input type="text" class="form-control" id="edit-airline-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="adress">Adresa</label>
+                    <input type="text" class="form-control" id="edit-airline-address" name="address" required>
+                </div>
+                <div class="form-group">
+                    <label for="airline-contact-info">Kontakt</label>
+                    <input type="text" class="form-control" id="edit-airline-contact-info" name="contactInfo" placeholder="email@mail.com +12345" required>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Uredi</button>
+                </div>
+            </form>
+        </div>
+>>>>>>> 5b1f20d (Add data persistance)
     </section>
 
     <script>
@@ -117,8 +157,34 @@
         document.addEventListener('DOMContentLoaded', function () {
             const form = document.getElementById('filter-airlines-form');
 
+<<<<<<< HEAD
             form.addEventListener('submit', function (event) {
                 event.preventDefault();
+=======
+        function checkSession() {
+            var nav = $("#nav");
+            var navBrand = nav.find('.navbar-brand')
+            if (Object.keys(sessionStorage).length == 0) {
+                nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
+            } else if (sessionStorage.getItem("role") == 'PUTNIK') {
+                nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            } else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
+                navBrand.remove();
+
+                nav.append(`<a href="admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
+                nav.append(`<a href="admin-flights.html" class="navbar-brand">Letovi</a>`);
+                nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
+                nav.append(`<a href="admin-reviews.html" class="navbar-brand">Recenzije</a>`);
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            } else {
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            }
+        }
+
+        editForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+>>>>>>> 5b1f20d (Add data persistance)
 
                 const formData = new FormData(form);
                 const jsonData = JSON.stringify(Object.fromEntries(formData));
@@ -207,6 +273,7 @@
         }
 
         $(document).ready(function () {
+            checkSession();
             loadAirlines();
         });
     </script>

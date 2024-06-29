@@ -14,78 +14,81 @@
         </a>
     </nav>
 
-    <section id="table">
-        <h2>Letovi</h2>
-        <div>
-            <form id="searchForm" action="/api/default" method="post" onsubmit="submitForm(event)">
-                <table>
+    <section id="user-view">
+
+        <section id="table">
+            <h2>Letovi</h2>
+            <div>
+                <form id="searchForm" action="/api/default" method="post" onsubmit="submitForm(event)">
+                    <table>
+                        <tr>
+                            <td>
+                                <label>Polazište</label>
+                            </td>
+                            <td>
+                                <input type="text" placeholder="Belgrade" id="pocetna_destinacija" name="startDestination" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Odredište</label>
+                            </td>
+                            <td>
+                                <input type="text" placeholder="Paris" id="odredisna_destinacija" name="endDestination" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Aviokompanija</label>
+                            </td>
+                            <td>
+                                <input type="text" placeholder="Air France" id="aviokompanija" name="airlinesName" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Datum polaska</label>
+                            </td>
+                            <td>
+                                <input type="date" id="datum_polaska" name="departureDate" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Datum dolaska</label>
+                            </td>
+                            <td>
+                                <input type="date" id="datum_dolaska" name="arrivalDate" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input class="btn btn-success" type="submit" value="PRETRAŽI" />
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <br />
+            <table id="flightsTable" class="table table-bordered table-striped">
+                <thead>
                     <tr>
-                        <td>
-                            <label>Polazište</label>
-                        </td>
-                        <td>
-                            <input type="text" placeholder="Polazište" id="pocetna_destinacija" name="startDestination" />
-                        </td>
+                        <th hidden>Flight Id</th>
+                        <th scope="col">#</th>
+                        <th scope="col">Polazna destinacija</th>
+                        <th scope="col">Odredišna destinacija</th>
+                        <th scope="col">Datum polaska</th>
+                        <th scope="col">Datum dolaska</th>
+                        <th scope="col">Slobodna mjesta</th>
+                        <th scope="col">Aviokompanija</th>
+                        <th id="sortHeader" style="cursor:pointer" scope="col" onclick="sortTable()">Cijena</th>
+                        <th style="width:30px;" scope="col">Rezervacija</th>
                     </tr>
-                    <tr>
-                        <td>
-                            <label>Odredište</label>
-                        </td>
-                        <td>
-                            <input type="text" placeholder="Odredište" id="odredisna_destinacija" name="endDestination" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Aviokompanija</label>
-                        </td>
-                        <td>
-                            <input type="text" placeholder="Aviokompanija" id="aviokompanija" name="airlinesName" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Datum polaska</label>
-                        </td>
-                        <td>
-                            <input type="date" id="datum_polaska" name="departureDate" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Datum dolaska</label>
-                        </td>
-                        <td>
-                            <input type="date" id="datum_dolaska" name="arrivalDate" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input class="btn btn-success" type="submit" value="PRETRAŽI" />
-                        </td>
-                    </tr>
-                </table>
-            </form>
-        </div>
-        <br />
-        <table id="flightsTable" class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th hidden>Flight Id</th>
-                    <th scope="col">#</th>
-                    <th scope="col">Polazna destinacija</th>
-                    <th scope="col">Odredišna destinacija</th>
-                    <th scope="col">Datum polaska</th>
-                    <th scope="col">Datum dolaska</th>
-                    <th scope="col">Slobodna mjesta</th>
-                    <th scope="col">Aviokompanija</th>
-                    <th id="sortHeader" style="cursor:pointer" scope="col" onclick="sortTable()">Cijena</th>
-                    <th style="width:30px;" scope="col">Rezervacija</th>
-                </tr>
-            </thead>
-            <tbody id="flights-table-body">
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="flights-table-body">
+                </tbody>
+            </table>
+        </section>
     </section>
 
     <section id="airlines">
@@ -133,16 +136,33 @@
                 }
             });
         }
-               
+
         // Update navbar based on current user
         function checkSession() {
             var nav = $("#nav");
+            var navBrand = nav.find('.navbar-brand')
+
             if (Object.keys(sessionStorage).length == 0) {
                 nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
             } else if (sessionStorage.getItem("role") == 'PUTNIK') {
                 nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
                 nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
             }
+<<<<<<< HEAD
+=======
+            else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
+                navBrand.remove();
+
+                nav.append(`<a href="admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
+                nav.append(`<a href="admin-flights.html" class="navbar-brand">Letovi</a>`);
+                nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
+                nav.append(`<a href="admin-reviews.html" class="navbar-brand">Recenzije</a>`);
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+
+                var userView = document.getElementById("user-view");
+                userView.style.display = 'none';
+            }
+>>>>>>> 5b1f20d (Add data persistance)
             else {
                 nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
             }
@@ -155,16 +175,16 @@
                 success: function (data, status) {
                     var airlines = data;
                     var tbody = $("#airlines-table-body");
-                    tbody.empty(); // Clear any existing rows
+                    tbody.empty();
 
                     airlines.forEach(function (airline, index) {
                         var contactInfo = parseContactInfo(airline.ContactInfo);
                         var row = `<tr>
-                                    <td>${index + 1}</td>
-                                    <td><a href="Airline.html?airline=${encodeURIComponent(airline.Name)}">${airline.Name}</a></td>
-                                    <td>${contactInfo.email}</td>
-                                    <td>${contactInfo.phone}</td>
-                                   </tr>`;
+                                        <td>${index + 1}</td>
+                                        <td><a href="Airline.html?airline=${encodeURIComponent(airline.Name)}">${airline.Name}</a></td>
+                                        <td>${contactInfo.email}</td>
+                                        <td>${contactInfo.phone}</td>
+                                       </tr>`;
                         tbody.append(row);
                     });
                 },
@@ -225,35 +245,35 @@
             flights.forEach(function (flight, index) {
                 if (sessionStorage.getItem("token") == null) {
                     var row = `<tr>
-                            <td hidden>${flight.Id}</td>
-                            <td scope="row">${index + 1}</td>
-                            <td>${flight.StartDestination}</td>
-                            <td>${flight.EndDestination}</td>
-                            <td>${flight.DepartureDateTime}</td>
-                            <td>${flight.ArrivalDateTime}</td>
-                            <td>${flight.NumberOf_FreeSeats}</td>
-                            <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airline.Name)}">${flight.Airline.Name}</a></td>
-                            <td>$${flight.Price}</td>
-                            <td class="text-center"><button href="Reservation.html" class="btn btn-secondary" disabled>Rezerviši</button></td>
-                           </tr>`;
+                                <td hidden>${flight.Id}</td>
+                                <td scope="row">${index + 1}</td>
+                                <td>${flight.StartDestination}</td>
+                                <td>${flight.EndDestination}</td>
+                                <td>${flight.DepartureDateTime}</td>
+                                <td>${flight.ArrivalDateTime}</td>
+                                <td>${flight.NumberOf_FreeSeats}</td>
+                                <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airline.Name)}">${flight.Airline.Name}</a></td>
+                                <td>$${flight.Price}</td>
+                                <td class="text-center"><button href="Reservation.html" class="btn btn-secondary" disabled>Rezerviši</button></td>
+                               </tr>`;
                     tbody.append(row);
                 }
                 else {
                     var buttonLabel = currentUserReservedFlightIds.includes(Number(flight.Id)) ? "Uredi" : "Rezerviši";
                     var row = `<tr>
-                            <td hidden>${flight.Id}</td>
-                            <td scope="row">${index + 1}</td>
-                            <td>${flight.StartDestination}</td>
-                            <td>${flight.EndDestination}</td>
-                            <td>${flight.DepartureDateTime}</td>
-                            <td>${flight.ArrivalDateTime}</td>
-                            <td>${flight.NumberOf_FreeSeats}</td>
-                            <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airlines)}">${flight.Airlines}</a></td>
-                            <td>$${flight.Price}</td>
-                            <td class="text-center">
-                                <a href="Reservation.html?id=${flight.Id}" class="btn btn-${currentUserReservedFlightIds.includes(Number(flight.Id)) ? 'primary' : 'success'}">${buttonLabel}</a>
-                            </td>
-                        </tr>`;
+                                <td hidden>${flight.Id}</td>
+                                <td scope="row">${index + 1}</td>
+                                <td>${flight.StartDestination}</td>
+                                <td>${flight.EndDestination}</td>
+                                <td>${flight.DepartureDateTime}</td>
+                                <td>${flight.ArrivalDateTime}</td>
+                                <td>${flight.NumberOf_FreeSeats}</td>
+                                <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airlines)}">${flight.Airlines}</a></td>
+                                <td>$${flight.Price}</td>
+                                <td class="text-center">
+                                    <a href="Reservation.html?id=${flight.Id}" class="btn btn-${currentUserReservedFlightIds.includes(Number(flight.Id)) ? 'primary' : 'success'}">${buttonLabel}</a>
+                                </td>
+                            </tr>`;
                     tbody.append(row);
                 }
             });
@@ -264,51 +284,51 @@
                 url: "api/default",
                 method: "GET",
                 success: function (data, status) {
+                    console.log(data);
                     var flights = data.filter(function (flight) {
                         return flight.Status === 0;
                     });
 
                     var tbody = $("#flights-table-body");
                     tbody.empty();
-
                     flights.forEach(function (flight, index) {
                         if (sessionStorage.getItem("token") == null) {
-                            console.log("jes nul");
                             var row = `<tr>
-                                        <td hidden>${flight.Id}</td>
-                                        <td scope="row">${index + 1}</td>
-                                        <td>${flight.StartDestination}</td>
-                                        <td>${flight.EndDestination}</td>
-                                        <td>${flight.DepartureDateTime}</td>
-                                        <td>${flight.ArrivalDateTime}</td>
-                                        <td>${flight.NumberOf_FreeSeats}</td>
-                                        <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airline.Name)}">${flight.Airline.Name}</a></td>
-                                        <td>$${flight.Price}</td>
-                                        <td class="text-center"><button class="btn btn-secondary" disabled>Rezerviši</button></td>
-                                       </tr>`;
+                                            <td hidden>${flight.Id}</td>
+                                            <td scope="row">${index + 1}</td>
+                                            <td>${flight.StartDestination}</td>
+                                            <td>${flight.EndDestination}</td>
+                                            <td>${flight.DepartureDateTime}</td>
+                                            <td>${flight.ArrivalDateTime}</td>
+                                            <td>${flight.NumberOf_FreeSeats}</td>
+                                            <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airline.Name)}">${flight.Airline.Name}</a></td>
+                                            <td>$${flight.Price}</td>
+                                            <td class="text-center"><button class="btn btn-secondary" disabled>Rezerviši</button></td>
+                                           </tr>`;
                             tbody.append(row);
                         }
                         else {
                             var buttonLabel = currentUserReservedFlightIds.includes(Number(flight.Id)) ? "Uredi" : "Rezerviši";
                             var row = `<tr>
-                                        <td hidden>${flight.Id}</td>
-                                        <td scope="row">${index + 1}</td>
-                                        <td>${flight.StartDestination}</td>
-                                        <td>${flight.EndDestination}</td>
-                                        <td>${flight.DepartureDateTime}</td>
-                                        <td>${flight.ArrivalDateTime}</td>
-                                        <td>${flight.NumberOf_FreeSeats}</td>
-                                        <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airline.Name)}">${flight.Airline.Name}</a></td>
-                                        <td>$${flight.Price}</td>
-                                        <td class="text-center">
-                                            <a href="Reservation.html?id=${flight.Id}" class="btn btn-${currentUserReservedFlightIds.includes(Number(flight.Id)) ? 'primary' : 'success'}">${buttonLabel}</a>
-                                        </td>
-                                       </tr>`;
+                                            <td hidden>${flight.Id}</td>
+                                            <td scope="row">${index + 1}</td>
+                                            <td>${flight.StartDestination}</td>
+                                            <td>${flight.EndDestination}</td>
+                                            <td>${flight.DepartureDateTime}</td>
+                                            <td>${flight.ArrivalDateTime}</td>
+                                            <td>${flight.NumberOf_FreeSeats}</td>
+                                            <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airline.Name)}">${flight.Airline.Name}</a></td>
+                                            <td>$${flight.Price}</td>
+                                            <td class="text-center">
+                                                <a href="Reservation.html?id=${flight.Id}" class="btn btn-${currentUserReservedFlightIds.includes(Number(flight.Id)) ? 'primary' : 'success'}">${buttonLabel}</a>
+                                            </td>
+                                           </tr>`;
                             tbody.append(row);
                         }
 
                     });
-                },
+                }, error: function (xhr, status, error) {
+                }
             });
         }
 
@@ -334,7 +354,6 @@
                             });
                         }
                     });
-
                     loadFlights();
                     loadAirlines();
                 },

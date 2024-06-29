@@ -60,6 +60,8 @@ namespace Web_PR106.Controllers
 					review.Status = ReviewStatus.ODOBRENA;
 				}
 			}
+
+			Global.SaveAirlineData();
 			
 			return Ok(new { message = $"Review with ID {Id} has been approved." });
 		}
@@ -76,6 +78,8 @@ namespace Web_PR106.Controllers
 					review.Status = ReviewStatus.ODBIJENA;
 				}
 			}
+
+			Global.SaveAirlineData();
 			return Ok(new { message = $"Review with ID {Id} has been rejected." });
 		}
 	}

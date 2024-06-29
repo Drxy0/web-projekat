@@ -22,19 +22,24 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Id</th>
+                <th scope="col">Id rezervacije</th>
                 <th scope="col">Id leta</th>
+                <th scope="col">Polazna destinacija</th>
+                <th scope="col">Odredišna destinacija</th>
+                <th scope="col">Datum polaska</th>
+                <th scope="col">Datum dolaska</th>
+                <th scope="col">Status leta</th>
                 <th scope="col">Korisnik</th>
                 <th scope="col">Broj putnika</th>
                 <th scope="col">Ukupna cijena</th>
-                <th scope="col">Status</th>
+                <th scope="col">Status rezervacije</th>
             </tr>
         </thead>
         <tbody id="reservations-table-body">
         </tbody>
     </table>
     <script>
-        const reservationStatus = ['KREIRANA', 'ODOBRENA', 'OTKAZANA', 'ZAVRSENA'];
+        const flightStatus = ['AKTIVAN', 'OTKAZAN', 'ZAVRSEN']
 
         $(document).ready(function () {
             $.get("api/reservation", function (data) {
@@ -52,6 +57,7 @@
                     var otkazanaDisabled = timeDifferenceInHours < 24 ? "disabled" : "";
                     var selectDisabled = reservation.Status === 3 ? "disabled" : "";
 
+<<<<<<< HEAD
                     var row = `<tr>
                                 <td>${index + 1}</td>
                                 <td>${reservation.Id}</td>
@@ -61,6 +67,23 @@
                                 <td>${reservation.Price}</td>
                                 <td>
                                     <select id="status-${reservation.Id}" name="status" ${selectDisabled}>
+=======
+                        var row = `<tr>
+                            <td>${index + 1}</td>
+                            <td>${reservation.Id}</td>
+                            <td>${reservation.Flight.Id}</td>
+                            <td>${reservation.Flight.StartDestination}</td>
+                            <td>${reservation.Flight.EndDestination}</td>
+                            <td>${reservation.Flight.ArrivalDateTime}</td>
+                            <td>${reservation.Flight.DepartureDateTime}</td>
+                            <td>${flightStatus[reservation.Flight.Status]}</td>
+
+                            <td>${reservation.User}</td>
+                            <td>${reservation.NumberOfPassengers}</td>
+                            <td>${reservation.Price}</td>
+                            <td>
+                                <select id="status-${reservation.Id}" name="status" ${selectDisabled}>
+>>>>>>> 5b1f20d (Add data persistance)
                                     <option value="KREIRANA" ${reservation.Status === 0 ? 'selected' : ''}>KREIRANA</option>
                                     <option value="ODOBRENA" ${reservation.Status === 1 ? 'selected' : ''}>ODOBRENA</option>
                                     <option value="OTKAZANA" ${otkazanaDisabled} ${reservation.Status === 2 ? 'selected' : ''}>OTKAZANA</option>
@@ -69,6 +92,7 @@
                             </tr>`;
                     tbody.append(row);
 
+<<<<<<< HEAD
                     $(`#status-${reservation.Id}`).on('change', function () {
                         var newValue = $(this).val();
 
@@ -79,6 +103,19 @@
                             numberOfPassengers: reservation.NumberOfPassengers,
                             flightId: reservation.Flight.Id
                         };
+=======
+                        $(`#status-${reservation.Id}`).on('change', function () {
+                            var newValue = $(this).val();
+                            console.log(newValue);
+
+                            const reservationData = {
+                                reservationId: reservation.Id,
+                                status: newValue,
+                                username: reservation.User,
+                                numberOfPassengers: reservation.NumberOfPassengers,
+                                flightId: reservation.Flight.Id
+                            };
+>>>>>>> 5b1f20d (Add data persistance)
 
                         fetch('/api/reservation', {
                             method: 'POST',

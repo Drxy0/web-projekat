@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -22,7 +23,7 @@ namespace Web_PR106.Controllers
         public IHttpActionResult Post([FromBody] JObject reservationData)
         {
             int reservationId = int.Parse(reservationData["reservationId"]?.ToString());
-            string status = reservationData["reservationId"]?.ToString();
+            string status = reservationData["status"]?.ToString();
             string username = reservationData["username"]?.ToString();
             int numberOfPassengers = int.Parse(reservationData["numberOfPassengers"]?.ToString());
             int flightId = int.Parse(reservationData["flightId"]?.ToString());
@@ -54,11 +55,17 @@ namespace Web_PR106.Controllers
                 {
                     Flight flight = airline.ProvidedFlights.FirstOrDefault(u => u.Id == flightId);
                     flight.NumberOf_FreeSeats += numberOfPassengers;
-                    flight.NumberOf_TakenSeats -= numberOfPassengers;
                 }
-            }
+				foreach (Flight flight in Global.ShownFlights)
+				{
+					flight.NumberOf_FreeSeats += numberOfPassengers;
+				}
+			}
 
-			return Ok();
+            Global.SaveAirlineData();
+            Global.SaveUserData();
+			
+            return Ok();
         }
     }
 }

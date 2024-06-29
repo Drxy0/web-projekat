@@ -66,7 +66,7 @@
                             var card = `
                                 <div class="col-md-4 mb-4">
                                     <div class="card">
-                                        <img class="card-img-top" src="${review.Picture}">
+                                        ${review.Picture ? `<img class="card-img-top" src="${review.Picture}">` : ''}
                                         <div class="card-body">
                                             <h5 class="card-title">${review.Title}</h5>
                                             <p class="card-text">${review.Description}</p>
@@ -79,6 +79,13 @@
                                 </div>
                             `;
                             row.append(card);
+
+                            if (review.Status === 1) {
+                                approveUpdateUI(row.find('.approve:last'));
+                            }
+                            else if (review.Status === 2) {
+                                rejectUpdateUI(row.find('.reject:last'));
+                            }
                         });
                         container.append(row);
                     });
@@ -96,12 +103,9 @@
                 method: 'POST',
                 contentType: 'application/json',
                 success: function (response) {
-                    console.log('Review approved successfully:', response);
-                    $(button).text('Odobrena').removeClass('btn-success').addClass('btn-secondary').removeAttr('onclick');
-                    $(button).siblings('.reject').attr('hidden', true).removeClass('btn-danger').addClass('btn-secondary');
+                    approveUpdateUI(button)
                 },
                 error: function (xhr, status, error) {
-                    console.error('Error approving review:', status, error);
                 }
             });
         }
@@ -112,14 +116,22 @@
                 method: 'POST',
                 contentType: 'application/json',
                 success: function (response) {
-                    console.log('Review rejected successfully:', response);
-                    $(button).text('Odbijena').removeClass('btn-danger').addClass('btn-secondary').removeAttr('onclick');
-                    $(button).siblings('.approve').attr('hidden', true).removeClass('btn-success').addClass('btn-secondary');
+                    rejectUpdateUI(button);
                 },
                 error: function (xhr, status, error) {
                     console.error('Error rejecting review:', status, error);
                 }
             });
+        }
+
+        function approveUpdateUI(button) {
+            $(button).text('Odobrena').removeClass('btn-success').addClass('btn-secondary').removeAttr('onclick');
+            $(button).siblings('.reject').attr('hidden', true).removeClass('btn-danger').addClass('btn-secondary');
+        }
+
+        function rejectUpdateUI(button) {
+            $(button).text('Odbijena').removeClass('btn-danger').addClass('btn-secondary').removeAttr('onclick');
+            $(button).siblings('.approve').attr('hidden', true).removeClass('btn-success').addClass('btn-secondary');
         }
 
     </script>

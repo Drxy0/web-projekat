@@ -83,9 +83,9 @@
                 <th scope="col">Odredišna destinacija</th>
                 <th scope="col">Datum polaska</th>
                 <th scope="col">Datum dolaska</th>
-                <th style="cursor:pointer" scope="col" onclick="sortTable()">Ukupna cijena</th>
                 <th scope="col">Status leta</th>
                 <th scope="col">Broj putnika</th>
+                <th style="cursor:pointer" scope="col" onclick="sortTable()">Ukupna cijena</th>
                 <th scope="col">Status rezervacije</th>
                 <th scope="col">Recenzija</th>
             </tr>
@@ -146,9 +146,9 @@
                                     <td id="table_endDestination">${flight.EndDestination}</td>
                                     <td id="table_departure">${flight.DepartureDateTime}</td>
                                     <td id="table_arrival">${flight.ArrivalDateTime}</td>
-                                    <td id="table_price">$${flight.Price * flight.NumberOfPassengers}</td>
                                     <td id="table_status">${flightStatus[flight.Status]}</td>
                                     <td>${flight.NumberOfPassengers}</th>
+                                    <td id="table_price">$${flight.Price * flight.NumberOfPassengers}</td>
                                     <td>${reservationStatus[flight.ReservationStatus]}</th>
                                     <td class="text-center">${flight.Status === 'ZAVRSEN' ? `<a href="Review.html?airline=${encodeURIComponent(flight.Airline.Name)}" class="btn btn-primary">Napiši</a>` : `<button disabled type="button" class="btn btn-secondary">Napiši</button>`}</td>
                                 </tr>`;

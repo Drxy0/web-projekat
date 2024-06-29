@@ -206,7 +206,6 @@ namespace Web_PR106.Controllers
 					}
 				}
 
-				// Proceed with creating the new reservation
 				Flight selectedFlight = Global.Flights.Find(x => x.Id == flightId);
 				if (selectedFlight == null)
 				{
@@ -218,14 +217,12 @@ namespace Web_PR106.Controllers
 					return BadRequest("Number of passengers exceeds available seats.");
 				}
 
-				// Update seat counts
 				selectedFlight.NumberOf_FreeSeats -= numberOfPassengers;
 				selectedFlight.NumberOf_TakenSeats += numberOfPassengers;
 
-				// Create new reservation
 				Reservation newReservation = new Reservation()
 				{
-					User = new User() { Username = username },
+					User = username,
 					Flight = selectedFlight,
 					NumberOfPassengers = numberOfPassengers,
 					Price = selectedFlight.Price * numberOfPassengers,
@@ -234,6 +231,22 @@ namespace Web_PR106.Controllers
 
 				reservationList.Add(newReservation);
 				Global.Reservations.Add(newReservation);
+				Global.SaveUserData();
+
+				foreach(Airline airline in Global.Airlines)
+				{
+					foreach(Flight flight in airline.ProvidedFlights)
+					{
+						if (flight.Id == selectedFlight.Id)
+						{
+							flight.NumberOf_FreeSeats = selectedFlight.NumberOf_FreeSeats;
+							flight.NumberOf_TakenSeats = selectedFlight.NumberOf_TakenSeats;
+							break;
+						}
+					}
+				}
+
+				Global.SaveAirlineData();
 
 				return Ok("Reservation created successfully.");
 			}
@@ -251,9 +264,25 @@ namespace Web_PR106.Controllers
 			selectedFlight.NumberOf_TakenSeats -= existingReservation.NumberOfPassengers;
 
 			Global.Users
-				.Find(x => x.Username == existingReservation.User.Username)?
+				.Find(x => x.Username == existingReservation.User)?
 				.ReservationList
 				.Remove(existingReservation);
+
+			foreach (Airline airline in Global.Airlines)
+			{
+				foreach (Flight flight in airline.ProvidedFlights)
+				{
+					if (flight.Id == selectedFlight.Id)
+					{
+						flight.NumberOf_FreeSeats = selectedFlight.NumberOf_FreeSeats;
+						flight.NumberOf_TakenSeats = selectedFlight.NumberOf_TakenSeats;
+						break;
+					}
+				}
+			}
+			Global.SaveUserData();
+			Global.SaveAirlineData();
+
 		}
 
 

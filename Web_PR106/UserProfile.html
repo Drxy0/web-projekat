@@ -23,7 +23,7 @@
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
         <a href="Index.html" class="navbar-brand">
-            Home
+            Počenta
         </a>
     </nav>
 
@@ -145,9 +145,11 @@
 
         function checkSession() {
             var nav = $("#nav");
+            var navBrand = nav.find('.navbar-brand')
             if (Object.keys(sessionStorage).length == 0) {
                 nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
             } else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
+                navBrand.remove();
                 nav.append(`<a href="admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
                 nav.append(`<a href="admin-flights.html" class="navbar-brand">Letovi</a>`);
                 nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
@@ -332,9 +334,7 @@
                               <h4>${user.Birthday}</h4>
                               <h4>${gender[user.Gender]}</h4>`;
 
-                    if (role === "PUTNIK") {
-                        userInfo.innerHTML += '<h4> Reservations</h4>';
-                    } else if (role === "ADMINISTRATOR") {
+                    if (role === "ADMINISTRATOR") {
                       //adminFilterUsersForm();
                         adminLoadUsersList();
                     }

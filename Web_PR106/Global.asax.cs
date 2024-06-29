@@ -13,6 +13,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Timers;
 using System.Globalization;
+using System.Xml.Serialization;
 
 namespace Web_PR106
 {
@@ -41,8 +42,27 @@ namespace Web_PR106
 			timer.Elapsed += TimerElapsed;
 			timer.AutoReset = true;
 			timer.Start();
+		}
 
-
+		public static void SaveAirlineData()
+		{
+			XmlSerializer serializer = new XmlSerializer(typeof(List<Airline>), new XmlRootAttribute("Airlines"));
+			string relativePath = "~/Assets/test_aviokompanije.xml";
+			string filePath = HttpContext.Current.Server.MapPath(relativePath);
+			using (TextWriter writer = new StreamWriter(filePath))
+			{
+				serializer.Serialize(writer, Global.Airlines);
+			}
+		}
+		public static void SaveUserData()
+		{
+			XmlSerializer serializer = new XmlSerializer(typeof(List<User>), new XmlRootAttribute("Users"));
+			string relativePath = "~/Assets/test_users.xml";
+			string filePath = HttpContext.Current.Server.MapPath(relativePath);
+			using (TextWriter writer = new StreamWriter(filePath))
+			{
+				serializer.Serialize(writer, Global.Users);
+			}
 		}
 		private static void TimerElapsed(object sender, ElapsedEventArgs e)
 		{
@@ -92,11 +112,11 @@ namespace Web_PR106
 				foreach (XmlNode reservationNode in reservationNodes)
 				{
 					Reservation reservation = new Reservation();
-					reservation.User = new User() { Username = reservationNode["User"].InnerText };
+					reservation.User = reservationNode["User"].InnerText;
 					XmlNode flightNode = reservationNode["Flight"];
 					Flight flight = new Flight()
 					{
-						Id = int.Parse(flightNode["FlightId"].InnerText),
+						Id = int.Parse(flightNode["Id"].InnerText),
 						Airline = new Airline()
 						{
 							Id = int.Parse(flightNode["Airline"]["Id"].InnerText),
@@ -115,7 +135,7 @@ namespace Web_PR106
 					reservation.Flight = flight;
 					reservation.NumberOfPassengers = int.Parse(reservationNode["NumberOfPassengers"].InnerText);
 					reservation.Price = double.Parse(reservationNode["Price"].InnerText.Replace(',', '.'));
-					reservation.Status = (ReservationStatus)Enum.Parse(typeof(ReservationStatus), reservationNode["ReservationStatus"].InnerText.ToUpper());
+					reservation.Status = (ReservationStatus)Enum.Parse(typeof(ReservationStatus), reservationNode["Status"].InnerText.ToUpper());
 					user.ReservationList.Add(reservation);
 					Reservations.Add(reservation);
 				}
@@ -172,7 +192,7 @@ namespace Web_PR106
 								Id = int.Parse(flightNode["Airline"]["Id"].InnerText),
 								Name = flightNode["Airline"]["Name"].InnerText
 							},
-							Id = int.Parse(flightNode["FlightId"].InnerText),
+							Id = int.Parse(flightNode["Id"].InnerText),
 							StartDestination = flightNode["StartDestination"].InnerText,
 							EndDestination = flightNode["EndDestination"].InnerText,
 							DepartureDateTime = flightNode["DepartureDateTime"].InnerText,
@@ -194,13 +214,14 @@ namespace Web_PR106
 					{
 						Review review = new Review()
 						{
-							Id = int.Parse(reviewNode["ReviewId"].InnerText),
+							Id = int.Parse(reviewNode["Id"].InnerText),
 							Reviewer = reviewNode["Reviewer"].InnerText,
 							Airline = reviewNode["Airline"].InnerText,
 							Title = reviewNode["Title"].InnerText,
 							Description = reviewNode["Description"].InnerText,
-							//Picture = reviewNode["Picture"].InnerText,
-							Status = (ReviewStatus)Enum.Parse(typeof(ReviewStatus), reviewNode["Status"].InnerText)
+							Picture = reviewNode["Picture"].InnerText,
+							Status = (ReviewStatus)Enum.Parse(typeof(ReviewStatus), reviewNode["Status"].InnerText),
+							IsDeleted = bool.Parse(reviewNode["IsDeleted"].InnerText),
 						};
 						airline.Reviews.Add(review);
 					}
