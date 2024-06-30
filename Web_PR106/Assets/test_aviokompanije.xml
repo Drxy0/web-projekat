@@ -3,7 +3,7 @@
   <Airline>
     <Id>1</Id>
     <Name>Air France</Name>
-    <Address>123 Airline Street, City 1, Country</Address>
+    <Address>39 rue Petite Fusterie, Paris, France</Address>
     <ContactInfo>email: info@airfrance.com/phone: +1234567890</ContactInfo>
     <IsDeleted>false</IsDeleted>
     <ProvidedFlights>
@@ -45,6 +45,44 @@
         <Status>OTKAZAN</Status>
         <IsDeleted>false</IsDeleted>
       </Flight>
+      <Flight>
+        <Id>0</Id>
+        <Airline>
+          <Id>1</Id>
+          <Name>Air France</Name>
+          <IsDeleted>false</IsDeleted>
+          <ProvidedFlights />
+          <Reviews />
+        </Airline>
+        <StartDestination>Paris</StartDestination>
+        <EndDestination>London</EndDestination>
+        <DepartureDateTime>16/07/2024 19:30</DepartureDateTime>
+        <ArrivalDateTime>16/07/2024 20:40</ArrivalDateTime>
+        <NumberOf_FreeSeats>120</NumberOf_FreeSeats>
+        <NumberOf_TakenSeats>0</NumberOf_TakenSeats>
+        <Price>60</Price>
+        <Status>AKTIVAN</Status>
+        <IsDeleted>true</IsDeleted>
+      </Flight>
+      <Flight>
+        <Id>5</Id>
+        <Airline>
+          <Id>1</Id>
+          <Name>Air France</Name>
+          <IsDeleted>false</IsDeleted>
+          <ProvidedFlights />
+          <Reviews />
+        </Airline>
+        <StartDestination>Paris</StartDestination>
+        <EndDestination>London</EndDestination>
+        <DepartureDateTime>16/07/2024 19:30</DepartureDateTime>
+        <ArrivalDateTime>16/07/2024 20:40</ArrivalDateTime>
+        <NumberOf_FreeSeats>117</NumberOf_FreeSeats>
+        <NumberOf_TakenSeats>3</NumberOf_TakenSeats>
+        <Price>60</Price>
+        <Status>AKTIVAN</Status>
+        <IsDeleted>true</IsDeleted>
+      </Flight>
     </ProvidedFlights>
     <Reviews>
       <Review>
@@ -82,7 +120,7 @@
   <Airline>
     <Id>2</Id>
     <Name>Lufthansa</Name>
-    <Address>456 Airline Avenue, City 2, Country</Address>
+    <Address>Venloer Straße 151-153, Cologne, Germany</Address>
     <ContactInfo>email: info@lufthansa.com/phone: +9876543210</ContactInfo>
     <IsDeleted>false</IsDeleted>
     <ProvidedFlights>
@@ -133,6 +171,84 @@
         <Title>Great experience!</Title>
         <Description>The flight was on time, and the service exceeded my expectations. Highly recommended!</Description>
         <Picture />
+        <Status>ODOBRENA</Status>
+        <IsDeleted>false</IsDeleted>
+      </Review>
+    </Reviews>
+  </Airline>
+  <Airline>
+    <Id>3</Id>
+    <Name>Air Montenegro</Name>
+    <Address>Bulevar Dzordza Vasingtona 98, Podgorica, Montenegro</Address>
+    <ContactInfo>email: info@airmontenegro.com/phone: </ContactInfo>
+    <IsDeleted>false</IsDeleted>
+    <ProvidedFlights>
+      <Flight>
+        <Id>6</Id>
+        <Airline>
+          <Id>3</Id>
+          <Name>Air Montenegro</Name>
+          <IsDeleted>false</IsDeleted>
+          <ProvidedFlights />
+          <Reviews />
+        </Airline>
+        <StartDestination>Podgorica</StartDestination>
+        <EndDestination>Belgrade</EndDestination>
+        <DepartureDateTime>24/07/2024 20:00</DepartureDateTime>
+        <ArrivalDateTime>24/07/2024 21:00</ArrivalDateTime>
+        <NumberOf_FreeSeats>78</NumberOf_FreeSeats>
+        <NumberOf_TakenSeats>2</NumberOf_TakenSeats>
+        <Price>67</Price>
+        <Status>AKTIVAN</Status>
+        <IsDeleted>false</IsDeleted>
+      </Flight>
+      <Flight>
+        <Id>6</Id>
+        <Airline>
+          <Id>3</Id>
+          <Name>Air Montenegro</Name>
+          <IsDeleted>false</IsDeleted>
+          <ProvidedFlights />
+          <Reviews />
+        </Airline>
+        <StartDestination>Podgorica</StartDestination>
+        <EndDestination>Zagreb</EndDestination>
+        <DepartureDateTime>22/07/2024 20:00</DepartureDateTime>
+        <ArrivalDateTime>22/07/2024 21:00</ArrivalDateTime>
+        <NumberOf_FreeSeats>60</NumberOf_FreeSeats>
+        <NumberOf_TakenSeats>0</NumberOf_TakenSeats>
+        <Price>75</Price>
+        <Status>OTKAZAN</Status>
+        <IsDeleted>false</IsDeleted>
+      </Flight>
+      <Flight>
+        <Id>7</Id>
+        <Airline>
+          <Id>3</Id>
+          <Name>Air Montenegro</Name>
+          <IsDeleted>false</IsDeleted>
+          <ProvidedFlights />
+          <Reviews />
+        </Airline>
+        <StartDestination>Tivat</StartDestination>
+        <EndDestination>Tirana</EndDestination>
+        <DepartureDateTime>22/06/2024 14:00</DepartureDateTime>
+        <ArrivalDateTime>22/06/2024 15:00</ArrivalDateTime>
+        <NumberOf_FreeSeats>12</NumberOf_FreeSeats>
+        <NumberOf_TakenSeats>40</NumberOf_TakenSeats>
+        <Price>75</Price>
+        <Status>OTKAZAN</Status>
+        <IsDeleted>false</IsDeleted>
+      </Flight>
+    </ProvidedFlights>
+    <Reviews>
+      <Review>
+        <Id>0</Id>
+        <Reviewer>jane_smith</Reviewer>
+        <Airline>Air Montenegro</Airline>
+        <Title>Preporučujem</Title>
+        <Description>Sedišta su udobna, letovi su često tačni, a osoblje je ljubazno i profesionalno.</Description>
+        <Picture>/UploadedImages/air_montenegro.jpg</Picture>
         <Status>ODOBRENA</Status>
         <IsDeleted>false</IsDeleted>
       </Review>

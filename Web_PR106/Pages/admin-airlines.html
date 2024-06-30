@@ -159,25 +159,35 @@
         const editForm = document.getElementById('editForm');
         var editId;
 
-        function checkSession() {
-            var nav = $("#nav");
-            var navBrand = nav.find('.navbar-brand')
-            if (Object.keys(sessionStorage).length == 0) {
-                nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
-            } else if (sessionStorage.getItem("role") == 'PUTNIK') {
-                nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
-            } else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
-                navBrand.remove();
 
-                nav.append(`<a href="admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
-                nav.append(`<a href="admin-flights.html" class="navbar-brand">Letovi</a>`);
-                nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
-                nav.append(`<a href="admin-reviews.html" class="navbar-brand">Recenzije</a>`);
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
-            } else {
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
-            }
+        function checkSession() {
+            $.ajax({
+                url: "../api/session/isLoggedIn",
+                method: "GET",
+                success: function (data, status) {
+                    if (data !== false) {
+                        sessionStorage.setItem("token", data.token);
+                        sessionStorage.setItem("role", data.role);
+                    }
+                    var nav = $("#nav");
+                    if (Object.keys(sessionStorage).length == 0) {
+                        nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
+                        window.location = "../Index.html";
+                    } else if (sessionStorage.getItem("role") == 'PUTNIK') {
+                        window.location = "../Index.html";
+                        nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
+                        nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                    } else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
+                        nav.append(`<a href="admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
+                        nav.append(`<a href="admin-flights.html" class="navbar-brand">Letovi</a>`);
+                        nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
+                        nav.append(`<a href="admin-reviews.html" class="navbar-brand">Recenzije</a>`);
+                        nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                    } else {
+                        nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                    }
+                },
+            });
         }
 
         editForm.addEventListener('submit', function (event) {

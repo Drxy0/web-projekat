@@ -132,8 +132,6 @@
                 contentType: 'application/json',
                 data: JSON.stringify(request),
                 success: function (data, status, xhr) {
-                    console.log(data);
-
                     var tbodyReserv = $("#reservations-table-body");
                     tbodyReserv.empty(); // Clear any existing rows
 
@@ -157,7 +155,6 @@
                 },
                 error: function (xhr, status, error) {
                     console.error('Error:', error);
-                    // Handle errors if any
                 }
             });
 
@@ -183,7 +180,7 @@
                 data: JSON.stringify(request),
                 success: function (data, status, xhr) {
                     var tbody = $("#flights-table-body");
-                    tbody.empty(); // Clear any existing rows
+                    tbody.empty();
                     let i = 0;
                     data.forEach(function (flight) {
                         ++i;
@@ -215,18 +212,33 @@
         });
 
         function checkSession() {
-            var nav = $("#nav");
-            if (Object.keys(sessionStorage).length == 0) {
-                nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
-            } else if (sessionStorage.getItem("role") == 'PUTNIK') {
-                nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
-            }
-            else {
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
-            }
-        }
+            $.ajax({
+                url: "../api/session/isLoggedIn",
+                method: "GET",
+                success: function (data, status) {
+                    if (data !== false) {
+                        sessionStorage.setItem("token", data.token);
+                        sessionStorage.setItem("role", data.role);
+                    }
+                    var nav = $("#nav");
 
+                    if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
+                        window.location = "admin-airlines.html"
+                    }
+                    if (Object.keys(sessionStorage).length == 0) {
+                        nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
+                    } else if (sessionStorage.getItem("role") == 'PUTNIK') {
+                        nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
+                        nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                    }
+                    else {
+                        nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                    }
+
+
+                },
+            });
+        }
 
         function loadUser() {
             $.ajax({
@@ -249,6 +261,8 @@
 
                     var i = 0;
                     reservationList.forEach(function (reservation) {
+
+                        console.log(reservation);
                         i++;
                         var flight = reservation.Flight;
                         if (clear === "clearReservations" || clear === "init") {

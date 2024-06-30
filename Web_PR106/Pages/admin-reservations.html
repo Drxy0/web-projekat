@@ -34,24 +34,39 @@
         </tbody>
     </table>
     <script>
-        const flightStatus = ['AKTIVAN', 'OTKAZAN', 'ZAVRSEN']
-
+        const flightStatus = ['AKTIVAN', 'OTKAZAN', 'ZAVRSEN'];
+        const ReservationStatus = ['KREIRANA', 'ODOBRENA', 'OTKAZANA', 'ZAVRSENA'];
         function checkSession() {
-            var nav = $("#nav");
-            if (Object.keys(sessionStorage).length == 0) {
-                nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
-            } else if (sessionStorage.getItem("role") == 'PUTNIK') {
-                nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
-            } else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
-                nav.append(`<a href="admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
-                nav.append(`<a href="admin-flights.html" class="navbar-brand">Letovi</a>`);
-                nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
-                nav.append(`<a href="admin-reviews.html" class="navbar-brand">Recenzije</a>`);
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
-            } else {
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
-            }
+            $.ajax({
+                url: "../api/session/isLoggedIn",
+                method: "GET",
+                success: function (data, status) {
+                    if (data !== false) {
+                        sessionStorage.setItem("token", data.token);
+                        sessionStorage.setItem("role", data.role);
+                    }
+                    var nav = $("#nav");
+                    var navBrand = nav.find('.navbar-brand')
+                    if (Object.keys(sessionStorage).length == 0) {
+                        window.location = "../Index.html";
+                        nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
+                    } else if (sessionStorage.getItem("role") == 'PUTNIK') {
+                        window.location = "../Index.html";
+                        nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
+                        nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                    } else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
+                        navBrand.remove();
+
+                        nav.append(`<a href="admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
+                        nav.append(`<a href="admin-flights.html" class="navbar-brand">Letovi</a>`);
+                        nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
+                        nav.append(`<a href="admin-reviews.html" class="navbar-brand">Recenzije</a>`);
+                        nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                    } else {
+                        nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                    }
+                },
+            });
         }
 
         $(document).ready(function () {
@@ -70,31 +85,33 @@
                         const formattedDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0], timeParts[0], timeParts[1]);
                         const currentDate = new Date();
                         var timeDifferenceInHours = (formattedDate - currentDate) / 36e5; // 36e5 is 60 * 60 * 1000
-
                         var otkazanaDisabled = timeDifferenceInHours < 24 ? "disabled" : "";
+
                         var selectDisabled = reservation.Status === 3 ? "disabled" : "";
+                        var selectedStatus = reservation.Status === 3 && otkazanaDisabled ? "ZAVRSENA" : ReservationStatus[reservation.Status];
 
                         var row = `<tr>
-                                <td>${index + 1}</td>
-                                <td>${reservation.Id}</td>
-                                <td>${reservation.Flight.Id}</td>
-                                <td>${reservation.Flight.StartDestination}</td>
-                                <td>${reservation.Flight.EndDestination}</td>
-                                <td>${reservation.Flight.ArrivalDateTime}</td>
-                                <td>${reservation.Flight.DepartureDateTime}</td>
-                                <td>${flightStatus[reservation.Flight.Status]}</td>
+                                        <td>${index + 1}</td>
+                                        <td>${reservation.Id}</td>
+                                        <td>${reservation.Flight.Id}</td>
+                                        <td>${reservation.Flight.StartDestination}</td>
+                                        <td>${reservation.Flight.EndDestination}</td>
+                                        <td>${reservation.Flight.ArrivalDateTime}</td>
+                                        <td>${reservation.Flight.DepartureDateTime}</td>
+                                        <td>${flightStatus[reservation.Flight.Status]}</td>
 
-                                <td>${reservation.User}</td>
-                                <td>${reservation.NumberOfPassengers}</td>
-                                <td>${reservation.Price}</td>
-                                <td>
-                                    <select id="status-${reservation.Id}" name="status" ${selectDisabled}>
-                                        <option value="KREIRANA" ${reservation.Status === 0 ? 'selected' : ''}>KREIRANA</option>
-                                        <option value="ODOBRENA" ${reservation.Status === 1 ? 'selected' : ''}>ODOBRENA</option>
-                                        <option value="OTKAZANA" ${otkazanaDisabled} ${reservation.Status === 2 ? 'selected' : ''}>OTKAZANA</option>
-                                    </select>
-                                </td>
-                            </tr>`;
+                                        <td>${reservation.User}</td>
+                                        <td>${reservation.NumberOfPassengers}</td>
+                                        <td>${reservation.Price}</td>
+                                        <td>
+                                            <select id="status-${reservation.Id}" name="status" ${selectDisabled}>
+                                                <option value="KREIRANA" ${selectedStatus === "KREIRANA" ? 'selected' : ''}>KREIRANA</option>
+                                                <option value="ODOBRENA" ${selectedStatus === "ODOBRENA" ? 'selected' : ''}>ODOBRENA</option>
+                                                <option value="OTKAZANA" ${selectedStatus === "OTKAZANA" ? 'selected' : ''} ${otkazanaDisabled}>OTKAZANA</option>
+                                                <option value="ZAVRSENA" ${selectedStatus === "ZAVRSENA" ? 'selected' : ''} ${otkazanaDisabled ? '' : 'disabled'}>ZAVRSENA</option>
+                                            </select>
+                                        </td>
+                                    </tr>`;
                         tbody.append(row);
 
                         $(`#status-${reservation.Id}`).on('change', function () {

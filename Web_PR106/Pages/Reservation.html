@@ -38,16 +38,26 @@
         });
 
         function checkSession() {
-            var nav = $("#nav");
-            if (Object.keys(sessionStorage).length == 0) {
-                nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
-            } else if (sessionStorage.getItem("role") == 'PUTNIK') {
-                nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
-            }
-            else {
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
-            }
+            $.ajax({
+                url: "../api/session/isLoggedIn",
+                method: "GET",
+                success: function (data, status) {
+                    if (data !== false) {
+                        sessionStorage.setItem("token", data.token);
+                        sessionStorage.setItem("role", data.role);
+                    }
+                    var nav = $("#nav");
+                    if (Object.keys(sessionStorage).length == 0) {
+                        nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
+                    } else if (sessionStorage.getItem("role") == 'PUTNIK') {
+                        nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
+                        nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                    }
+                    else {
+                        nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                    }
+                },
+            });
         }
 
         function canCancelReservation() {
@@ -81,7 +91,7 @@
                 contentType: 'application/json',
                 data: JSON.stringify(request),
                 success: function (response) {
-                    window.location = 'Index.html';
+                    window.location = '../Index.html';
                 },
                 error: function (xhr, status, error) {
                     if (xhr.status === 412) {
@@ -113,7 +123,7 @@
                 data: JSON.stringify(request),
                 success: function (data, status, xhr) {
                     if (xhr.status === 200) {
-                        window.location = "Index.html";
+                        window.location = "../Index.html";
                     }
                 },
                 error: function (xhr, status, error) {

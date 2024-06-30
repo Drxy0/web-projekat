@@ -51,7 +51,7 @@ namespace Web_PR106
 
 		public static int SetFlightId()
 		{
-			int id = 0;
+			int id = 1;
 			bool isUnique = false;
 
 			while (!isUnique)
@@ -83,16 +83,39 @@ namespace Web_PR106
 			return id;
 		}
 
-		public static void SaveAirlineData()
+		public static int SetReservationId()
 		{
-			foreach (Airline airline in Airlines)
+			int id = 1;
+			bool isUnique = false;
+
+			while (!isUnique)
 			{
-				foreach (Flight flight in airline.ProvidedFlights)
+				isUnique = true;
+				foreach (User user in Users)
 				{
-					Trace.WriteLine(flight.Price);
+					foreach (Reservation res in user.ReservationList)
+					{
+						if (res.Id == id)
+						{
+							isUnique = false;
+							break;
+						}
+					}
+					if (!isUnique)
+					{
+						break;
+					}
+				}
+				if (!isUnique)
+				{
+					id++;
 				}
 			}
+			return id;
+		}
 
+		public static void SaveAirlineData()
+		{
 			XmlSerializer serializer = new XmlSerializer(typeof(List<Airline>), new XmlRootAttribute("Airlines"));
 			string relativePath = "~/Assets/test_aviokompanije.xml";
 			string filePath = HttpContext.Current.Server.MapPath(relativePath);
@@ -134,6 +157,7 @@ namespace Web_PR106
 					}
 				}
 			}
+			//SaveAirlineData();
 		}
 		public static void LoadUsers()
 		{

@@ -4,29 +4,56 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../Content/bootstrap.min.css">
     <script src="../Scripts/jquery-1.10.2.js"></script>
-    <title>Rezencije</title>
+    <title>Recenzije</title>
     <style>
         .card {
             display: flex;
             flex-direction: column;
-            height: 100%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
             .card .card-body {
                 flex-grow: 1;
             }
 
-        .card-footer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: auto; /* Pushes the footer to the bottom */
-            padding: 10px;
+            .card .card-img-top {
+                max-height: 200px; /* Limiting the maximum height of the image */
+                object-fit: cover; /* Ensures the image covers the entire container */
+            }
+
+        .profile-header {
+            margin: 20px;
         }
 
-            .card-footer .btn {
-                margin: 0 10px; /* Adjust spacing between buttons */
+            .profile-header h1 {
+                font-size: 2.5rem;
+                font-weight: bold;
+                color: #333;
+                margin-bottom: 20px;
             }
+
+        .reviews-header h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .profile-header h3 {
+            font-size: 1.75rem;
+            color: #555;
+        }
+
+        .profile-header p {
+            font-size: 1.2rem;
+            color: #777;
+        }
+
+        .navbar {
+            margin-bottom: 20px;
+        }
     </style>
 
 </head>
@@ -50,21 +77,36 @@
         });
 
         function checkSession() {
-            var nav = $("#nav");
-            if (Object.keys(sessionStorage).length == 0) {
-                nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
-            } else if (sessionStorage.getItem("role") == 'PUTNIK') {
-                nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
-            } else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
-                nav.append(`<a href="admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
-                nav.append(`<a href="admin-flights.html" class="navbar-brand">Letovi</a>`);
-                nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
-                nav.append(`<a href="admin-reviews.html" class="navbar-brand">Recenzije</a>`);
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
-            } else {
-                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
-            }
+            $.ajax({
+                url: "../api/session/isLoggedIn",
+                method: "GET",
+                success: function (data, status) {
+                    if (data !== false) {
+                        sessionStorage.setItem("token", data.token);
+                        sessionStorage.setItem("role", data.role);
+                    }
+                    var nav = $("#nav");
+                    var navBrand = nav.find('.navbar-brand')
+                    if (Object.keys(sessionStorage).length == 0) {
+                        window.location = "../Index.html";
+                        nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
+                    } else if (sessionStorage.getItem("role") == 'PUTNIK') {
+                        window.location = "../Index.html";
+                        nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
+                        nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                    } else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
+                        navBrand.remove();
+
+                        nav.append(`<a href="admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
+                        nav.append(`<a href="admin-flights.html" class="navbar-brand">Letovi</a>`);
+                        nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
+                        nav.append(`<a href="admin-reviews.html" class="navbar-brand">Recenzije</a>`);
+                        nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                    } else {
+                        nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+                    }
+                },
+            });
         }
 
         function getAirlines() {
@@ -76,28 +118,35 @@
                     var container = $('#airlineReviewsContainer');
                     container.empty();
 
-                    data.forEach(function (airline) {
-                        var header = `<h2>${airline.Name}</h2>`;
+                    data.forEach(function (airline, index) {
+                        if (index == 0) {
+                            var header = `<h2>${airline.Name}</h2>`;
+                        }
+                        else {
+                            var header = `<hr/><h2>${airline.Name}</h2>`;
+                        }
+
                         container.append(header);
 
                         var row = $('<div class="row"></div>');
                         airline.Reviews.forEach(function (review) {
+                            var cardClass = review.Picture ? 'card' : 'card no-image'; // Check if there is a picture
                             var card = `
-                                    <div class="col-md-4 mb-4">
-                                        <div class="card">
-                                            ${review.Picture ? `<img class="card-img-top" src="${review.Picture}">` : ''}
-                                            <div class="card-body">
-                                                <h6 class="card-subtitle mb-2 text-muted">${review.Reviewer}</h6>
-                                                <h5 class="card-title">${review.Title}</h5>
-                                                <p class="card-text">${review.Description}</p>
-                                            </div>
-                                            <div class="card-footer">
-                                                <a class="btn btn-success approve" onclick="approveReview('${review.Id}', this)">Odobri</a>
-                                                <a class="btn btn-danger reject" onclick="rejectReview('${review.Id}', this)">Odbij</a>
+                                        <div class="col-md-4 mb-4">
+                                            <div class="${cardClass}">
+                                                ${review.Picture ? `<img class="card-img-top" src="${review.Picture}">` : ''}
+                                                <div class="card-body">
+                                                    <h6 class="card-subtitle mb-2 text-muted">${review.Reviewer}</h6>
+                                                    <h5 class="card-title">${review.Title}</h5>
+                                                    <p class="card-text">${review.Description}</p>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <a class="btn btn-success approve" onclick="approveReview('${review.Id}', this)">Odobri</a>
+                                                    <a class="btn btn-danger reject" onclick="rejectReview('${review.Id}', this)">Odbij</a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                `;
+                                    `;
                             row.append(card);
 
                             if (review.Status === 1) {
@@ -109,7 +158,6 @@
                         });
                         container.append(row);
                     });
-
                 },
                 error: function (xhr, status, error) {
                     console.error('Error:', status, error);

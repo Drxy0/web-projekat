@@ -226,7 +226,8 @@ namespace Web_PR106.Controllers
 					Flight = selectedFlight,
 					NumberOfPassengers = numberOfPassengers,
 					Price = selectedFlight.Price * numberOfPassengers,
-					Status = ReservationStatus.KREIRANA
+					Status = ReservationStatus.KREIRANA,
+					Id = Global.SetReservationId()
 				};
 
 				reservationList.Add(newReservation);

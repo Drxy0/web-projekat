@@ -190,14 +190,23 @@
                     };
 
                     $.ajax({
-                        url: '/api/users/addUser',
+                        url: '../api/users/addUser',
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify(formData),
                         success: function (response) {
-                            sessionStorage.setItem("token", formData.username);
-                            sessionStorage.setItem("role", "PUTNIK");
-                            window.location.href = "../Index.html";
+                            $.ajax({
+                                url: "../api/session/logIn",
+                                type: "POST",
+                                contentType: 'application/json',
+                                data: JSON.stringify(formData),
+                                success: function (data) {
+                                    window.location.href = "../Index.html";
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    window.location.href = "../Index.html";
+                                }
+                            });
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
                             showAlert('registerAlert', "Error adding user. Please try again.");
