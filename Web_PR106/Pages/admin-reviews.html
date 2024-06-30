@@ -32,13 +32,8 @@
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323;">
-<<<<<<< HEAD:Web_PR106/admin-reviews.html
-        <a href="Index.html" class="navbar-brand">
-            Home
-=======
         <a href="../Index.html" class="navbar-brand">
             Početna
->>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-reviews.html
         </a>
     </nav>
 
@@ -51,7 +46,26 @@
 
         $(document).ready(function () {
             getAirlines();
+            checkSession();
         });
+
+        function checkSession() {
+            var nav = $("#nav");
+            if (Object.keys(sessionStorage).length == 0) {
+                nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
+            } else if (sessionStorage.getItem("role") == 'PUTNIK') {
+                nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            } else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
+                nav.append(`<a href="admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
+                nav.append(`<a href="admin-flights.html" class="navbar-brand">Letovi</a>`);
+                nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
+                nav.append(`<a href="admin-reviews.html" class="navbar-brand">Recenzije</a>`);
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            } else {
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            }
+        }
 
         function getAirlines() {
             $.ajax({
@@ -69,20 +83,21 @@
                         var row = $('<div class="row"></div>');
                         airline.Reviews.forEach(function (review) {
                             var card = `
-                                <div class="col-md-4 mb-4">
-                                    <div class="card">
-                                        ${review.Picture ? `<img class="card-img-top" src="${review.Picture}">` : ''}
-                                        <div class="card-body">
-                                            <h5 class="card-title">${review.Title}</h5>
-                                            <p class="card-text">${review.Description}</p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <a class="btn btn-success approve" onclick="approveReview('${review.Id}', this)">Odobri</a>
-                                            <a class="btn btn-danger reject" onclick="rejectReview('${review.Id}', this)">Odbij</a>
+                                    <div class="col-md-4 mb-4">
+                                        <div class="card">
+                                            ${review.Picture ? `<img class="card-img-top" src="${review.Picture}">` : ''}
+                                            <div class="card-body">
+                                                <h6 class="card-subtitle mb-2 text-muted">${review.Reviewer}</h6>
+                                                <h5 class="card-title">${review.Title}</h5>
+                                                <p class="card-text">${review.Description}</p>
+                                            </div>
+                                            <div class="card-footer">
+                                                <a class="btn btn-success approve" onclick="approveReview('${review.Id}', this)">Odobri</a>
+                                                <a class="btn btn-danger reject" onclick="rejectReview('${review.Id}', this)">Odbij</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            `;
+                                `;
                             row.append(card);
 
                             if (review.Status === 1) {

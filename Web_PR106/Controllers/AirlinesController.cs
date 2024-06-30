@@ -17,27 +17,13 @@ namespace Web_PR106.Controllers
 {
 	[RoutePrefix("api/airlines")]
 	public class AirlinesController : ApiController
-    {
+	{
 		[HttpGet]
-        public IHttpActionResult Get()
-        {
-            return Ok(Global.Airlines);
-        }
+		public IHttpActionResult Get()
+		{
+			return Ok(Global.Airlines);
+		}
 
-        [HttpPost]
-        public IHttpActionResult Post([FromBody]Airline airline)
-        {
-            if (airline != null)
-            {
-                Global.Airlines.Add(airline);
-                return Ok();
-            }
-            
-            return BadRequest();
-        }
-
-<<<<<<< HEAD
-=======
 		[HttpPost]
 		public IHttpActionResult Post([FromBody] Airline airline)
 		{
@@ -54,7 +40,6 @@ namespace Web_PR106.Controllers
 			}
 			return BadRequest("Airline with that id already exists.");
 		}
->>>>>>> 5b1f20d (Add data persistance)
 
 		[HttpPost]
 		[Route("adminFilterAirlines")]
@@ -67,15 +52,17 @@ namespace Web_PR106.Controllers
 			}
 			List<Airline> filteredAirlines = new List<Airline>(Global.Airlines);
 
-			string name = searchFilter["name"]?.ToString(); // Accessing "name" property from JSON
-			string address = searchFilter["address"]?.ToString(); // Accessing "address" property from JSON
-			string contactInfo = searchFilter["contactInfo"]?.ToString(); // Accessing "contactInfo" property from JSON
+			string name = searchFilter["name"]?.ToString();
+			string address = searchFilter["address"]?.ToString();
+			string email = searchFilter["email"]?.ToString();
+			string phone = searchFilter["phone"]?.ToString();
 
-			
+
 			//if form is left unfilled then reset
 			if (string.IsNullOrEmpty(name) &&
 				string.IsNullOrEmpty(address) &&
-				string.IsNullOrEmpty(contactInfo))
+				string.IsNullOrEmpty(email) &&
+				string.IsNullOrEmpty(phone))
 			{
 				return Ok(Global.Airlines);
 			}
@@ -84,7 +71,7 @@ namespace Web_PR106.Controllers
 			{
 				foreach (Airline airline in Global.Airlines)
 				{
-					if (airline.Name != name)
+					if (!airline.Name.Contains(name))
 					{
 						filteredAirlines.Remove(airline);
 					}
@@ -95,17 +82,35 @@ namespace Web_PR106.Controllers
 			{
 				foreach (Airline airline in Global.Airlines)
 				{
-					if (airline.Address != address)
+					if (!airline.Address.Contains(address))
 					{
 						filteredAirlines.Remove(airline);
 					}
 				}
 			}
-			if (!string.IsNullOrEmpty(contactInfo))
+
+			if (!string.IsNullOrEmpty(email))
 			{
 				foreach (Airline airline in Global.Airlines)
 				{
-					if (airline.ContactInfo != contactInfo)
+					int emailStartIndex = airline.ContactInfo.IndexOf("email: ") + "email: ".Length;
+					int emailEndIndex = airline.ContactInfo.IndexOf("/phone: ");
+					string airlineEmail = airline.ContactInfo.Substring(emailStartIndex, emailEndIndex - emailStartIndex).Trim();
+
+					if (!airlineEmail.Contains(email))
+					{
+						filteredAirlines.Remove(airline);
+					}
+				}
+			}
+
+			if (!string.IsNullOrEmpty(phone))
+			{
+				foreach (Airline airline in Global.Airlines)
+				{
+					int phoneStartIndex = airline.ContactInfo.IndexOf("/phone: ") + "/phone: ".Length;
+					string airlinePhone = airline.ContactInfo.Substring(phoneStartIndex).Trim();
+					if (!airlinePhone.Contains(phone))
 					{
 						filteredAirlines.Remove(airline);
 					}
@@ -116,6 +121,7 @@ namespace Web_PR106.Controllers
 		}
 
 		[HttpDelete]
+		[Route("delete/{id}")]
 		public IHttpActionResult Delete(int id)
 		{
 			var airline = Global.Airlines.FirstOrDefault(u => u.Id == id);
@@ -124,14 +130,10 @@ namespace Web_PR106.Controllers
 				return NotFound();
 			}
 
-<<<<<<< HEAD
-			airline.IsDeleted = true;
-			return Ok();
-=======
 			if (!airline.ProvidedFlights.Any(f => f.Status == FlightStatus.AKTIVAN))
 			{
 				airline.IsDeleted = true;
-				foreach(Flight flight in airline.ProvidedFlights)
+				foreach (Flight flight in airline.ProvidedFlights)
 				{
 					flight.IsDeleted = true;
 					flight.Airline.IsDeleted = true;
@@ -159,7 +161,7 @@ namespace Web_PR106.Controllers
 			bool airlineExists = Global.Airlines.Any(u => u.Id == airline.Id);
 			if (!airlineExists)
 			{
-				return Content(HttpStatusCode.NotFound,"Airline with that id not found.");
+				return Content(HttpStatusCode.NotFound, "Airline with that id not found.");
 			}
 			else
 			{
@@ -171,7 +173,6 @@ namespace Web_PR106.Controllers
 				Global.SaveAirlineData();
 				return Ok();
 			}
->>>>>>> 5b1f20d (Add data persistance)
 		}
 	}
 }

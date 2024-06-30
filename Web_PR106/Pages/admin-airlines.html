@@ -2,19 +2,17 @@
 <html>
 <head>
     <meta charset="utf-8" />
-<<<<<<< HEAD:Web_PR106/admin-airlines.html
-    <link rel="stylesheet" href="Content/bootstrap.min.css">
-    <script src="Scripts/jquery-1.10.2.js"></script>
-    <title>Sve aviokompanije</title>
-=======
     <link rel="stylesheet" href="../Content/bootstrap.min.css">
     <script src="../Scripts/jquery-1.10.2.js"></script>
     <title>Aviokompanije</title>
->>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-airlines.html
     <style>
-        body {
-            padding-top: 50px;
+        .centered-form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40vh;
         }
+
         #addForm, #editForm {
             max-width: 80%;
             padding: 20px;
@@ -23,9 +21,11 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         #editForm {
             margin-top: 50px;
         }
+
         #default, #edit-airline {
             padding: 10px;
         }
@@ -43,6 +43,11 @@
             <h2 class="text-center">Dodaj Aviokopmaniju</h2>
             <div id="loginAlert" class="alert alert-danger" hidden role="alert"></div>
             <div class="form-group">
+                <label for="id">Id</label>
+                <input type="number" class="form-control" id="airline-id" name="id" required min="1">
+                <small id="idError-addForm" style="color:red;"></small>
+            </div>
+            <div class="form-group">
                 <label for="name">Naziv</label>
                 <input type="text" class="form-control" id="airline-name" name="name" required>
             </div>
@@ -52,15 +57,15 @@
             </div>
             <div class="form-group">
                 <label for="airline-contact-info">Kontakt</label>
-                <input type="text" class="form-control" id="airline-contact-info" name="contactInfo" required>
+                <input type="text" class="form-control" id="airline-contact-info" name="contactInfo" placeholder="email@mail.com +12345" required>
             </div>
             <div class="text-center">
                 <button type="submit" style="width:200px;" class="btn btn-success">Dodaj</button>
             </div>
         </form>
 
-        <br/>
-        <br/>
+        <br />
+        <br />
 
         <h2>Sve Aviokompanije</h2>
         <form id="filter-airlines-form" action="../api/airlines/adminFilterAirlines" method="post">
@@ -83,10 +88,18 @@
                 </tr>
                 <tr>
                     <td>
-                        <label>Kontakt</label>
+                        <label>Email: </label>
                     </td>
                     <td>
-                        <input type="text" name="contactInfo" />
+                        <input type="text" name="email" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Telefon: </label>
+                    </td>
+                    <td>
+                        <input type="text" name="phone" />
                     </td>
                 </tr>
                 <tr>
@@ -100,10 +113,11 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
+                    <th scope="col">Id</th>
                     <th scope="col">Naziv</th>
                     <th scope="col">Adresa</th>
-                    <th scope="col">Kontakt</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Telefon</th>
                     <th scope="col">Uredi</th>
                     <th scope="col">Izbriši</th>
                 </tr>
@@ -114,25 +128,6 @@
     </section>
 
     <section id="edit-airline" style="display: none;">
-<<<<<<< HEAD
-        <form id="addForm" action="/api/airlines" method="post">
-            <h2 class="text-center">Dodaj Aviokopmaniju</h2>
-            <div id="loginAlert" class="alert alert-danger" hidden role="alert"></div>
-            <div class="form-group">
-                <label for="name">Naziv</label>
-                <input type="text" class="form-control" id="airline-name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="adress">Adresa</label>
-                <input type="text" class="form-control" id="airline-address" name="address" required>
-            </div>
-            <div class="form-group">
-                <label for="airline-contact-info">Kontakt</label>
-                <input type="text" class="form-control" id="airline-contact-info" name="contactInfo" required>
-            </div>
-            <button type="submit" class="btn btn-success">Uredi</button>
-        </form>
-=======
         <div class="centered-form">
             <form id="editForm" style="max-width: 500px;" action="../api/airlines/edit" method="post" class="col-6">
                 <h2 class="text-center">Uredi Aviokopmaniju</h2>
@@ -154,19 +149,16 @@
                 </div>
             </form>
         </div>
->>>>>>> 5b1f20d (Add data persistance)
     </section>
 
     <script>
         const defaultSection = document.getElementById('default');
         const editAirlineSection = document.getElementById('edit-airline');
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('filter-airlines-form');
+        const addForm = document.getElementById('addForm');
+        const filterForm = document.getElementById('filter-airlines-form');
+        const editForm = document.getElementById('editForm');
+        var editId;
 
-<<<<<<< HEAD
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-=======
         function checkSession() {
             var nav = $("#nav");
             var navBrand = nav.find('.navbar-brand')
@@ -190,45 +182,128 @@
 
         editForm.addEventListener('submit', function (event) {
             event.preventDefault();
->>>>>>> 5b1f20d (Add data persistance)
 
-                const formData = new FormData(form);
-                const jsonData = JSON.stringify(Object.fromEntries(formData));
+            let inputString = document.getElementById('edit-airline-contact-info').value;
+            let parts = inputString.split(' ');
+            let transformedString;
+            if (parts.length === 2) {
+                transformedString = `email: ${parts[0]}/phone: ${parts[1]}`;
+            } else if (parts.length === 1) {
+                transformedString = `email: ${parts[0]}/phone: `;
+            }
+            else {
+                transformedString = 'invalid format';
+            }
 
-                fetch(form.action, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: jsonData
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Assuming data is an array of users; adjust as needed
-                        const tbody = document.getElementById("airlines-table-body");
-                        tbody.innerHTML = ''; // Clear existing table rows
+            const formData = {
+                id: editId,
+                name: document.getElementById('edit-airline-name').value,
+                address: document.getElementById('edit-airline-address').value,
+                contactInfo: transformedString,
+            };
+            const jsonData = JSON.stringify(formData);
 
-                        data.forEach((user, index) => {
-                            const row = `
+            $.ajax({
+                url: editForm.action,
+                type: 'POST',
+                contentType: 'application/json',
+                data: jsonData,
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error:', textStatus, errorThrown);
+                }
+            })
+        });
+
+
+        filterForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(filterForm);
+            const jsonData = JSON.stringify(Object.fromEntries(formData));
+
+            $.ajax({
+                url: filterForm.action,
+                type: 'POST',
+                contentType: 'application/json',
+                data: jsonData,
+                success: function (data) {
+                    const tbody = $('#airlines-table-body');
+                    tbody.empty();
+
+                    data.forEach((airline, index) => {
+                        let contactInfo = airline.ContactInfo;
+                        let email = contactInfo.split('email: ')[1].split('/phone:')[0].trim();
+                        let phone = contactInfo.split('/phone: ')[1].trim();
+
+                        const row = `
                                     <tr>
                                         <td>${index + 1}</td>
-                                        <td>${user.Name}</td>
-                                        <td>${user.Address}</td>
-                                        <td>${user.ContactInfo}</td>
+                                        <td>${airline.Id}</td>
+                                        <td><a href="Airline.html?airline=${encodeURIComponent(airline.Name)}">${airline.Name}</a></td>
+                                        <td>${airline.Address}</td>
+                                        <td>${email}</td>
+                                        <td>${phone}</td>
                                         <td><button type="submit" class="btn btn-primary" onclick="editAirline()">Uredi</button></td>
                                         <td><button type="submit" class="btn btn-danger" onclick="deleteAirline()">Izbriši</button></td>
                                     </tr>`;
-                            tbody.innerHTML += row;
-                        });
-
-                        form.reset();
+                        tbody.append(row);
                     });
+
+                    filterForm.reset();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error:', textStatus, errorThrown);
+                    alert('Network response was not ok');
+                    filterForm.reset();
+                }
             });
+
+        });
+
+        addForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            let inputString = document.getElementById('airline-contact-info').value;
+
+            let parts = inputString.split(' ');
+            let transformedString;
+
+            if (parts.length === 2) {
+                transformedString = `email: ${parts[0]}/phone: ${parts[1]}`;
+            } else if (parts.length === 1) {
+                transformedString = `email: ${parts[0]}/phone: `;
+            }
+            else {
+                transformedString = 'invalid format';
+            }
+
+            const formData = {
+                id: document.getElementById('airline-id').value,
+                name: document.getElementById('airline-name').value,
+                address: document.getElementById('airline-address').value,
+                contactInfo: transformedString,
+            };
+            const jsonData = JSON.stringify(formData);
+
+            $.ajax({
+                url: addForm.action,
+                type: 'POST',
+                contentType: 'application/json',
+                data: jsonData,
+                success: function (data) {
+                    addForm.reset();
+                    loadAirlines();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error:', textStatus, errorThrown);
+                    document.getElementById('idError-addForm').innerHTML = "Aviokompanija sa tim id vec postoji.";
+                    addForm.reset();
+                }
+            });
+
         });
 
         function loadAirlines() {
@@ -238,18 +313,29 @@
                 success: function (data, status) {
                     var airlines = data;
                     var tbody = $("#airlines-table-body");
-                    tbody.empty(); // Clear any existing rows
+                    tbody.empty();
 
                     airlines.forEach(function (airline, index) {
+                        if (airline.IsDeleted === true) {
+                            return;
+                        }
+
+                        let hasActiveFlights = airline.ProvidedFlights.some(Flight => Flight.Status === 0);
+                        let deleteButtonDisabled = hasActiveFlights ? 'disabled' : '';
+
                         var contactInfo = airline.ContactInfo;
-                        var email = contactInfo.split('email: ')[1].split('/phone:')[0].trim(); // Extract email from ContactInfo
+                        let email = contactInfo.split('email: ')[1].split('/phone:')[0].trim(); // Extract email from ContactInfo
+                        let phone = contactInfo.split('/phone: ')[1].trim();
                         var row = `<tr>
-                            <td>${index + 1}</td>
-                            <td>${airline.Name}</td>
-                            <td>${email}</td>
-                            <td><button type="button" class="btn btn-primary" onclick="editAirline()">Uredi</button></td>
-                            <td><button type="button" class="btn btn-danger" onclick="deleteAirline()">Izbriši</button></td>
-                           </tr>`;
+                                <td>${index + 1}</td>
+                                <td>${airline.Id}</td>
+                                <td><a href="Airline.html?airline=${encodeURIComponent(airline.Name)}">${airline.Name}</a></td>
+                                <td>${airline.Address}</td>
+                                <td>${email}</td>
+                                <td>${phone}</td>
+                                <td><button type="button" class="btn btn-primary" onclick="editAirline('${airline.Id}', '${airline.Name}', '${airline.Address}', '${email}', '${phone}')">Uredi</button></td>
+                                <td><button type="button" class="btn btn-danger" onclick="deleteAirline(${airline.Id})" ${deleteButtonDisabled}>Izbriši</button></td>
+                               </tr>`;
                         tbody.append(row);
                     });
                 },
@@ -259,21 +345,26 @@
             });
         }
 
-        function deleteAirline() {
+        function deleteAirline(id) {
             $.ajax({
                 url: `../api/airlines/delete/${id}`,
                 type: 'DELETE',
                 contentType: 'application/json',
                 success: function (data) {
-                    console.log('Airline deleted successfully');
+                    location.reload();
                 },
                 error: function (xhr, status, error) {
-                    console.error('Error deleting airline:', error);
+                    console.error('Error deleting airline:', xhr.responseText);
                 }
             });
         }
 
-        function editAirline() {
+        function editAirline(id, name, address, email, phone) {
+            editId = id;
+            document.getElementById('edit-airline-name').value = name;
+            document.getElementById('edit-airline-address').value = address;
+            document.getElementById('edit-airline-contact-info').value = email + " " + phone;
+
             defaultSection.style.display = 'none';
             editAirlineSection.style.display = 'block';
         }

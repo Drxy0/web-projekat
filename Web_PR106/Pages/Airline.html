@@ -3,62 +3,102 @@
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../Content/bootstrap.min.css">
-    <title>Airline profile</title>
-<<<<<<< HEAD:Web_PR106/Airline.html
-    <script src="Scripts/jquery-1.10.2.js"></script>
-=======
+    <title>Airline Profile</title>
     <script src="../Scripts/jquery-1.10.2.js"></script>
 
->>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/Airline.html
     <style>
-        body{
-            padding-top:50px;
+        .card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+            .card .card-body {
+                flex-grow: 1;
+            }
+
+        .profile-header {
+            margin: 20px;
+        }
+
+            .profile-header h1 {
+                font-size: 2.5rem;
+                font-weight: bold;
+                color: #333;
+                margin-bottom: 20px;
+            }
+
+        .reviews-header h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .profile-header h3 {
+            font-size: 1.75rem;
+            color: #555;
+        }
+
+        .profile-header p {
+            font-size: 1.2rem;
+            color: #777;
+        }
+
+        .navbar {
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
-<<<<<<< HEAD:Web_PR106/Airline.html
-        <a href="Index.html#table" class="navbar-brand">
-            Letovi
-        </a>
-        <a href="#airlines" class="navbar-brand">
-            Aviokompanije
-        </a>
-        <a href="MyFlights.html" class="navbar-brand">
-            Moji Letovi
-=======
-        <a href="../Index.html" class="navbar-brand">
-            Početna
->>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/Airline.html
-        </a>
+    <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323;">
+        <a href="../Index.html" class="navbar-brand">Početna</a>
     </nav>
 
-
-    <div style="margin-left:20px">
+    <div class="profile-header">
         <h1 id="airlineName">Airline Name</h1>
-        <h3 id="address">Adress</h3>
+        <h3 id="address">Address</h3>
         <h3 id="email">Email: </h3>
         <h3 id="phone">Phone: </h3>
     </div>
 
-    <div style="margin-top:100px">
+    <hr>
+
+    <div class="reviews-header" style="margin-left:20px">
         <h2>Reviews</h2>
-        <div id="reviewsList" class="list-group">
+        <div class="container mt-5">
+            <section id="airlineReviewsContainer">
+            </section>
         </div>
     </div>
 
     <script>
+
+        function checkSession() {
+            var nav = $("#nav");
+            if (Object.keys(sessionStorage).length == 0) {
+                nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
+            } else if (sessionStorage.getItem("role") == 'PUTNIK') {
+                nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            } else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
+                nav.append(`<a href="admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
+                nav.append(`<a href="admin-flights.html" class="navbar-brand">Letovi</a>`);
+                nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
+                nav.append(`<a href="admin-reviews.html" class="navbar-brand">Recenzije</a>`);
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            } else {
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            }
+        }
+
         $(document).ready(function () {
+            checkSession();
             var queryString = window.location.search;
             var urlParams = new URLSearchParams(queryString);
             var airlineName = urlParams.get('airline');
             document.querySelector("#airlineName").innerHTML = airlineName;
 
-<<<<<<< HEAD:Web_PR106/Airline.html
-            $.get("api/airlines", function (data, status) {
-                if (status === 'success') {
-=======
             $.ajax({
                 url: '../api/airlines',
                 type: 'GET',
@@ -66,39 +106,56 @@
                     var container = $('#airlineReviewsContainer');
                     container.empty();
 
->>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/Airline.html
                     data.forEach(function (airline) {
                         if (airline.Name == airlineName) {
                             document.querySelector("#address").innerHTML = airline.Address;
-                            document.querySelector("#email").innerHTML += airline.ContactInfo.split('/phone:')[0].split('email: ')[1];
-                            document.querySelector("#phone").innerHTML += airline.ContactInfo.split('/phone:')[1];
+                            var contactInfoParts = airline.ContactInfo.split('/phone:');
+                            document.querySelector("#email").innerHTML += contactInfoParts[0].split('email: ')[1];
+                            document.querySelector("#phone").innerHTML += contactInfoParts[1];
 
-                            airline.Reviews.forEach(review => {
+                            var row = $('<div class="row"></div>');
+                            airline.Reviews.forEach(function (review) {
                                 if (review.Status === 1) {
-                                    $("#reviewsList").append(
-                                        `
-                                            <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                                                <div class="d-flex w-100 justify-content-between list-group-item list-group-item-action active">
-                                                    <h5 class="mb-1">${review.Reviewer}</h5>
-                                                    <h4 class="mb-1">${review.Title}</h4>
-                                                    <p>${review.Description}</p>
-                                                    <img style="width:50px" src="Assets/comment_placeholder.png" />
-                                                </div>
-                                            </a>
-                                            <br/>`
-                                    );
+                                    var card = `
+                                                                    <div class="col-md-4 mb-4">
+                                                                        <div class="card">
+                                                                            <img class="card-img-top" src="${review.Picture}">
+                                                                            <div class="card-body">
+                                                                                <h5 class="card-title">${review.Title}</h5>
+                                                                                <h6 class="card-subtitle mb-2 text-muted">${review.Reviewer}</h6>
+                                                                                <p class="card-text">${review.Description}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                `;
+                                    row.append(card);
+                                }
+                                if (sessionStorage.getItem("role") == 'ADMINISTRATOR' && review.Status === 2) {
+                                    var card = `
+                                                                    <div class="col-md-4 mb-4">
+                                                                        <div class="card">
+                                                                            <img class="card-img-top" src="${review.Picture}">
+                                                                            <div class="card-body">
+                                                                                <h5 class="card-title">${review.Title}</h5>
+                                                                                <h6 class="card-subtitle mb-2 text-muted">${review.Reviewer}</h6>
+                                                                                <p class="card-text">${review.Description}</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                `;
+                                    row.append(card);
                                 }
                             });
+                            container.append(row);
                         }
                     });
-                } else {
-                    console.error("Failed to load reviews.");
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error("Failed to load reviews. Error: " + errorThrown);
                 }
             });
+
         });
     </script>
-
-
-
 </body>
 </html>

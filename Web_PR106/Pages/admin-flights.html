@@ -5,11 +5,6 @@
     <link rel="stylesheet" href="../Content/bootstrap.min.css">
     <script src="../Scripts/jquery-1.10.2.js"></script>
     <title>Svi Letovi</title>
-    <style>
-        body {
-            padding-top: 50px;
-        }
-    </style>
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
@@ -25,7 +20,7 @@
             <form id="addForm" action="../api/flight" method="post">
                 <div class="form-group">
                     <label for="available-airlines">Izaberite Aviokompaniju</label>
-                    <input list="available-airlines-list" id="available-airlines" name="airline" required/>
+                    <input list="available-airlines-list" id="available-airlines" name="airline" required />
                     <datalist id="available-airlines-list">
                     </datalist>
                 </div>
@@ -60,7 +55,7 @@
                 </div>
             </form>
         </div>
-
+        <br />
         <h2>Svi Letovi</h2>
         <form id="filter-flights-form" action="../api/flight/adminFilterFlights" method="post">
             <table>
@@ -161,15 +156,9 @@
         const arrivalTimeInput = document.getElementById('arrival-time');
         const arrivalTimeError = document.getElementById('arrivalTimeError');
 
-<<<<<<< HEAD
-        var editDepartureTimeInput = document.getElementById('edit-departure-time');
-        var editArrivalTimeInput = document.getElementById('edit-arrival-time');
-        var editAarrivalTimeError = document.getElementById('edit-arrivalTimeError');
-=======
         const editDepartureTimeInput = document.getElementById('edit-departure-time');
         const editArrivalTimeInput = document.getElementById('edit-arrival-time');
         const editArrivalTimeError = document.getElementById('edit-arrivalTimeError');
->>>>>>> 5b1f20d (Add data persistance)
 
         var reservations = [];
 
@@ -205,122 +194,87 @@
             var arrivalDateTime = new Date(arrivalTimeInput.value);
             if (arrivalDateTime <= departureDateTime) {
                 arrivalTimeError.textContent = 'Vrijeme dolaska mora biti veće od vremena polaska.';
-                event.preventDefault();
+                return;
             } else {
-                arrivalTimeError.textContent = ''; // Clear error message if validation passes
+                arrivalTimeError.textContent = '';
             }
 
-            fetch(addform.action, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
+            $.ajax({
+                url: addForm.action,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    airline: $('#available-airlines').val(),
+                    startDestination: $('#start-destination').val(),
+                    endDestination: $('#end-destination').val(),
+                    departureDateTime: $('#departure-time').val(),
+                    arrivalDateTime: $('#arrival-time').val(),
+                    numberOf_FreeSeats: parseInt($('#free-seats').val()),
+                    price: parseFloat($('#price').val())
+                }),
+                success: function (response) {
+                    loadFlights();
                 },
-                body: JSON.stringify({
-                    airline: document.getElementById('available-airlines').value,
-                    startDestination: document.getElementById('start-destination').value,
-                    endDestination: document.getElementById('end-destination').value,
-                    departureDateTime: document.getElementById('departure-time').value,
-                    arrivalDateTime: document.getElementById('arrival-time').value,
-                    numberOf_FreeSeats: parseInt(document.getElementById('free-seats').value),
-                    price: parseFloat(document.getElementById('price').value)
-                })
-            })
-                .then(response => {
-                    if (response.ok) {
-                        // If submission is successful, refresh the page
-                        loadFlights();
-                    } else {
-                        // Handle errors if needed
-                        console.error('Form submission failed:', response);
-                        alert('Form submission failed. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error during form submission:', error);
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error during form submission:', textStatus, errorThrown);
                     alert('An error occurred during form submission. Please try again.');
-                });
+                }
+            });
+
         });
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();
 
-            // Serialize form data into JSON format
             const formData = new FormData(form);
             const formDataJson = {};
             formData.forEach((value, key) => {
                 formDataJson[key] = value;
             });
 
-<<<<<<< HEAD:Web_PR106/admin-flights.html
-            // Construct the fetch request
-            fetch('/api/flight/adminFilterFlights', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formDataJson)
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-=======
             $.ajax({
                 url: '../api/flight/adminFilterFlights',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(formDataJson),
                 success: function (data) {
->>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-flights.html
                     form.reset();
                     var tbody = $("#flights-table-body");
                     tbody.empty();
+
                     data.forEach(function (flight, index) {
+                        var hasActiveReservations = reservations.some(function (reservation) {
+                            return reservation.Flight.Id === flight.Id &&
+                                (reservation.Status === 0 || reservation.Status === 1);
+                        });
+
+                        var deleteButtonDisabled = hasActiveReservations ? 'disabled' : '';
                         var row = `<tr>
-<<<<<<< HEAD
-                            <td scope="row">${index + 1}</td>
-                            <td>${flight.Id}</td>
-                            <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airline.Name)}">${flight.Airline.Name}</a></td>
-                            <td hidden>${flight.Airline.Id}</td>
-                            <td>${flight.StartDestination}</td>
-                            <td>${flight.EndDestination}</td>
-                            <td>${flight.DepartureDateTime}</td>
-                            <td>${flight.ArrivalDateTime}</td>
-                            <td>${flight.NumberOf_FreeSeats}</td>
-                            <td>${flight.NumberOf_TakenSeats}</td>
-                            <td>$${flight.Price}</td>
-                            <td>${flightStatus[flight.Status]}</td >
-                            <td class="text-center"><button class="btn btn-primary" onclick="editFlight('${flight.Id}')">Uredi</button></td>
-                            <td class="text-center"><button class="btn btn-error" onclick="deleteFlight('${flight.Airline.Id}', '${flight.Id}')">Izbriši</button></td>
-                        </tr>`;
-=======
-                                        <td scope="row">${index + 1}</td>
-                                        <td>${flight.Id}</td>
-                                        <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airline.Name)}">${flight.Airline.Name}</a></td>
-                                        <td hidden>${flight.Airline.Id}</td>
-                                        <td>${flight.StartDestination}</td>
-                                        <td>${flight.EndDestination}</td>
-                                        <td>${flight.DepartureDateTime}</td>
-                                        <td>${flight.ArrivalDateTime}</td>
-                                        <td>${flight.NumberOf_FreeSeats}</td>
-                                        <td>${flight.NumberOf_TakenSeats}</td>
-                                        <td>$${flight.Price}</td>
-                                        <td>${flightStatus[flight.Status]}</td>
-                                        <td class="text-center"><button class="btn btn-primary"
-                                            onclick="editFlight('${flight.Airline.Id}', '${flight.Id}', '${flight.DepartureDateTime}', '${flight.ArrivalDateTime}', '${flight.NumberOf_FreeSeats + flight.NumberOf_TakenSeats}', ${flight.Price})">
-                                            Uredi</button></td>
-                                        <td class="text-center"><button class="btn btn-danger" onclick="deleteFlight('${flight.Airline.Id}', '${flight.Id}')" ${deleteButtonDisabled}>Izbriši</button></td>
-                                    </tr>`;
->>>>>>> df7cbbc (Fix bugs)
+                                            <td scope="row">${index + 1}</td>
+                                            <td>${flight.Id}</td>
+                                            <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airline.Name)}">${flight.Airline.Name}</a></td>
+                                            <td hidden>${flight.Airline.Id}</td>
+                                            <td>${flight.StartDestination}</td>
+                                            <td>${flight.EndDestination}</td>
+                                            <td>${flight.DepartureDateTime}</td>
+                                            <td>${flight.ArrivalDateTime}</td>
+                                            <td>${flight.NumberOf_FreeSeats}</td>
+                                            <td>${flight.NumberOf_TakenSeats}</td>
+                                            <td>$${flight.Price}</td>
+                                            <td>${flightStatus[flight.Status]}</td>
+                                            <td class="text-center"><button class="btn btn-primary"
+                                                onclick="editFlight('${flight.Airline.Id}', '${flight.Id}', '${flight.DepartureDateTime}', '${flight.ArrivalDateTime}', '${flight.NumberOf_FreeSeats + flight.NumberOf_TakenSeats}', ${flight.Price})">
+                                                Uredi</button></td>
+                                            <td class="text-center"><button class="btn btn-danger" onclick="deleteFlight('${flight.Airline.Id}', '${flight.Id}')" ${deleteButtonDisabled}>Izbriši</button></td>
+                                        </tr>`;
                         tbody.append(row);
-                    })
-                })
-                .catch(error => {
-                    console.error('Error filtering flights:', error);
-                });
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error filtering flights:', textStatus, errorThrown);
+                }
+            });
+
         });
 
         editform.addEventListener('submit', function (event) {
@@ -329,10 +283,10 @@
             var departureDateTime = new Date(editDepartureTimeInput.value);
             var arrivalDateTime = new Date(editArrivalTimeInput.value);
             if (arrivalDateTime <= departureDateTime) {
-                arrivalTimeError.textContent = 'Vrijeme dolaska mora biti veće od vremena polaska.';
-                event.preventDefault();
+                editArrivalTimeError.textContent = 'Vrijeme dolaska mora biti veće od vremena polaska.';
+                return;
             } else {
-                editAarrivalTimeError.textContent = ''; // Clear error message if validation passes
+                editArrivalTimeError.textContent = '';
             }
 
             let price = 0.0;
@@ -340,35 +294,6 @@
                 price = parseFloat(document.getElementById('edit-price').value);
             }
 
-<<<<<<< HEAD
-            fetch(editform.action, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    airlineId: sessionStorage.getItem("airlineId"),
-                    flightId: sessionStorage.getItem("flightId"), 
-                    departureDateTime: document.getElementById('edit-departure-time').value,
-                    arrivalDateTime: document.getElementById('edit-arrival-time').value,
-                    numberOf_FreeSeats: parseInt(document.getElementById('edit-free-seats').value),
-                    price: price
-                })
-            })
-                .then(response => {
-                    if (response.ok) {
-                        location.reload();
-                    } else {
-                        // Handle errors if needed
-                        console.error('Form submission failed:', response);
-                        alert('Form submission failed. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error during form submission:', error);
-                    alert('An error occurred during form submission. Please try again.');
-                });
-=======
             $.ajax({
                 url: editForm.action,
                 type: 'POST',
@@ -390,7 +315,6 @@
                 }
             });
 
->>>>>>> 5b1f20d (Add data persistance)
         });
 
 
@@ -406,20 +330,6 @@
         function editFlight(airlineId, flightId, departureDateTime, arrivalDateTime, numberOfSeats, price) {
             sessionStorage.setItem("airlineId", airlineId);
             sessionStorage.setItem("flightId", flightId);
-<<<<<<< HEAD
-            $.get("api/reservation", function (data, status) {
-                let canEditPrice = true;
-                data.forEach(function (reservation) {
-                    if (reservation.Flight.Id == flightId && (reservation.Status == 0 || reservation.Status == 1)) {
-                        canEditPrice = false;
-                    }
-                });
-                let priceFormGroup = document.querySelector('#edit-price').closest('.form-group');
-                if (!canEditPrice) {
-                    if (priceFormGroup) {
-                        priceFormGroup.remove();
-                    }
-=======
 
             setDateTime(departureDateTime, editDepartureTimeInput);
             setDateTime(arrivalDateTime, editArrivalTimeInput);
@@ -455,28 +365,12 @@
                 },
                 error: function (xhr, status, error) {
                     console.error('Error fetching reservations:', status, error);
->>>>>>> 5b1f20d (Add data persistance)
                 }
-
-                var defaultSection = document.getElementById('default');
-                var editSection = document.getElementById('edit-flight');
-                defaultSection.style.display = 'none';
-                editSection.style.display = 'block';
             });
+
         }
 
-
         function loadFlights() {
-<<<<<<< HEAD
-            $.get("api/default", function (data, status) {
-                var tbody = $("#flights-table-body");
-                tbody.empty(); // Clear any existing rows
-                console.log(reservations);
-                data.forEach(function (flight, index) {
-                    var hasActiveReservations = reservations.some(function (reservation) {
-                        return reservation.Flight.Id === flight.Id &&
-                            (reservation.Status === 0 || reservation.Status === 1);
-=======
             $.ajax({
                 url: '../api/flight/getAll',
                 type: 'GET',
@@ -492,85 +386,51 @@
 
                         var deleteButtonDisabled = hasActiveReservations ? 'disabled' : '';
                         var row = `<tr>
-                                        <td scope="row">${index + 1}</td>
-                                        <td>${flight.Id}</td>
-                                        <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airline.Name)}">${flight.Airline.Name}</a></td>
-                                        <td hidden>${flight.Airline.Id}</td>
-                                        <td>${flight.StartDestination}</td>
-                                        <td>${flight.EndDestination}</td>
-                                        <td>${flight.DepartureDateTime}</td>
-                                        <td>${flight.ArrivalDateTime}</td>
-                                        <td>${flight.NumberOf_FreeSeats}</td>
-                                        <td>${flight.NumberOf_TakenSeats}</td>
-                                        <td>$${flight.Price}</td>
-                                        <td>${flightStatus[flight.Status]}</td >
-                                        <td class="text-center"><button class="btn btn-primary"
-                                            onclick="editFlight('${flight.Airline.Id}', '${flight.Id}', '${flight.DepartureDateTime}', '${flight.ArrivalDateTime}', '${flight.NumberOf_FreeSeats + flight.NumberOf_TakenSeats}', ${flight.Price})">
-                                            Uredi</button></td>
-                                        <td class="text-center"><button class="btn btn-danger" onclick="deleteFlight('${flight.Airline.Id}', '${flight.Id}')" ${deleteButtonDisabled}>Izbriši</button></td>
-                                    </tr>`;
+                                            <td scope="row">${index + 1}</td>
+                                            <td>${flight.Id}</td>
+                                            <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airline.Name)}">${flight.Airline.Name}</a></td>
+                                            <td hidden>${flight.Airline.Id}</td>
+                                            <td>${flight.StartDestination}</td>
+                                            <td>${flight.EndDestination}</td>
+                                            <td>${flight.DepartureDateTime}</td>
+                                            <td>${flight.ArrivalDateTime}</td>
+                                            <td>${flight.NumberOf_FreeSeats}</td>
+                                            <td>${flight.NumberOf_TakenSeats}</td>
+                                            <td>$${flight.Price}</td>
+                                            <td>${flightStatus[flight.Status]}</td >
+                                            <td class="text-center"><button class="btn btn-primary"
+                                                onclick="editFlight('${flight.Airline.Id}', '${flight.Id}', '${flight.DepartureDateTime}', '${flight.ArrivalDateTime}', '${flight.NumberOf_FreeSeats + flight.NumberOf_TakenSeats}', ${flight.Price})">
+                                                Uredi</button></td>
+                                            <td class="text-center"><button class="btn btn-danger" onclick="deleteFlight('${flight.Airline.Id}', '${flight.Id}')" ${deleteButtonDisabled}>Izbriši</button></td>
+                                        </tr>`;
                         tbody.append(row);
->>>>>>> 5b1f20d (Add data persistance)
                     });
-                    var deleteButtonDisabled = hasActiveReservations ? 'disabled' : '';
-                    var row = `<tr>
-                            <td scope="row">${index + 1}</td>
-                            <td>${flight.Id}</td>
-                            <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airline.Name)}">${flight.Airline.Name}</a></td>
-                            <td hidden>${flight.Airline.Id}</td>
-                            <td>${flight.StartDestination}</td>
-                            <td>${flight.EndDestination}</td>
-                            <td>${flight.DepartureDateTime}</td>
-                            <td>${flight.ArrivalDateTime}</td>
-                            <td>${flight.NumberOf_FreeSeats}</td>
-                            <td>${flight.NumberOf_TakenSeats}</td>
-                            <td>$${flight.Price}</td>
-                            <td>${flightStatus[flight.Status]}</td >
-                            <td class="text-center"><button class="btn btn-primary" onclick="editFlight('${flight.Airline.Id}', '${flight.Id}')">Uredi</button></td>
-                            <td class="text-center"><button class="btn btn-danger" onclick="deleteFlight('${flight.Airline.Id}', '${flight.Id}')" ${deleteButtonDisabled}>Izbriši</button></td>
-                        </tr>`;
-                    tbody.append(row);
-                });
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching flights:', status, error);
+                }
             });
+
         }
 
         function deleteFlight(airlineId, flightId) {
 
-<<<<<<< HEAD:Web_PR106/admin-flights.html
-            fetch(`/api/flight/delete/${airlineId}/flight/${flightId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-=======
             $.ajax({
                 url: `../api/flight/delete/${airlineId}/flight/${flightId}`,
                 type: 'DELETE',
                 contentType: 'application/json',
                 success: function (data, status, xhr) {
                     loadFlights();
->>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-flights.html
                 },
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    loadFlights();
-                })
+                error: function (xhr, status, error) {
+                }
+            });
+
         }
 
         function updateAvailableAirlinesList() {
             const list = document.getElementById('available-airlines-list');
 
-<<<<<<< HEAD:Web_PR106/admin-flights.html
-            $.get("api/airlines", function (data, status) {
-                data.forEach(function (airline, index) {
-                    var option = document.createElement('option');
-                    option.value = airline.Id;
-                    option.innerHTML = ` Id ${airline.Id} - ${airline.Name}`;
-                    list.appendChild(option);
-                });
-=======
             $.ajax({
                 url: "../api/airlines",
                 type: 'GET',
@@ -582,15 +442,11 @@
                 },
                 error: function (xhr, status, error) {
                 }
->>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-flights.html
             });
+
         }
 
         function loadReservations() {
-<<<<<<< HEAD:Web_PR106/admin-flights.html
-            $.get("api/reservation", function (data, status) {
-                reservations = data;
-=======
             $.ajax({
                 url: "../api/reservation",
                 type: 'GET',
@@ -599,19 +455,15 @@
                 },
                 error: function (xhr, status, error) {
                 }
->>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-flights.html
             });
+
         }
 
         $(document).ready(function () {
             setTimeout(function () {
                 loadFlights();
-<<<<<<< HEAD
-            },100)
-=======
             }, 100)
             checkSession();
->>>>>>> 5b1f20d (Add data persistance)
             loadReservations();
             updateAvailableAirlinesList();
         });

@@ -1,6 +1,5 @@
-<<<<<<< HEAD
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<Airlines>
+<?xml version="1.0" encoding="utf-8"?>
+<Airlines xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Airline>
 		<Id>1</Id>
 		<Name>Air France</Name>
@@ -9,66 +8,67 @@
 		<IsDeleted>false</IsDeleted>
 		<ProvidedFlights>
 			<Flight>
-				<FlightId>1</FlightId>
+				<Id>1</Id>
 				<Airline>
 					<Id>1</Id>
 					<Name>Air France</Name>
+					<IsDeleted>false</IsDeleted>
+					<ProvidedFlights />
+					<Reviews />
 				</Airline>
 				<StartDestination>Belgrade</StartDestination>
 				<EndDestination>Paris</EndDestination>
-				<DepartureDateTime>25/06/2024 10:30</DepartureDateTime>
-				<ArrivalDateTime>26/06/2024 13:00</ArrivalDateTime>
+				<DepartureDateTime>25/06/2024 06:30</DepartureDateTime>
+				<ArrivalDateTime>26/06/2024 09:00</ArrivalDateTime>
 				<NumberOf_FreeSeats>20</NumberOf_FreeSeats>
 				<NumberOf_TakenSeats>150</NumberOf_TakenSeats>
-				<Price>120,50</Price>
-				<Status>AKTIVAN</Status>
+				<Price>140</Price>
+				<Status>OTKAZAN</Status>
 				<IsDeleted>false</IsDeleted>
 			</Flight>
 			<Flight>
-				<FlightId>2</FlightId>
+				<Id>2</Id>
 				<Airline>
 					<Id>1</Id>
 					<Name>Air France</Name>
+					<IsDeleted>false</IsDeleted>
+					<ProvidedFlights />
+					<Reviews />
 				</Airline>
 				<StartDestination>Paris</StartDestination>
 				<EndDestination>New York</EndDestination>
-				<DepartureDateTime>02/07/2024 00:00</DepartureDateTime>
-				<ArrivalDateTime>02/07/2024 18:00</ArrivalDateTime>
-				<NumberOf_FreeSeats>50</NumberOf_FreeSeats>
+				<DepartureDateTime>25/06/2024 20:00</DepartureDateTime>
+				<ArrivalDateTime>06/06/2024 14:00</ArrivalDateTime>
+				<NumberOf_FreeSeats>54</NumberOf_FreeSeats>
 				<NumberOf_TakenSeats>200</NumberOf_TakenSeats>
-				<Price>350,00</Price>
+				<Price>340</Price>
 				<Status>ZAVRSEN</Status>
 				<IsDeleted>false</IsDeleted>
 			</Flight>
 		</ProvidedFlights>
 		<Reviews>
 			<Review>
-				<ReviewId>1</ReviewId>
+				<Id>1</Id>
 				<Reviewer>john_doe</Reviewer>
-				<Airline>
-					<Id>1</Id>
-					<Name>Air France</Name>
-				</Airline>
+				<Airline>1</Airline>
 				<Title>Could be better</Title>
 				<Description>The flight was delayed and the service was average. Needs improvement.</Description>
-				<Picture>picture</Picture>
+				<Picture />
 				<Status>ODOBRENA</Status>
+				<IsDeleted>true</IsDeleted>
 			</Review>
 			<Review>
-				<ReviewId>2</ReviewId>
+				<Id>2</Id>
 				<Reviewer>jane_smith</Reviewer>
-				<Airline>
-					<Id>1</Id>
-					<Name>Air France</Name>
-				</Airline>
+				<Airline>1</Airline>
 				<Title>Excellent service!</Title>
 				<Description>I had a fantastic experience with Air France. The flight was smooth, and the crew was very helpful.</Description>
-				<Picture>another-picture</Picture>
-				<Status>ODOBRENA</Status>
+				<Picture />
+				<Status>KREIRANA</Status>
+				<IsDeleted>false</IsDeleted>
 			</Review>
 		</Reviews>
 	</Airline>
-	
 	<Airline>
 		<Id>2</Id>
 		<Name>Lufthansa</Name>
@@ -77,185 +77,55 @@
 		<IsDeleted>false</IsDeleted>
 		<ProvidedFlights>
 			<Flight>
-				<FlightId>3</FlightId>
+				<Id>3</Id>
 				<Airline>
 					<Id>2</Id>
 					<Name>Lufthansa</Name>
+					<IsDeleted>false</IsDeleted>
+					<ProvidedFlights />
+					<Reviews />
 				</Airline>
 				<StartDestination>Frankfurt</StartDestination>
 				<EndDestination>Tokyo</EndDestination>
-				<DepartureDateTime>24/06/2024 23:00</DepartureDateTime>
-				<ArrivalDateTime>26/06/2024 07:00</ArrivalDateTime>
-				<NumberOf_FreeSeats>30</NumberOf_FreeSeats>
-				<NumberOf_TakenSeats>300</NumberOf_TakenSeats>
-				<Price>290,75</Price>
+				<DepartureDateTime>30/06/2024 18:04</DepartureDateTime>
+				<ArrivalDateTime>07/07/2024 18:04</ArrivalDateTime>
+				<NumberOf_FreeSeats>41</NumberOf_FreeSeats>
+				<NumberOf_TakenSeats>309</NumberOf_TakenSeats>
+				<Price>120</Price>
 				<Status>AKTIVAN</Status>
 				<IsDeleted>false</IsDeleted>
 			</Flight>
 			<Flight>
-				<FlightId>4</FlightId>
+				<Id>4</Id>
 				<Airline>
 					<Id>2</Id>
 					<Name>Lufthansa</Name>
+					<IsDeleted>false</IsDeleted>
+					<ProvidedFlights />
+					<Reviews />
 				</Airline>
 				<StartDestination>London</StartDestination>
 				<EndDestination>Los Angeles</EndDestination>
-				<DepartureDateTime>07/04/2024 12:00</DepartureDateTime>
-				<ArrivalDateTime>08/04/2024 02:00</ArrivalDateTime>
+				<DepartureDateTime>07/04/2024 02:00</DepartureDateTime>
+				<ArrivalDateTime>07/04/2024 16:00</ArrivalDateTime>
 				<NumberOf_FreeSeats>40</NumberOf_FreeSeats>
 				<NumberOf_TakenSeats>210</NumberOf_TakenSeats>
-				<Price>500.00</Price>
-				<Status>AKTIVAN</Status>
-				<IsDeleted>true</IsDeleted>
+				<Price>240.56</Price>
+				<Status>OTKAZAN</Status>
+				<IsDeleted>false</IsDeleted>
 			</Flight>
 		</ProvidedFlights>
 		<Reviews>
 			<Review>
-				<ReviewId>3</ReviewId>
+				<Id>3</Id>
 				<Reviewer>mark_jackson</Reviewer>
-				<Airline>
-					<Id>2</Id>
-					<Name>Lufthansa</Name>
-				</Airline>
+				<Airline>2</Airline>
 				<Title>Great experience!</Title>
 				<Description>The flight was on time, and the service exceeded my expectations. Highly recommended!</Description>
-				<Picture>review-picture</Picture>
+				<Picture />
 				<Status>ODOBRENA</Status>
+				<IsDeleted>false</IsDeleted>
 			</Review>
 		</Reviews>
 	</Airline>
-
 </Airlines>
-=======
-<?xml version="1.0" encoding="utf-8"?>
-<Airlines xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <Airline>
-    <Id>1</Id>
-    <Name>Air France</Name>
-    <Address>123 Airline Street, City 1, Country</Address>
-    <ContactInfo>email: info@airfrance.com/phone: +1234567890</ContactInfo>
-    <IsDeleted>false</IsDeleted>
-    <ProvidedFlights>
-      <Flight>
-        <Id>1</Id>
-        <Airline>
-          <Id>1</Id>
-          <Name>Air France</Name>
-          <IsDeleted>false</IsDeleted>
-          <ProvidedFlights />
-          <Reviews />
-        </Airline>
-        <StartDestination>Belgrade</StartDestination>
-        <EndDestination>Paris</EndDestination>
-        <DepartureDateTime>25/06/2024 06:30</DepartureDateTime>
-        <ArrivalDateTime>26/06/2024 09:00</ArrivalDateTime>
-        <NumberOf_FreeSeats>20</NumberOf_FreeSeats>
-        <NumberOf_TakenSeats>150</NumberOf_TakenSeats>
-        <Price>140</Price>
-        <Status>OTKAZAN</Status>
-        <IsDeleted>false</IsDeleted>
-      </Flight>
-      <Flight>
-        <Id>2</Id>
-        <Airline>
-          <Id>1</Id>
-          <Name>Air France</Name>
-          <IsDeleted>false</IsDeleted>
-          <ProvidedFlights />
-          <Reviews />
-        </Airline>
-        <StartDestination>Paris</StartDestination>
-        <EndDestination>New York</EndDestination>
-        <DepartureDateTime>01/07/2024 20:00</DepartureDateTime>
-        <ArrivalDateTime>02/07/2024 14:00</ArrivalDateTime>
-        <NumberOf_FreeSeats>54</NumberOf_FreeSeats>
-        <NumberOf_TakenSeats>200</NumberOf_TakenSeats>
-        <Price>340</Price>
-        <Status>AKTIVAN</Status>
-        <IsDeleted>false</IsDeleted>
-      </Flight>
-    </ProvidedFlights>
-    <Reviews>
-      <Review>
-        <Id>1</Id>
-        <Reviewer>john_doe</Reviewer>
-        <Airline>1</Airline>
-        <Title>Could be better</Title>
-        <Description>The flight was delayed and the service was average. Needs improvement.</Description>
-        <Picture />
-        <Status>ODOBRENA</Status>
-        <IsDeleted>true</IsDeleted>
-      </Review>
-      <Review>
-        <Id>2</Id>
-        <Reviewer>jane_smith</Reviewer>
-        <Airline>1</Airline>
-        <Title>Excellent service!</Title>
-        <Description>I had a fantastic experience with Air France. The flight was smooth, and the crew was very helpful.</Description>
-        <Picture />
-        <Status>KREIRANA</Status>
-        <IsDeleted>true</IsDeleted>
-      </Review>
-    </Reviews>
-  </Airline>
-  <Airline>
-    <Id>2</Id>
-    <Name>Lufthansa</Name>
-    <Address>456 Airline Avenue, City 2, Country</Address>
-    <ContactInfo>email: info@lufthansa.com/phone: +9876543210</ContactInfo>
-    <IsDeleted>false</IsDeleted>
-    <ProvidedFlights>
-      <Flight>
-        <Id>3</Id>
-        <Airline>
-          <Id>2</Id>
-          <Name>Lufthansa</Name>
-          <IsDeleted>false</IsDeleted>
-          <ProvidedFlights />
-          <Reviews />
-        </Airline>
-        <StartDestination>Frankfurt</StartDestination>
-        <EndDestination>Tokyo</EndDestination>
-        <DepartureDateTime>30/06/2024 18:04</DepartureDateTime>
-        <ArrivalDateTime>07/07/2024 18:04</ArrivalDateTime>
-        <NumberOf_FreeSeats>41</NumberOf_FreeSeats>
-        <NumberOf_TakenSeats>309</NumberOf_TakenSeats>
-        <Price>120</Price>
-        <Status>AKTIVAN</Status>
-        <IsDeleted>false</IsDeleted>
-      </Flight>
-      <Flight>
-        <Id>4</Id>
-        <Airline>
-          <Id>2</Id>
-          <Name>Lufthansa</Name>
-          <IsDeleted>false</IsDeleted>
-          <ProvidedFlights />
-          <Reviews />
-        </Airline>
-        <StartDestination>London</StartDestination>
-        <EndDestination>Los Angeles</EndDestination>
-        <DepartureDateTime>07/04/2024 02:00</DepartureDateTime>
-        <ArrivalDateTime>07/04/2024 16:00</ArrivalDateTime>
-        <NumberOf_FreeSeats>40</NumberOf_FreeSeats>
-        <NumberOf_TakenSeats>210</NumberOf_TakenSeats>
-        <Price>240.56</Price>
-        <Status>OTKAZAN</Status>
-        <IsDeleted>false</IsDeleted>
-      </Flight>
-    </ProvidedFlights>
-    <Reviews>
-      <Review>
-        <Id>3</Id>
-        <Reviewer>mark_jackson</Reviewer>
-        <Airline>2</Airline>
-        <Title>Great experience!</Title>
-        <Description>The flight was on time, and the service exceeded my expectations. Highly recommended!</Description>
-        <Picture />
-        <Status>ODOBRENA</Status>
-        <IsDeleted>false</IsDeleted>
-      </Review>
-    </Reviews>
-  </Airline>
-</Airlines>
->>>>>>> 5b1f20d (Add data persistance)

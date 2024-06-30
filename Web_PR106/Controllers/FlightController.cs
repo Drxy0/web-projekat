@@ -14,14 +14,14 @@ namespace Web_PR106.Controllers
 {
 	[RoutePrefix("api/flight")]
 	public class FlightController : ApiController
-    {
+	{
 
 		[HttpPost]
 		public IHttpActionResult Post([FromBody] JObject flightParams)
 		{
-			if (flightParams == null) 
-			{ 
-				return BadRequest(); 
+			if (flightParams == null)
+			{
+				return BadRequest();
 			}
 
 			int airlineId = Convert.ToInt32(flightParams["airline"]);
@@ -95,7 +95,7 @@ namespace Web_PR106.Controllers
 			{
 				flight.NumberOf_FreeSeats += seatsToAdd;
 			}
-			
+
 			double price = flightParams["price"] != null ? Convert.ToDouble(flightParams["price"]) : 0;
 			if (price != 0)
 			{
@@ -111,17 +111,17 @@ namespace Web_PR106.Controllers
 		[Route("adminFilterFlights")]
 		public IHttpActionResult AdminFilterFlights([FromBody] JObject searchFilter)
 		{
-			if (searchFilter == null)
+			if (searchFilter == null || searchFilter.Count == 0)
 			{
 				return BadRequest();
 			}
 
-			List<Flight> filteredFlights = new List<Flight>(Global.Flights);
+			List<Flight> filteredFlights = new List<Flight>(Global.Flights.Where(x => x.IsDeleted == false));
 
 			string startDestination = searchFilter["startDestination"]?.ToString();
 			string endDestination = searchFilter["endDestination"]?.ToString();
 			string departureDate = searchFilter["departureDate"]?.ToString();
-			if (!string.IsNullOrEmpty(departureDate) || departureDate == "")
+			if (string.IsNullOrEmpty(departureDate) || departureDate == "")
 			{
 				departureDate = "01/01/0001";
 			}
@@ -143,7 +143,7 @@ namespace Web_PR106.Controllers
 			{
 				foreach (Flight flight in Global.Flights)
 				{
-					if (flight.StartDestination != startDestination)
+					if (!flight.StartDestination.Contains(startDestination))
 					{
 						filteredFlights.Remove(flight);
 					}
@@ -154,7 +154,7 @@ namespace Web_PR106.Controllers
 			{
 				foreach (Flight flight in Global.Flights)
 				{
-					if (flight.EndDestination != endDestination)
+					if (!flight.StartDestination.Contains(endDestination))
 					{
 						filteredFlights.Remove(flight);
 					}
@@ -200,6 +200,13 @@ namespace Web_PR106.Controllers
 			flight.IsDeleted = true;
 			Global.SaveAirlineData();
 			return Ok();
+		}
+
+		[HttpGet]
+		[Route("getAll")]
+		public IHttpActionResult GetAll()
+		{
+			return Ok(Global.Flights.Where(x => x.IsDeleted == false));
 		}
 	}
 }

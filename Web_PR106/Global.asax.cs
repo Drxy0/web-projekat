@@ -17,8 +17,8 @@ using System.Xml.Serialization;
 
 namespace Web_PR106
 {
-    public class Global : HttpApplication
-    {
+	public class Global : HttpApplication
+	{
 		public static List<Airline> Airlines = new List<Airline>();
 		public static List<Flight> Flights = new List<Flight>();
 		public static List<Flight> ShownFlights = new List<Flight>();
@@ -28,11 +28,11 @@ namespace Web_PR106
 		private static Timer timer;
 
 		void Application_Start(object sender, EventArgs e)
-        {
-            // Code that runs on application startup
-            AreaRegistration.RegisterAllAreas();
-            GlobalConfiguration.Configure(WebApiConfig.Register);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
+		{
+			// Code that runs on application startup
+			AreaRegistration.RegisterAllAreas();
+			GlobalConfiguration.Configure(WebApiConfig.Register);
+			RouteConfig.RegisterRoutes(RouteTable.Routes);
 
 			LoadDatabaseAirlines();
 			LoadFlights();
@@ -42,6 +42,11 @@ namespace Web_PR106
 			timer.Elapsed += TimerElapsed;
 			timer.AutoReset = true;
 			timer.Start();
+		}
+
+		private void Application_PostAuthorizeRequest()
+		{
+			HttpContext.Current.SetSessionStateBehavior(SessionStateBehavior.Required);
 		}
 
 		public static int SetFlightId()
@@ -80,9 +85,9 @@ namespace Web_PR106
 
 		public static void SaveAirlineData()
 		{
-			foreach(Airline airline in Airlines)
+			foreach (Airline airline in Airlines)
 			{
-				foreach(Flight flight in airline.ProvidedFlights)
+				foreach (Flight flight in airline.ProvidedFlights)
 				{
 					Trace.WriteLine(flight.Price);
 				}
@@ -193,9 +198,9 @@ namespace Web_PR106
 		public static void LoadFlights()
 		{
 			Flights.Clear();
-			foreach(Airline airline in Airlines)
+			foreach (Airline airline in Airlines)
 			{
-				foreach(Flight flight in airline.ProvidedFlights)
+				foreach (Flight flight in airline.ProvidedFlights)
 				{
 					if (!Flights.Contains(flight))
 					{
@@ -256,7 +261,7 @@ namespace Web_PR106
 						airline.ProvidedFlights.Add(flight);
 					}
 				}
-				
+
 				XmlNode reviewsNode = node["Reviews"];
 				if (reviewsNode != null)
 				{

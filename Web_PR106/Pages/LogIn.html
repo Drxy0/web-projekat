@@ -78,7 +78,7 @@
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
         <p>Already have an account? <a href="#" onclick="showSignInForm()">Sign in</a></p>
-        <br/>
+        <br />
     </section>
     <script>
 
@@ -132,15 +132,24 @@
                         return;
                     }
 
-                    // Login success
-                    sessionStorage.setItem("token", user.Username);
-                    if (user.UserType === 0) {
-                        sessionStorage.setItem("role", "PUTNIK");
-                    } else {
-                        sessionStorage.setItem("role", "ADMINISTRATOR");
-                    }
+                    const formData = {
+                        username: user.Username,
+                        userType: user.UserType,
+                    };
 
-                    window.location.href = "../Index.html";
+                    $.ajax({
+                        url: "../api/session/logIn",
+                        type: "POST",
+                        contentType: 'application/json',
+                        data: JSON.stringify(formData),
+                        success: function (data) {
+                            window.location.href = "../Index.html";
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            window.location.href = "../Index.html";
+                        }
+                    });
+
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     showAlert('loginAlert', "Error fetching users. Please try again.");

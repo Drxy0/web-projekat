@@ -5,21 +5,11 @@
     <link rel="stylesheet" href="../Content/bootstrap.min.css">
     <script src="../Scripts/jquery-1.10.2.js"></script>
     <title>Rezervacije</title>
-    <style>
-        body {
-            padding-top: 50px;
-        }
-    </style>
 </head>
 <body>
     <nav id="nav" class="navbar navbar-fixed-top navbar-static-top" style="background-color: #242323; ">
-<<<<<<< HEAD:Web_PR106/admin-reservations.html
-        <a href="Index.html" class="navbar-brand">
-            Home
-=======
         <a href="../Index.html" class="navbar-brand">
             Počenta
->>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-reservations.html
         </a>
     </nav>
 
@@ -46,12 +36,25 @@
     <script>
         const flightStatus = ['AKTIVAN', 'OTKAZAN', 'ZAVRSEN']
 
+        function checkSession() {
+            var nav = $("#nav");
+            if (Object.keys(sessionStorage).length == 0) {
+                nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
+            } else if (sessionStorage.getItem("role") == 'PUTNIK') {
+                nav.append(`<a id="userNav" href="MyFlights.html" class="navbar-brand">Moji Letovi</a>`);
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            } else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
+                nav.append(`<a href="admin-airlines.html" class="navbar-brand">Aviokompanije</a>`);
+                nav.append(`<a href="admin-flights.html" class="navbar-brand">Letovi</a>`);
+                nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
+                nav.append(`<a href="admin-reviews.html" class="navbar-brand">Recenzije</a>`);
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            } else {
+                nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            }
+        }
+
         $(document).ready(function () {
-<<<<<<< HEAD:Web_PR106/admin-reservations.html
-            $.get("api/reservation", function (data) {
-                var tbody = $("#reservations-table-body");
-                tbody.empty();
-=======
             checkSession();
             $.ajax({
                 url: '../api/reservation',
@@ -59,66 +62,41 @@
                 success: function (data) {
                     var tbody = $("#reservations-table-body");
                     tbody.empty();
->>>>>>> e061511 (Move html files to separate directory):Web_PR106/Pages/admin-reservations.html
 
-                data.forEach(function (reservation, index) {
-                    const parts = reservation.Flight.DepartureDateTime.split(' ');
-                    const dateParts = parts[0].split('/');
-                    const timeParts = parts[1].split(':');
-                    const formattedDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0], timeParts[0], timeParts[1]);
-                    const currentDate = new Date();
-                    var timeDifferenceInHours = (formattedDate - currentDate) / 36e5; // 36e5 is 60 * 60 * 1000
+                    data.forEach(function (reservation, index) {
+                        const parts = reservation.Flight.DepartureDateTime.split(' ');
+                        const dateParts = parts[0].split('/');
+                        const timeParts = parts[1].split(':');
+                        const formattedDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[0], timeParts[0], timeParts[1]);
+                        const currentDate = new Date();
+                        var timeDifferenceInHours = (formattedDate - currentDate) / 36e5; // 36e5 is 60 * 60 * 1000
 
-                    var otkazanaDisabled = timeDifferenceInHours < 24 ? "disabled" : "";
-                    var selectDisabled = reservation.Status === 3 ? "disabled" : "";
+                        var otkazanaDisabled = timeDifferenceInHours < 24 ? "disabled" : "";
+                        var selectDisabled = reservation.Status === 3 ? "disabled" : "";
 
-<<<<<<< HEAD
-                    var row = `<tr>
+                        var row = `<tr>
                                 <td>${index + 1}</td>
                                 <td>${reservation.Id}</td>
                                 <td>${reservation.Flight.Id}</td>
-                                <td>${reservation.User.Username}</td>
+                                <td>${reservation.Flight.StartDestination}</td>
+                                <td>${reservation.Flight.EndDestination}</td>
+                                <td>${reservation.Flight.ArrivalDateTime}</td>
+                                <td>${reservation.Flight.DepartureDateTime}</td>
+                                <td>${flightStatus[reservation.Flight.Status]}</td>
+
+                                <td>${reservation.User}</td>
                                 <td>${reservation.NumberOfPassengers}</td>
                                 <td>${reservation.Price}</td>
                                 <td>
                                     <select id="status-${reservation.Id}" name="status" ${selectDisabled}>
-=======
-                        var row = `<tr>
-                            <td>${index + 1}</td>
-                            <td>${reservation.Id}</td>
-                            <td>${reservation.Flight.Id}</td>
-                            <td>${reservation.Flight.StartDestination}</td>
-                            <td>${reservation.Flight.EndDestination}</td>
-                            <td>${reservation.Flight.ArrivalDateTime}</td>
-                            <td>${reservation.Flight.DepartureDateTime}</td>
-                            <td>${flightStatus[reservation.Flight.Status]}</td>
-
-                            <td>${reservation.User}</td>
-                            <td>${reservation.NumberOfPassengers}</td>
-                            <td>${reservation.Price}</td>
-                            <td>
-                                <select id="status-${reservation.Id}" name="status" ${selectDisabled}>
->>>>>>> 5b1f20d (Add data persistance)
-                                    <option value="KREIRANA" ${reservation.Status === 0 ? 'selected' : ''}>KREIRANA</option>
-                                    <option value="ODOBRENA" ${reservation.Status === 1 ? 'selected' : ''}>ODOBRENA</option>
-                                    <option value="OTKAZANA" ${otkazanaDisabled} ${reservation.Status === 2 ? 'selected' : ''}>OTKAZANA</option>
+                                        <option value="KREIRANA" ${reservation.Status === 0 ? 'selected' : ''}>KREIRANA</option>
+                                        <option value="ODOBRENA" ${reservation.Status === 1 ? 'selected' : ''}>ODOBRENA</option>
+                                        <option value="OTKAZANA" ${otkazanaDisabled} ${reservation.Status === 2 ? 'selected' : ''}>OTKAZANA</option>
                                     </select>
                                 </td>
                             </tr>`;
-                    tbody.append(row);
+                        tbody.append(row);
 
-<<<<<<< HEAD
-                    $(`#status-${reservation.Id}`).on('change', function () {
-                        var newValue = $(this).val();
-
-                        const reservationData = {
-                            reservationId: reservation.Id,
-                            status: newValue,
-                            username: reservation.User.Username,
-                            numberOfPassengers: reservation.NumberOfPassengers,
-                            flightId: reservation.Flight.Id
-                        };
-=======
                         $(`#status-${reservation.Id}`).on('change', function () {
                             var newValue = $(this).val();
                             console.log(newValue);
@@ -130,31 +108,27 @@
                                 numberOfPassengers: reservation.NumberOfPassengers,
                                 flightId: reservation.Flight.Id
                             };
->>>>>>> 5b1f20d (Add data persistance)
 
-                        fetch('/api/reservation', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(reservationData),
-                        })
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error('Network response was not ok');
+                            $.ajax({
+                                url: '/api/reservation',
+                                type: 'POST',
+                                contentType: 'application/json',
+                                data: JSON.stringify(reservationData),
+                                success: function (data) {
+                                    console.log('Reservation status successfully updated:', data);
+                                },
+                                error: function (xhr, status, error) {
+                                    console.error('Error updating reservation status:', status, error);
                                 }
-                                return response.json();
-                            })
-                            .then(data => {
-                                console.log('Reservation successfully made:', data);
-                            })
-                            .catch(error => {
-                                console.error('Error making reservation:', error);
                             });
+                        });
                     });
-                });
-
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching reservations:', status, error);
+                }
             });
+
         });
     </script>
 </body>

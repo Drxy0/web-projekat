@@ -1,90 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Users xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <User>
-    <Username>john_doe</Username>
-    <Password>123</Password>
-    <Name>John</Name>
-    <Surname>Doe</Surname>
-    <Email>john.doe@example.com</Email>
-    <Birthday>01/05/1990</Birthday>
-    <Gender>MALE</Gender>
-    <UserType>PUTNIK</UserType>
-    <ReservationList>
-      <Reservation>
-        <Id>0</Id>
-        <User>john_doe</User>
-        <Flight>
-          <Id>3</Id>
-          <Airline>
-            <Id>2</Id>
-            <Name>Lufthansa</Name>
-            <IsDeleted>false</IsDeleted>
-            <ProvidedFlights />
-            <Reviews />
-          </Airline>
-          <StartDestination>Frankfurt</StartDestination>
-          <EndDestination>Tokyo</EndDestination>
-          <DepartureDateTime>07/07/2024 23:00</DepartureDateTime>
-          <ArrivalDateTime>08/07/2024 07:00</ArrivalDateTime>
-          <NumberOf_FreeSeats>21</NumberOf_FreeSeats>
-          <NumberOf_TakenSeats>309</NumberOf_TakenSeats>
-          <Price>290,75</Price>
-          <Status>AKTIVAN</Status>
-          <IsDeleted>false</IsDeleted>
-        </Flight>
-        <NumberOfPassengers>4</NumberOfPassengers>
-        <Price>116300</Price>
-        <Status>ODOBRENA</Status>
-      </Reservation>
-    </ReservationList>
-  </User>
-  <User>
-    <Username>jane_smith</Username>
-    <Password>securepassword</Password>
-    <Name>Jane</Name>
-    <Surname>Smith</Surname>
-    <Email>jane.smith@example.com</Email>
-    <Birthday>15/03/1990</Birthday>
-    <Gender>FEMALE</Gender>
-    <UserType>PUTNIK</UserType>
-    <ReservationList>
-      <Reservation>
-        <Id>3</Id>
-        <User>jane_smith</User>
-        <Flight>
-          <Id>3</Id>
-          <Airline>
-            <Id>2</Id>
-            <Name>Lufthansa</Name>
-            <IsDeleted>false</IsDeleted>
-            <ProvidedFlights />
-            <Reviews />
-          </Airline>
-          <StartDestination>Frankfurt</StartDestination>
-          <EndDestination>Tokyo</EndDestination>
-          <DepartureDateTime>24/06/2024 23:00</DepartureDateTime>
-          <ArrivalDateTime>26/06/2024 07:00</ArrivalDateTime>
-          <NumberOf_FreeSeats>30</NumberOf_FreeSeats>
-          <NumberOf_TakenSeats>300</NumberOf_TakenSeats>
-          <Price>290,75</Price>
-          <Status>AKTIVAN</Status>
-          <IsDeleted>false</IsDeleted>
-        </Flight>
-        <NumberOfPassengers>1</NumberOfPassengers>
-        <Price>110</Price>
-        <Status>ODOBRENA</Status>
-      </Reservation>
-    </ReservationList>
-  </User>
-  <User>
-    <Username>admin</Username>
-    <Password>admin</Password>
-    <Name>Admin</Name>
-    <Surname>Smith</Surname>
-    <Email>admin.smith@example.com</Email>
-    <Birthday>21/12/1985</Birthday>
-    <Gender>MALE</Gender>
-    <UserType>ADMINISTRATOR</UserType>
-    <ReservationList />
-  </User>
+	<User>
+		<Username>john_doe</Username>
+		<Password>123</Password>
+		<Name>John</Name>
+		<Surname>Doe</Surname>
+		<Email>john.doe@example.com</Email>
+		<Birthday>01/05/1990</Birthday>
+		<Gender>MALE</Gender>
+		<UserType>PUTNIK</UserType>
+		<ReservationList>
+			<Reservation>
+				<Id>0</Id>
+				<User>john_doe</User>
+				<Flight>
+					<Id>3</Id>
+					<Airline>
+						<Id>2</Id>
+						<Name>Lufthansa</Name>
+						<IsDeleted>false</IsDeleted>
+						<ProvidedFlights />
+						<Reviews />
+					</Airline>
+					<StartDestination>Frankfurt</StartDestination>
+					<EndDestination>Tokyo</EndDestination>
+					<DepartureDateTime>07/07/2024 23:00</DepartureDateTime>
+					<ArrivalDateTime>08/07/2024 07:00</ArrivalDateTime>
+					<NumberOf_FreeSeats>21</NumberOf_FreeSeats>
+					<NumberOf_TakenSeats>309</NumberOf_TakenSeats>
+					<Price>290,75</Price>
+					<Status>AKTIVAN</Status>
+					<IsDeleted>false</IsDeleted>
+				</Flight>
+				<NumberOfPassengers>4</NumberOfPassengers>
+				<Price>1163.00</Price>
+				<Status>ODOBRENA</Status>
+			</Reservation>
+			<Reservation>
+				<Id>0</Id>
+				<User>john_doe</User>
+				<Flight>
+					<Id>2</Id>
+					<Airline>
+						<Id>1</Id>
+						<Name>Air France</Name>
+						<IsDeleted>false</IsDeleted>
+						<ProvidedFlights />
+						<Reviews />
+					</Airline>
+					<StartDestination>Paris</StartDestination>
+					<EndDestination>New York</EndDestination>
+					<DepartureDateTime>25/06/2024 20:00</DepartureDateTime>
+					<ArrivalDateTime>06/06/2024 14:00</ArrivalDateTime>
+					<NumberOf_FreeSeats>54</NumberOf_FreeSeats>
+					<NumberOf_TakenSeats>200</NumberOf_TakenSeats>
+					<Price>340</Price>
+					<Status>ZAVRSEN</Status>
+					<IsDeleted>false</IsDeleted>
+				</Flight>
+				<NumberOfPassengers>4</NumberOfPassengers>
+				<Price>116300</Price>
+				<Status>ZAVRSENA</Status>
+			</Reservation>
+		</ReservationList>
+	</User>
+	<User>
+		<Username>jane_smith</Username>
+		<Password>securepassword</Password>
+		<Name>Jane</Name>
+		<Surname>Smith</Surname>
+		<Email>jane.smith@example.com</Email>
+		<Birthday>15/03/1990</Birthday>
+		<Gender>FEMALE</Gender>
+		<UserType>PUTNIK</UserType>
+		<ReservationList>
+			<Reservation>
+				<Id>3</Id>
+				<User>jane_smith</User>
+				<Flight>
+					<Id>3</Id>
+					<Airline>
+						<Id>2</Id>
+						<Name>Lufthansa</Name>
+						<IsDeleted>false</IsDeleted>
+						<ProvidedFlights />
+						<Reviews />
+					</Airline>
+					<StartDestination>Frankfurt</StartDestination>
+					<EndDestination>Tokyo</EndDestination>
+					<DepartureDateTime>24/06/2024 23:00</DepartureDateTime>
+					<ArrivalDateTime>26/06/2024 07:00</ArrivalDateTime>
+					<NumberOf_FreeSeats>30</NumberOf_FreeSeats>
+					<NumberOf_TakenSeats>300</NumberOf_TakenSeats>
+					<Price>290,75</Price>
+					<Status>AKTIVAN</Status>
+					<IsDeleted>false</IsDeleted>
+				</Flight>
+				<NumberOfPassengers>1</NumberOfPassengers>
+				<Price>110</Price>
+				<Status>ODOBRENA</Status>
+			</Reservation>
+		</ReservationList>
+	</User>
+	<User>
+		<Username>admin</Username>
+		<Password>admin</Password>
+		<Name>Admin</Name>
+		<Surname>Smith</Surname>
+		<Email>admin.smith@example.com</Email>
+		<Birthday>21/12/1985</Birthday>
+		<Gender>MALE</Gender>
+		<UserType>ADMINISTRATOR</UserType>
+		<ReservationList />
+	</User>
 </Users>
