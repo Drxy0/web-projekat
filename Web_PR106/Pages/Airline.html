@@ -10,11 +10,18 @@
         .card {
             display: flex;
             flex-direction: column;
-            height: 100%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
             .card .card-body {
                 flex-grow: 1;
+            }
+
+            .card .card-img-top {
+                max-height: 200px; /* Limiting the maximum height of the image */
+                object-fit: cover; /* Ensures the image covers the entire container */
             }
 
         .profile-header {
@@ -73,7 +80,6 @@
     </div>
 
     <script>
-
         function checkSession() {
             var nav = $("#nav");
             if (Object.keys(sessionStorage).length == 0) {
@@ -115,34 +121,19 @@
 
                             var row = $('<div class="row"></div>');
                             airline.Reviews.forEach(function (review) {
-                                if (review.Status === 1) {
+                                if (review.Status === 1 || (sessionStorage.getItem("role") == 'ADMINISTRATOR' && review.Status === 2)) {
                                     var card = `
-                                                                    <div class="col-md-4 mb-4">
-                                                                        <div class="card">
-                                                                            <img class="card-img-top" src="${review.Picture}">
-                                                                            <div class="card-body">
-                                                                                <h5 class="card-title">${review.Title}</h5>
-                                                                                <h6 class="card-subtitle mb-2 text-muted">${review.Reviewer}</h6>
-                                                                                <p class="card-text">${review.Description}</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                `;
-                                    row.append(card);
-                                }
-                                if (sessionStorage.getItem("role") == 'ADMINISTRATOR' && review.Status === 2) {
-                                    var card = `
-                                                                    <div class="col-md-4 mb-4">
-                                                                        <div class="card">
-                                                                            <img class="card-img-top" src="${review.Picture}">
-                                                                            <div class="card-body">
-                                                                                <h5 class="card-title">${review.Title}</h5>
-                                                                                <h6 class="card-subtitle mb-2 text-muted">${review.Reviewer}</h6>
-                                                                                <p class="card-text">${review.Description}</p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                `;
+                                            <div class="col-md-4 mb-4">
+                                                <div class="card">
+                                                    ${review.Picture ? `<img class="card-img-top" src="${review.Picture}">` : ''}
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">${review.Title}</h5>
+                                                        <h6 class="card-subtitle mb-2 text-muted">${review.Reviewer}</h6>
+                                                        <p class="card-text">${review.Description}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `;
                                     row.append(card);
                                 }
                             });

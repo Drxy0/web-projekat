@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../Content/bootstrap.min.css">
     <script src="../Scripts/jquery-1.10.2.js"></script>
-    <title>My Flights</title>
+    <title>Leave a Review</title>
     <style>
         #reviewForm {
             width: 80%;
@@ -20,7 +20,7 @@
             align-items: flex-start;
         }
         #submitReview {
-            margin: auto; /* Center the button horizontally */
+            margin: auto;
         }
         #formContainer {
             display: flex;
@@ -69,7 +69,7 @@
 
         function checkSession() {
             var nav = $("#nav");
-            var navBrand = nav.find('.navbar-brand')
+            var navBrand = nav.find('.navbar-brand');
             if (Object.keys(sessionStorage).length == 0) {
                 nav.append('<a id="userNav" href="LogIn.html" class="navbar-brand"> Sign in </a>');
             } else if (sessionStorage.getItem("role") == 'ADMINISTRATOR') {
@@ -79,10 +79,11 @@
                 nav.append(`<a href="admin-reservations.html" class="navbar-brand">Rezervacije</a>`);
                 nav.append(`<a href="admin-reviews.html" class="navbar-brand">Recenzije</a>`);
                 nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
-                document.getElementById('adminUsersList').style.display = 'block'
-            }
-            else {
+                document.getElementById('adminUsersList').style.display = 'block';
+            } else {
                 nav.append(`<a id="userNav" href="UserProfile.html" class="navbar-brand">${sessionStorage.getItem("token")}</a>`);
+            }
+        }
 
 
         document.getElementById('submitReview').addEventListener('click', function (event) {
@@ -109,7 +110,7 @@
                 processData: false,
                 contentType: false,
                 success: function () {
-                    location = "MyFlights.html";
+                    //window.href.location = "MyFlights.html";
                 },
                 error: function () {
                     alert('Error submitting review. Please try again later.');
