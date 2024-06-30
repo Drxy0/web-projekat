@@ -42,7 +42,7 @@ namespace Web_PR106.Controllers
 					Id = airlineId,
 					Name = airline.Name,
 				},
-				Id = ++Global.FlightIdCounter,
+				Id = Global.SetFlightId(),
 				StartDestination = flightParams["startDestination"]?.ToString(),
 				EndDestination = flightParams["endDestination"]?.ToString(),
 				DepartureDateTime = departureDateTime,
@@ -84,7 +84,7 @@ namespace Web_PR106.Controllers
 			flight.DepartureDateTime = departureDateTime;
 			flight.ArrivalDateTime = arrivalDateTime;
 
-			int numberOfSeats = flightParams["numberOf_Seats"] != null ? Convert.ToInt32(flightParams["numberOf_FreeSeats"]) : 0;
+			int numberOfSeats = flightParams["numberOf_Seats"] != null ? Convert.ToInt32(flightParams["numberOf_Seats"]) : 0;
 			int seatsToAdd = numberOfSeats - (flight.NumberOf_FreeSeats + flight.NumberOf_TakenSeats);
 
 			if (flight.NumberOf_FreeSeats + seatsToAdd < 0)

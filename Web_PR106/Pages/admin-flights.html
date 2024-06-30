@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="Content/bootstrap.min.css">
-    <script src="Scripts/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="../Content/bootstrap.min.css">
+    <script src="../Scripts/jquery-1.10.2.js"></script>
     <title>Svi Letovi</title>
     <style>
         body {
@@ -280,6 +280,7 @@
                     tbody.empty();
                     data.forEach(function (flight, index) {
                         var row = `<tr>
+<<<<<<< HEAD
                             <td scope="row">${index + 1}</td>
                             <td>${flight.Id}</td>
                             <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airline.Name)}">${flight.Airline.Name}</a></td>
@@ -295,6 +296,25 @@
                             <td class="text-center"><button class="btn btn-primary" onclick="editFlight('${flight.Id}')">Uredi</button></td>
                             <td class="text-center"><button class="btn btn-error" onclick="deleteFlight('${flight.Airline.Id}', '${flight.Id}')">Izbriši</button></td>
                         </tr>`;
+=======
+                                        <td scope="row">${index + 1}</td>
+                                        <td>${flight.Id}</td>
+                                        <td><a href="Airline.html?airline=${encodeURIComponent(flight.Airline.Name)}">${flight.Airline.Name}</a></td>
+                                        <td hidden>${flight.Airline.Id}</td>
+                                        <td>${flight.StartDestination}</td>
+                                        <td>${flight.EndDestination}</td>
+                                        <td>${flight.DepartureDateTime}</td>
+                                        <td>${flight.ArrivalDateTime}</td>
+                                        <td>${flight.NumberOf_FreeSeats}</td>
+                                        <td>${flight.NumberOf_TakenSeats}</td>
+                                        <td>$${flight.Price}</td>
+                                        <td>${flightStatus[flight.Status]}</td>
+                                        <td class="text-center"><button class="btn btn-primary"
+                                            onclick="editFlight('${flight.Airline.Id}', '${flight.Id}', '${flight.DepartureDateTime}', '${flight.ArrivalDateTime}', '${flight.NumberOf_FreeSeats + flight.NumberOf_TakenSeats}', ${flight.Price})">
+                                            Uredi</button></td>
+                                        <td class="text-center"><button class="btn btn-danger" onclick="deleteFlight('${flight.Airline.Id}', '${flight.Id}')" ${deleteButtonDisabled}>Izbriši</button></td>
+                                    </tr>`;
+>>>>>>> df7cbbc (Fix bugs)
                         tbody.append(row);
                     })
                 })
@@ -383,7 +403,7 @@
             inputElement.value = isoString;
         }
 
-        function editFlight(airlineId, flightId, departureDateTime, arrivalDateTime, numberOfSeats) {
+        function editFlight(airlineId, flightId, departureDateTime, arrivalDateTime, numberOfSeats, price) {
             sessionStorage.setItem("airlineId", airlineId);
             sessionStorage.setItem("flightId", flightId);
 <<<<<<< HEAD
@@ -405,6 +425,7 @@
             setDateTime(arrivalDateTime, editArrivalTimeInput);
 
             document.getElementById('edit-seats').value = numberOfSeats;
+            document.getElementById('edit-price').value = price;
 
             $.ajax({
                 url: '../api/reservation',
@@ -484,7 +505,7 @@
                                         <td>$${flight.Price}</td>
                                         <td>${flightStatus[flight.Status]}</td >
                                         <td class="text-center"><button class="btn btn-primary"
-                                            onclick="editFlight('${flight.Airline.Id}', '${flight.Id}', '${flight.DepartureDateTime}', '${flight.ArrivalDateTime}', '${flight.NumberOf_FreeSeats + flight.NumberOf_TakenSeats}')">
+                                            onclick="editFlight('${flight.Airline.Id}', '${flight.Id}', '${flight.DepartureDateTime}', '${flight.ArrivalDateTime}', '${flight.NumberOf_FreeSeats + flight.NumberOf_TakenSeats}', ${flight.Price})">
                                             Uredi</button></td>
                                         <td class="text-center"><button class="btn btn-danger" onclick="deleteFlight('${flight.Airline.Id}', '${flight.Id}')" ${deleteButtonDisabled}>Izbriši</button></td>
                                     </tr>`;

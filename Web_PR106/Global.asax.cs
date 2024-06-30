@@ -24,7 +24,7 @@ namespace Web_PR106
 		public static List<Flight> ShownFlights = new List<Flight>();
 		public static List<User> Users = new List<User>();
 		public static List<Reservation> Reservations = new List<Reservation>();
-		public static int FlightIdCounter = 100;
+		public static int ReviewIdCounter = 20;
 		private static Timer timer;
 
 		void Application_Start(object sender, EventArgs e)
@@ -44,8 +44,50 @@ namespace Web_PR106
 			timer.Start();
 		}
 
+		public static int SetFlightId()
+		{
+			int id = 0;
+			bool isUnique = false;
+
+			while (!isUnique)
+			{
+				isUnique = true;
+				foreach (Airline airline in Airlines)
+				{
+					foreach (Flight flight in airline.ProvidedFlights)
+					{
+						if (flight.Id == id)
+						{
+							// ID is not unique, generate a new one
+							isUnique = false;
+							break;
+						}
+					}
+
+					if (!isUnique)
+					{
+						break;
+					}
+				}
+				// If ID is unique, return it; otherwise, generate a new one
+				if (!isUnique)
+				{
+					id++;
+				}
+			}
+			return id;
+		}
+
 		public static void SaveAirlineData()
 		{
+			foreach(Airline airline in Airlines)
+			{
+				foreach(Flight flight in airline.ProvidedFlights)
+				{
+					Trace.WriteLine(flight.Price);
+				}
+			}
+
 			XmlSerializer serializer = new XmlSerializer(typeof(List<Airline>), new XmlRootAttribute("Airlines"));
 			string relativePath = "~/Assets/test_aviokompanije.xml";
 			string filePath = HttpContext.Current.Server.MapPath(relativePath);
@@ -53,6 +95,8 @@ namespace Web_PR106
 			{
 				serializer.Serialize(writer, Global.Airlines);
 			}
+			LoadDatabaseAirlines();
+			LoadFlights();
 		}
 		public static void SaveUserData()
 		{
@@ -63,6 +107,7 @@ namespace Web_PR106
 			{
 				serializer.Serialize(writer, Global.Users);
 			}
+			LoadUsers();
 		}
 		private static void TimerElapsed(object sender, ElapsedEventArgs e)
 		{
@@ -85,8 +130,10 @@ namespace Web_PR106
 				}
 			}
 		}
-		private void LoadUsers()
+		public static void LoadUsers()
 		{
+			Users.Clear();
+
 			string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 			string fullPath = Path.Combine(baseDirectory, "Assets", "test_users.xml");
 
@@ -128,7 +175,7 @@ namespace Web_PR106
 						ArrivalDateTime = flightNode["ArrivalDateTime"].InnerText,
 						NumberOf_FreeSeats = int.Parse(flightNode["NumberOf_FreeSeats"].InnerText),
 						NumberOf_TakenSeats = int.Parse(flightNode["NumberOf_TakenSeats"].InnerText),
-						Price = double.Parse(flightNode["Price"].InnerText),
+						Price = double.Parse(flightNode["Price"].InnerText.Replace('.', ',')),
 						Status = (FlightStatus)Enum.Parse(typeof(FlightStatus), flightNode["Status"].InnerText.ToUpper())
 					};
 					reservation.Id = int.Parse(reservationNode["Id"].InnerText);
@@ -145,6 +192,7 @@ namespace Web_PR106
 
 		public static void LoadFlights()
 		{
+			Flights.Clear();
 			foreach(Airline airline in Airlines)
 			{
 				foreach(Flight flight in airline.ProvidedFlights)
@@ -158,8 +206,10 @@ namespace Web_PR106
 			ShownFlights = new List<Flight>(Flights);
 
 		}
-		private void LoadDatabaseAirlines()
+		public static void LoadDatabaseAirlines()
 		{
+			Airlines.Clear();
+
 			string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 			string fullPath = baseDirectory + "\\Assets\\test_aviokompanije.xml";
 
@@ -199,7 +249,7 @@ namespace Web_PR106
 							ArrivalDateTime = flightNode["ArrivalDateTime"].InnerText,
 							NumberOf_FreeSeats = int.Parse(flightNode["NumberOf_FreeSeats"].InnerText),
 							NumberOf_TakenSeats = int.Parse(flightNode["NumberOf_TakenSeats"].InnerText),
-							Price = double.Parse(flightNode["Price"].InnerText),
+							Price = double.Parse(flightNode["Price"].InnerText.Replace('.', ',')),
 							Status = (FlightStatus)Enum.Parse(typeof(FlightStatus), flightNode["Status"].InnerText),
 							IsDeleted = bool.Parse(flightNode["IsDeleted"].InnerText),
 						};
