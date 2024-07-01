@@ -275,9 +275,9 @@
                                         <td id="table_endDestination">${flight.EndDestination}</td>
                                         <td id="table_departure">${flight.DepartureDateTime}</td>
                                         <td id="table_arrival">${flight.ArrivalDateTime}</td>
-                                        <td id="table_price">$${flight.Price * reservation.NumberOfPassengers}</td>
                                         <td id="table_status">${flightStatus[flight.Status]}</td>
                                         <td>${reservation.NumberOfPassengers}</th>
+                                        <td id="table_price">$${flight.Price * reservation.NumberOfPassengers}</td>
                                         <td>${reservationStatus[reservation.Status]}</th>
                                         ${leaveReviewButton}
                                     </tr>`;

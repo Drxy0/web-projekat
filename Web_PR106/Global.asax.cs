@@ -161,6 +161,7 @@ namespace Web_PR106
 		}
 		public static void LoadUsers()
 		{
+			Reservations.Clear();
 			Users.Clear();
 
 			string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;

@@ -189,7 +189,6 @@ namespace Web_PR106.Controllers
 					return BadRequest("Number of passengers must be greater than zero.");
 				}
 
-				// Check if a reservation already exists for the given flight and username
 				List<Reservation> reservationList = Global.Users.Find(x => x.Username == username)?.ReservationList;
 				Reservation existingReservation = reservationList?.Find(x => x.Flight.Id == flightId);
 
@@ -281,8 +280,8 @@ namespace Web_PR106.Controllers
 					}
 				}
 			}
-			Global.SaveUserData();
-			Global.SaveAirlineData();
+			//Global.SaveUserData();
+			//Global.SaveAirlineData();
 
 		}
 

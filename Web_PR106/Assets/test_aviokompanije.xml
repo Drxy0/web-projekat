@@ -156,8 +156,8 @@
         <EndDestination>Tokyo</EndDestination>
         <DepartureDateTime>30/06/2024 18:04</DepartureDateTime>
         <ArrivalDateTime>07/07/2024 18:04</ArrivalDateTime>
-        <NumberOf_FreeSeats>41</NumberOf_FreeSeats>
-        <NumberOf_TakenSeats>309</NumberOf_TakenSeats>
+        <NumberOf_FreeSeats>12</NumberOf_FreeSeats>
+        <NumberOf_TakenSeats>318</NumberOf_TakenSeats>
         <Price>120</Price>
         <Status>AKTIVAN</Status>
         <IsDeleted>false</IsDeleted>
@@ -198,7 +198,7 @@
   <Airline>
     <Id>3</Id>
     <Name>Air Montenegro</Name>
-    <Address>Bulevar Dzordza Vasingtona 98, Podgorica, Montenegro</Address>
+    <Address>Bulevar Džordža Vasingtona 98, Podgorica, Montenegro</Address>
     <ContactInfo>email: info@airmontenegro.com/phone: </ContactInfo>
     <IsDeleted>false</IsDeleted>
     <ProvidedFlights>

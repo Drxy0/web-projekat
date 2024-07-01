@@ -11,32 +11,6 @@
     <UserType>PUTNIK</UserType>
     <ReservationList>
       <Reservation>
-        <Id>0</Id>
-        <User>john_doe</User>
-        <Flight>
-          <Id>3</Id>
-          <Airline>
-            <Id>2</Id>
-            <Name>Lufthansa</Name>
-            <IsDeleted>false</IsDeleted>
-            <ProvidedFlights />
-            <Reviews />
-          </Airline>
-          <StartDestination>Frankfurt</StartDestination>
-          <EndDestination>Tokyo</EndDestination>
-          <DepartureDateTime>07/07/2024 23:00</DepartureDateTime>
-          <ArrivalDateTime>08/07/2024 07:00</ArrivalDateTime>
-          <NumberOf_FreeSeats>21</NumberOf_FreeSeats>
-          <NumberOf_TakenSeats>309</NumberOf_TakenSeats>
-          <Price>290.75</Price>
-          <Status>AKTIVAN</Status>
-          <IsDeleted>false</IsDeleted>
-        </Flight>
-        <NumberOfPassengers>4</NumberOfPassengers>
-        <Price>116300</Price>
-        <Status>ODOBRENA</Status>
-      </Reservation>
-      <Reservation>
         <Id>1</Id>
         <User>john_doe</User>
         <Flight>
@@ -59,8 +33,34 @@
           <IsDeleted>false</IsDeleted>
         </Flight>
         <NumberOfPassengers>4</NumberOfPassengers>
-        <Price>116300</Price>
+        <Price>1360</Price>
         <Status>ZAVRSENA</Status>
+      </Reservation>
+      <Reservation>
+        <Id>2</Id>
+        <User>john_doe</User>
+        <Flight>
+          <Id>3</Id>
+          <Airline>
+            <Id>2</Id>
+            <Name>Lufthansa</Name>
+            <IsDeleted>false</IsDeleted>
+            <ProvidedFlights />
+            <Reviews />
+          </Airline>
+          <StartDestination>Frankfurt</StartDestination>
+          <EndDestination>Tokyo</EndDestination>
+          <DepartureDateTime>30/06/2024 18:04</DepartureDateTime>
+          <ArrivalDateTime>07/07/2024 18:04</ArrivalDateTime>
+          <NumberOf_FreeSeats>12</NumberOf_FreeSeats>
+          <NumberOf_TakenSeats>318</NumberOf_TakenSeats>
+          <Price>120</Price>
+          <Status>AKTIVAN</Status>
+          <IsDeleted>false</IsDeleted>
+        </Flight>
+        <NumberOfPassengers>2</NumberOfPassengers>
+        <Price>240</Price>
+        <Status>KREIRANA</Status>
       </Reservation>
     </ReservationList>
   </User>
