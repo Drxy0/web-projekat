@@ -38,7 +38,7 @@
         <StartDestination>Paris</StartDestination>
         <EndDestination>New York</EndDestination>
         <DepartureDateTime>25/06/2024 20:00</DepartureDateTime>
-        <ArrivalDateTime>06/06/2024 14:00</ArrivalDateTime>
+        <ArrivalDateTime>26/06/2024 14:00</ArrivalDateTime>
         <NumberOf_FreeSeats>54</NumberOf_FreeSeats>
         <NumberOf_TakenSeats>200</NumberOf_TakenSeats>
         <Price>340</Price>
@@ -121,17 +121,27 @@
         <Title>Excellent service!</Title>
         <Description>I had a fantastic experience with Air France. The flight was smooth, and the crew was very helpful.</Description>
         <Picture />
-        <Status>KREIRANA</Status>
+        <Status>ODOBRENA</Status>
         <IsDeleted>false</IsDeleted>
       </Review>
       <Review>
-        <Id>0</Id>
+        <Id>3</Id>
         <Reviewer>john_doe</Reviewer>
         <Airline>Air France</Airline>
         <Title>Efficient and Comfortable Flight Experience</Title>
         <Description>My recent flight was both efficient and comfortable. The check-in process was smooth, and the flight departed and arrived on time. The cabin crew were friendly and attentive, ensuring a pleasant journey. Overall, it was a positive experience that I would recommend to others.</Description>
         <Picture>/UploadedImages/new york.png</Picture>
         <Status>ODOBRENA</Status>
+        <IsDeleted>false</IsDeleted>
+      </Review>
+      <Review>
+        <Id>5</Id>
+        <Reviewer>john_doe</Reviewer>
+        <Airline>Air France</Airline>
+        <Title>bla bla bla</Title>
+        <Description>123</Description>
+        <Picture />
+        <Status>ODBIJENA</Status>
         <IsDeleted>false</IsDeleted>
       </Review>
     </Reviews>
@@ -154,8 +164,8 @@
         </Airline>
         <StartDestination>Frankfurt</StartDestination>
         <EndDestination>Tokyo</EndDestination>
-        <DepartureDateTime>30/06/2024 18:04</DepartureDateTime>
-        <ArrivalDateTime>07/07/2024 18:04</ArrivalDateTime>
+        <DepartureDateTime>07/07/2024 16:00</DepartureDateTime>
+        <ArrivalDateTime>07/07/2024 18:00</ArrivalDateTime>
         <NumberOf_FreeSeats>12</NumberOf_FreeSeats>
         <NumberOf_TakenSeats>318</NumberOf_TakenSeats>
         <Price>120</Price>
@@ -184,7 +194,7 @@
     </ProvidedFlights>
     <Reviews>
       <Review>
-        <Id>3</Id>
+        <Id>4</Id>
         <Reviewer>mark_jackson</Reviewer>
         <Airline>2</Airline>
         <Title>Great experience!</Title>
@@ -268,7 +278,7 @@
         <Title>Preporučujem</Title>
         <Description>Sedišta su udobna, letovi su često tačni, a osoblje je ljubazno i profesionalno.</Description>
         <Picture>/UploadedImages/air_montenegro.jpg</Picture>
-        <Status>ODOBRENA</Status>
+        <Status>ODBIJENA</Status>
         <IsDeleted>false</IsDeleted>
       </Review>
     </Reviews>

@@ -82,7 +82,7 @@
     <script>
         function checkSession() {
             $.ajax({
-                url: "api/session/isLoggedIn",
+                url: "../api/session/isLoggedIn",
                 method: "GET",
                 success: function (data, status) {
                     if (data !== false) {

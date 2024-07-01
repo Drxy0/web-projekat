@@ -34,8 +34,9 @@ namespace Web_PR106.Controllers
 			}
 			else
 			{
-				review.Picture = null;
+				review.Picture = "";
 			}
+			review.Id = Global.SetReviewId();
 
 			foreach(Airline airline in Global.Airlines)
 			{

@@ -24,8 +24,8 @@
           </Airline>
           <StartDestination>Paris</StartDestination>
           <EndDestination>New York</EndDestination>
-          <DepartureDateTime>25/06/2024 20:00</DepartureDateTime>
-          <ArrivalDateTime>06/06/2024 14:00</ArrivalDateTime>
+			<DepartureDateTime>25/06/2024 20:00</DepartureDateTime>
+			<ArrivalDateTime>26/06/2024 14:00</ArrivalDateTime>
           <NumberOf_FreeSeats>54</NumberOf_FreeSeats>
           <NumberOf_TakenSeats>200</NumberOf_TakenSeats>
           <Price>340</Price>
@@ -50,8 +50,8 @@
           </Airline>
           <StartDestination>Frankfurt</StartDestination>
           <EndDestination>Tokyo</EndDestination>
-          <DepartureDateTime>30/06/2024 18:04</DepartureDateTime>
-          <ArrivalDateTime>07/07/2024 18:04</ArrivalDateTime>
+			<DepartureDateTime>07/07/2024 16:00</DepartureDateTime>
+		    <ArrivalDateTime>07/07/2024 18:00</ArrivalDateTime>
           <NumberOf_FreeSeats>12</NumberOf_FreeSeats>
           <NumberOf_TakenSeats>318</NumberOf_TakenSeats>
           <Price>120</Price>

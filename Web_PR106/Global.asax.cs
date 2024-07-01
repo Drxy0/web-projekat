@@ -114,6 +114,37 @@ namespace Web_PR106
 			return id;
 		}
 
+		public static int SetReviewId()
+		{
+			int id = 1;
+			bool isUnique = false;
+
+			while (!isUnique)
+			{
+				isUnique = true;
+				foreach (Airline airline in Airlines)
+				{
+					foreach (Review review in airline.Reviews)
+					{
+						if (review.Id == id)
+						{
+							isUnique = false;
+							break;
+						}
+					}
+					if (!isUnique)
+					{
+						break;
+					}
+				}
+				if (!isUnique)
+				{
+					id++;
+				}
+			}
+			return id;
+		}
+
 		public static void SaveAirlineData()
 		{
 			XmlSerializer serializer = new XmlSerializer(typeof(List<Airline>), new XmlRootAttribute("Airlines"));
@@ -299,10 +330,15 @@ namespace Web_PR106
 							Airline = reviewNode["Airline"].InnerText,
 							Title = reviewNode["Title"].InnerText,
 							Description = reviewNode["Description"].InnerText,
-							Picture = reviewNode["Picture"].InnerText,
 							Status = (ReviewStatus)Enum.Parse(typeof(ReviewStatus), reviewNode["Status"].InnerText),
 							IsDeleted = bool.Parse(reviewNode["IsDeleted"].InnerText),
 						};
+						try
+						{
+							review.Picture = reviewNode["Picture"].InnerText;
+						}
+						catch { review.Picture = "";}
+						
 						airline.Reviews.Add(review);
 					}
 				}
