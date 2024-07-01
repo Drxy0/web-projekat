@@ -154,7 +154,7 @@ namespace Web_PR106.Controllers
 			{
 				foreach (Flight flight in Global.Flights)
 				{
-					if (!flight.StartDestination.Contains(endDestination))
+					if (!flight.EndDestination.Contains(endDestination))
 					{
 						filteredFlights.Remove(flight);
 					}

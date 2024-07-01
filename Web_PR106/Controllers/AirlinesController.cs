@@ -43,7 +43,7 @@ namespace Web_PR106.Controllers
 
 		[HttpPost]
 		[Route("adminFilterAirlines")]
-		public IHttpActionResult AdminFilterUsers([FromBody] JObject searchFilter)
+		public IHttpActionResult AdminFilterAirlines([FromBody] JObject searchFilter)
 		{
 
 			if (searchFilter == null)

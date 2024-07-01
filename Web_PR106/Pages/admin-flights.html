@@ -221,7 +221,13 @@
                     price: parseFloat($('#price').val())
                 }),
                 success: function (response) {
-                    addform.clear();
+                    $('#available-airlines').val('');
+                    $('#start-destination').val('');
+                    $('#end-destination').val('');
+                    $('#departure-time').val('');
+                    $('#arrival-time').val('');
+                    $('#free-seats').val('');
+                    $('#price').val('');
                     loadFlights();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -330,52 +336,51 @@
             const [datePart, timePart] = dateTimeString.split(' ');
             const [day, month, year] = datePart.split('/');
             const [hours, minutes] = timePart.split(':');
-            const dateObject = new Date(`${year}-${month}-${day}T${hours}:${minutes}`);
-            const isoString = dateObject.toISOString().slice(0, 16);
+            const utcDate = new Date(Date.UTC(year, month - 1, day, hours, minutes));
+            const isoString = utcDate.toISOString().slice(0, 16);
             inputElement.value = isoString;
         }
 
         function editFlight(airlineId, flightId, departureDateTime, arrivalDateTime, numberOfSeats, price) {
             sessionStorage.setItem("airlineId", airlineId);
             sessionStorage.setItem("flightId", flightId);
-
             setDateTime(departureDateTime, editDepartureTimeInput);
             setDateTime(arrivalDateTime, editArrivalTimeInput);
-
             document.getElementById('edit-seats').value = numberOfSeats;
             document.getElementById('edit-price').value = price;
 
-            $.ajax({
-                url: '../api/reservation',
-                type: 'GET',
-                success: function (data, status) {
-                    let canEditPrice = true;
-                    data.forEach(function (reservation) {
-                        if (reservation.Flight.Id == flightId && (reservation.Status == 0 || reservation.Status == 1)) {
-                            canEditPrice = false;
-                        }
-                    });
+            setTimeout(function () {
+                $.ajax({
+                    url: '../api/reservation',
+                    type: 'GET',
+                    success: function (data, status) {
+                        let canEditPrice = true;
+                        data.forEach(function (reservation) {
+                            if (reservation.Flight.Id == flightId && (reservation.Status == 0 || reservation.Status == 1)) {
+                                canEditPrice = false;
+                            }
+                        });
 
-                    let priceFormGroup = $('#edit-price').closest('.form-group');
-                    if (!canEditPrice) {
-                        if (priceFormGroup.length > 0) {
-                            priceFormGroup.remove();
+                        let priceFormGroup = $('#edit-price').closest('.form-group');
+                        if (!canEditPrice) {
+                            if (priceFormGroup.length > 0) {
+                                priceFormGroup.remove();
+                            }
                         }
+
+                        document.getElementById('number-of-seats-error').innerHTML = "";
+
+                        var defaultSection = $('#default');
+                        var editSection = $('#edit-flight');
+                        defaultSection.hide();
+                        editSection.show();
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching reservations:', status, error);
                     }
-
-                    document.getElementById('number-of-seats-error').innerHTML = "";
-
-                    var defaultSection = $('#default');
-                    var editSection = $('#edit-flight');
-                    defaultSection.hide();
-                    editSection.show();
-
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error fetching reservations:', status, error);
-                }
-            });
-
+                });
+            }, 40);
         }
 
         function loadFlights() {

@@ -78,14 +78,14 @@
     <div id="adminUsersList" style="display:none">
         <h2>Svi korisnici</h2>
         <div id="adminUsersFormDiv">
-            <form id="adminUsersForm" action="../api/airlines/adminFilterAirlines" method="post">
+            <form id="adminUsersForm" action="../api/users/adminFilterUsers" method="post">
                 <table>
                     <tr>
                         <td>
                             <label>Ime: </label>
                         </td>
                         <td>
-                            <input type="text" placeholder="John" name="name" />
+                            <input type="text" placeholder="John" id="filter-name" name="name" />
                         </td>
                     </tr>
                     <tr>
@@ -93,7 +93,7 @@
                             <label>Prezime: </label>
                         </td>
                         <td>
-                            <input type="text" placeholder="Doe" name="surname" />
+                            <input type="text" placeholder="Doe" id="filter-surname" name="surname" />
                         </td>
                     </tr>
                     <tr>
@@ -101,7 +101,7 @@
                             <label>Datum rođenja (od): </label>
                         </td>
                         <td>
-                            <input type="date" placeholder="01/01/1970" name="startDate" />
+                            <input type="date" placeholder="01/01/1970"  id="filter-startDate" name="startDate" />
                         </td>
                     </tr>
                     <tr>
@@ -109,7 +109,7 @@
                             <label>Datum rođenja (do): </label>
                         </td>
                         <td>
-                            <input type="date" placeholder="01/12/1999" name="endDate" />
+                            <input type="date" placeholder="01/12/1999" id="filter-endDate" name="endDate" />
                         </td>
                     </tr>
                     <tr>
@@ -217,18 +217,20 @@
         form.addEventListener('submit', function (event) {
             event.preventDefault();
 
-            const formData = new FormData(form);
-            const jsonObject = {};
-            formData.forEach((value, key) => {
-                jsonObject[key] = value;
-            });
-            const jsonData = JSON.stringify(jsonObject);
+            const formData = {
+                name: document.getElementById('filter-name').value,
+                surname: document.getElementById('filter-surname').value,
+                stardDate: document.getElementById('filter-startDate').value,
+                endDate: document.getElementById('filter-endDate').value,
+            };
+            const jsonData = JSON.stringify(formData);
 
+            console.log(formData);
             $.ajax({
                 url: form.action,
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify(jsonData),
+                data: jsonData,
                 success: function (data) {
                     form.reset();
 
@@ -377,7 +379,6 @@
                                   <h4>Gender: ${gender[user.Gender]}</h4>`;
 
                     if (role === "ADMINISTRATOR") {
-                        //adminFilterUsersForm();
                         adminLoadUsersList();
                     }
 
@@ -404,7 +405,7 @@
                 method: "GET",
                 success: function (data, status) {
                     var tbody = $("#adminUsersTableBody");
-                    tbody.empty(); // Clear any existing rows
+                    tbody.empty();
                     data.forEach(function (user, index) {
                         var row = `<tr>
                                <td>${index + 1}</td>

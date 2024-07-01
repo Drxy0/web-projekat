@@ -83,6 +83,25 @@
         <Status>AKTIVAN</Status>
         <IsDeleted>true</IsDeleted>
       </Flight>
+      <Flight>
+        <Id>8</Id>
+        <Airline>
+          <Id>1</Id>
+          <Name>Air France</Name>
+          <IsDeleted>false</IsDeleted>
+          <ProvidedFlights />
+          <Reviews />
+        </Airline>
+        <StartDestination>Belgrade</StartDestination>
+        <EndDestination>Dublin</EndDestination>
+        <DepartureDateTime>10/07/2024 03:30</DepartureDateTime>
+        <ArrivalDateTime>10/07/2024 05:15</ArrivalDateTime>
+        <NumberOf_FreeSeats>74</NumberOf_FreeSeats>
+        <NumberOf_TakenSeats>0</NumberOf_TakenSeats>
+        <Price>150.5</Price>
+        <Status>AKTIVAN</Status>
+        <IsDeleted>false</IsDeleted>
+      </Flight>
     </ProvidedFlights>
     <Reviews>
       <Review>

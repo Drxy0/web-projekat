@@ -70,7 +70,7 @@ namespace Web_PR106.Controllers
 			{
 				foreach(Flight flight in Global.Flights)
 				{
-					if (flight.StartDestination != startDestination)
+					if (!flight.StartDestination.Contains(startDestination))
 					{
 						Global.ShownFlights.Remove(flight);
 					}
@@ -81,7 +81,7 @@ namespace Web_PR106.Controllers
 			{
 				foreach (Flight flight in Global.Flights)
 				{
-					if (flight.EndDestination != endDestination)
+					if (!flight.EndDestination.Contains(endDestination))
 					{
 						Global.ShownFlights.Remove(flight);
 					}
@@ -91,7 +91,7 @@ namespace Web_PR106.Controllers
 			{
 				foreach (Flight flight in Global.Flights)
 				{
-					if (flight.Airline.Name != airlinesName)
+					if (!flight.Airline.Name.Contains(airlinesName))
 					{
 						Global.ShownFlights.Remove(flight);
 					}
@@ -102,7 +102,6 @@ namespace Web_PR106.Controllers
 			{
 				foreach (Flight flight in Global.Flights)
 				{
-					Trace.WriteLine(flight.DepartureDateTime.Split(' ')[0]);
 					if (flight.DepartureDateTime.Split(' ')[0] != departureDate)
 					{
 						Global.ShownFlights.Remove(flight);

@@ -73,7 +73,7 @@ namespace Web_PR106.Controllers
 			{
 				foreach (User user in Global.Users)
 				{
-					if (user.Name != searchFilter.Name)
+					if (!user.Name.Contains(searchFilter.Name))
 					{
 						filteredUsers.Remove(user);
 					}
@@ -84,7 +84,7 @@ namespace Web_PR106.Controllers
 			{
 				foreach (User user in Global.Users)
 				{
-					if (user.Surname != searchFilter.Surname)
+					if (!user.Surname.Contains(searchFilter.Surname))
 					{
 						filteredUsers.Remove(user);
 					}
